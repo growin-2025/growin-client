@@ -1,6 +1,7 @@
 import MainCard from "@/components/main/MainCard";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import {
   Image,
@@ -13,6 +14,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MyPageScreen() {
+  const router = useRouter();
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
       <StatusBar style="dark" />
@@ -58,7 +60,10 @@ export default function MyPageScreen() {
           <Text style={[styles.userName, textStyles.title18_SB135]}>
             가짜대학생
           </Text>
-          <Pressable style={styles.editButton}>
+          <Pressable
+            style={styles.editButton}
+            onPress={() => router.push("./edit")}
+          >
             <Image
               source={require("@/assets/images/mypage/edit.png")}
               style={{

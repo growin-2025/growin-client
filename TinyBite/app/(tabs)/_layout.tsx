@@ -76,7 +76,7 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="(mypage)/index"
+        name="(mypage)"
         options={{
           title: "내정보",
           tabBarIcon: ({ focused }) => (
