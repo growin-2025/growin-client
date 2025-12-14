@@ -32,7 +32,7 @@ export default function EditProfileScreen() {
         <Text style={[styles.headerTitle, textStyles.title20_B135]}>
           프로필 수정
         </Text>
-        <Pressable>
+        <Pressable onPress={() => router.back()}>
           <Text style={[styles.saveButton, textStyles.body16_SB135]}>완료</Text>
         </Pressable>
       </View>
