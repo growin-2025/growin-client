@@ -37,7 +37,7 @@ export default function MyPageScreen() {
             내 정보
           </Text>
         </View>
-        <Pressable>
+        <Pressable onPress={() => router.push("../(mypage)/setting")}>
           <Image
             source={require("@/assets/images/mypage/setting.png")}
             style={{
