@@ -26,7 +26,10 @@ export default function SettingScreen() {
       {/* Content */}
       <View style={styles.contentWrapper}>
         {/* 알림 설정 */}
-        <Pressable style={styles.settingItem}>
+        <Pressable
+          style={styles.settingItem}
+          onPress={() => router.push("../(mypage)/notification")}
+        >
           <View style={styles.settingItemLeft}>
             <Image
               source={require("@/assets/images/mypage/notification.png")}
