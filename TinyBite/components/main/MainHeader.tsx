@@ -39,7 +39,7 @@ export default MainHeader;
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: 179,
+    height: 178,
     backgroundColor: PRIMARY_COLOR,
     borderBottomLeftRadius: 16,
     borderBottomRightRadius: 16,
@@ -49,7 +49,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 22,
     overflow: "hidden",
-    marginBottom: 0,
   },
   textBlock: {
     flex: 1,
