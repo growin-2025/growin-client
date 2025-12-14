@@ -49,7 +49,10 @@ export default function SettingScreen() {
         <View style={styles.divider} />
 
         {/* 내 동네 설정 */}
-        <Pressable style={styles.settingItem}>
+        <Pressable
+          style={styles.settingItem}
+          onPress={() => router.push("../(mypage)/neighborhood")}
+        >
           <View style={styles.settingItemLeft}>
             <Image
               source={require("@/assets/images/location-tracking-maincolor.png")}
