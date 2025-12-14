@@ -1,3 +1,5 @@
+import { colors } from "@/styles/colors";
+import { textStyles } from "@/styles/typography/textStyles";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -35,7 +37,9 @@ export default function LoginScreen() {
           onPress={() => handleLoginPress("kakao")}
         >
           <Image source={require("@/assets/images/login/icon-kakao.png")} />
-          <Text style={styles.socialText}>카카오로 시작하기</Text>
+          <Text style={[styles.socialText, textStyles.title18_SB135]}>
+            카카오로 시작하기
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -43,7 +47,9 @@ export default function LoginScreen() {
           onPress={() => handleLoginPress("google")}
         >
           <Image source={require("@/assets/images/login/icon-google.png")} />
-          <Text style={styles.socialText}>Google로 시작하기</Text>
+          <Text style={[styles.socialText, textStyles.title18_SB135]}>
+            Google로 시작하기
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -51,7 +57,9 @@ export default function LoginScreen() {
           onPress={() => handleLoginPress("apple")}
         >
           <Image source={require("@/assets/images/login/icon-apple.png")} />
-          <Text style={styles.socialText}>Apple로 시작하기</Text>
+          <Text style={[styles.socialText, textStyles.title18_SB135]}>
+            Apple로 시작하기
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -63,7 +71,7 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 120,
     paddingHorizontal: 20,
-    backgroundColor: "#FE870F",
+    backgroundColor: colors.main,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -83,13 +91,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   kakao: { backgroundColor: "#FEE500" },
-  google: { backgroundColor: "#FFFFFF" },
-  apple: { backgroundColor: "#FFFFFF" },
+  google: { backgroundColor: colors.white },
+  apple: { backgroundColor: colors.white },
   socialText: {
-    color: "#222",
-    fontSize: 18,
-    fontStyle: "normal",
-    fontWeight: 600,
-    lineHeight: 24.3,
+    color: colors.black,
   },
 });

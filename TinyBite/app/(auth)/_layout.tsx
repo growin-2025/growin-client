@@ -1,3 +1,4 @@
+import { colors } from "@/styles/colors";
 import { Stack } from "expo-router";
 import { StyleSheet, View } from "react-native";
 
@@ -8,7 +9,7 @@ export default function AuthLayout() {
         screenOptions={{
           headerShown: false,
           animation: "slide_from_right",
-          contentStyle: { backgroundColor: "#FCFBFF" },
+          contentStyle: { backgroundColor: colors.background },
         }}
       />
     </View>
@@ -18,6 +19,6 @@ export default function AuthLayout() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FCFBFF",
+    backgroundColor: colors.background,
   },
 });

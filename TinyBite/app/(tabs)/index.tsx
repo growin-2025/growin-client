@@ -1,6 +1,7 @@
 import MainCard from "@/components/main/MainCard";
 import MainCategory from "@/components/main/MainCategory";
 import MainHeader from "@/components/main/MainHeader";
+import { colors } from "@/styles/colors";
 import { useRouter } from "expo-router";
 
 import { ScrollView, StyleSheet, View } from "react-native";
@@ -35,15 +36,15 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#FE870F",
+    backgroundColor: colors.main,
   },
   container: {
     flex: 1,
-    backgroundColor: "#FCFBFF",
+    backgroundColor: colors.background,
   },
   scroll: {
     marginTop: 18,
-    backgroundColor: "#FCFBFF",
+    backgroundColor: colors.background,
   },
   listWrapper: {
     marginTop: 4,

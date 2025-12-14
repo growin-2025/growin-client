@@ -1,3 +1,4 @@
+import { colors } from "@/styles/colors";
 import { useFonts } from "expo-font";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
@@ -69,7 +70,7 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FE870F",
+    backgroundColor: colors.main,
     alignItems: "center",
     justifyContent: "center",
   },

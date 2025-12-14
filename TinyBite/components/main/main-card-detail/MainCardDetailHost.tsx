@@ -1,3 +1,5 @@
+import { colors } from "@/styles/colors";
+import { textStyles } from "@/styles/typography/textStyles";
 import { Image, StyleSheet, Text, View } from "react-native";
 
 interface MainCardDetailHostProps {
@@ -22,14 +24,16 @@ const MainCardDetailHost = ({
           resizeMode="cover"
         />
         <View>
-          <Text style={styles.hostName}>{name}</Text>
+          <Text style={[styles.hostName, textStyles.body15_SB135]}>{name}</Text>
           <View style={styles.hostMetaRow}>
             <Image
               source={require("@/assets/images/mainlist/detail/location-icon.png")}
               style={styles.hostMetaIcon}
               resizeMode="contain"
             />
-            <Text style={styles.hostMeta}>{location}</Text>
+            <Text style={[styles.hostMeta, textStyles.body13_SB135]}>
+              {location}
+            </Text>
           </View>
         </View>
       </View>
@@ -55,11 +59,7 @@ const styles = StyleSheet.create({
     height: 40,
   },
   hostName: {
-    fontSize: 15,
-    lineHeight: 20.25,
-    fontWeight: "600",
     color: "#000000",
-    fontFamily: "Pretendard",
   },
   hostMetaRow: {
     marginTop: 2,
@@ -72,10 +72,6 @@ const styles = StyleSheet.create({
     height: 18,
   },
   hostMeta: {
-    fontSize: 13,
-    lineHeight: 17.55,
-    fontWeight: "600",
-    color: "#888888",
-    fontFamily: "Pretendard",
+    color: colors.gray[1],
   },
 });

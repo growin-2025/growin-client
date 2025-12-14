@@ -1,5 +1,7 @@
 import LocationSearchResult from "@/components/LocationSearchResult";
 import PaginationIndecatorHeader from "@/components/PaginationIndecatorHeader";
+import { colors } from "@/styles/colors";
+import { textStyles } from "@/styles/typography/textStyles";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useState } from "react";
@@ -40,7 +42,7 @@ export default function RegionScreen() {
         {/* 동네 설정 */}
         <View style={{ marginBottom: 10 }}>
           <Text
-            style={styles.title}
+            style={[styles.title, textStyles.title24_SB135]}
           >{`내 동네를 설정하고 \n근처 이웃과 딱 필요한 만큼 나눠요!`}</Text>
 
           <View style={styles.inputContainer}>
@@ -49,11 +51,11 @@ export default function RegionScreen() {
               style={{ width: 24, height: 24, aspectRatio: 1 / 1 }}
             />
             <TextInput
-              style={styles.input}
+              style={[styles.input, textStyles.title18_SB135]}
               onChangeText={handleTextChange}
               value={text}
               placeholder="동명(읍,면)으로 검색 (ex.역삼동)"
-              placeholderTextColor="#888"
+              placeholderTextColor={colors.gray[1]}
               keyboardType="default"
               maxLength={8}
             />
@@ -67,7 +69,9 @@ export default function RegionScreen() {
               source={require("@/assets/images/location-tracking.png")}
               style={{ width: 24, height: 24, aspectRatio: 1 / 1 }}
             />
-            <Text style={styles.findText}>현재 위치로 주소 찾기</Text>
+            <Text style={[styles.findText, textStyles.body15_SB135]}>
+              현재 위치로 주소 찾기
+            </Text>
           </TouchableOpacity>
         </View>
 
@@ -79,7 +83,7 @@ export default function RegionScreen() {
           disabled={!verified}
           onPress={() => router.replace("/(auth)/signup/complete")}
         >
-          <Text style={styles.nextText}>다음</Text>
+          <Text style={[styles.nextText, textStyles.title18_SB135]}>다음</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -91,11 +95,8 @@ const styles = StyleSheet.create({
   inner: { flex: 1 },
 
   title: {
-    fontSize: 24,
-    fontWeight: "600",
-    lineHeight: 32.4,
     marginBottom: 28,
-    color: "#FE870F",
+    color: colors.main,
   },
 
   inputContainer: {
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
     gap: 4,
     padding: 12,
     marginBottom: 12,
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     borderRadius: 16,
     borderWidth: 0,
     // 그림자 효과 (iOS)
@@ -117,9 +118,6 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     alignSelf: "stretch",
-    fontSize: 18,
-    fontWeight: "600",
-    lineHeight: 24.3,
     color: "#000",
     padding: 0,
     margin: 0,
@@ -131,27 +129,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 4,
     borderRadius: 16,
-    backgroundColor: "#FE870F",
+    backgroundColor: colors.main,
   },
   findText: {
-    color: "#ffffff",
-    fontSize: 15,
-    fontWeight: 600,
-    lineHeight: 20.25,
+    color: colors.white,
   },
 
   nextBtn: {
-    backgroundColor: "#FE870F",
+    backgroundColor: colors.main,
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: 16,
     borderRadius: 16,
   },
   nextText: {
-    color: "#ffffff",
-    fontSize: 18,
-    fontWeight: 600,
-    lineHeight: 24.3,
+    color: colors.white,
   },
   disabled: { opacity: 0.3 },
 });

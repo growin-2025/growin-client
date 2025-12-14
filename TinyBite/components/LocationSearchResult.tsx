@@ -1,3 +1,5 @@
+import { colors } from "@/styles/colors";
+import { textStyles } from "@/styles/typography/textStyles";
 import {
   FlatList,
   StyleSheet,
@@ -30,7 +32,9 @@ const LocationSearchResult = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{`'역삼동' 검색 결과`}</Text>
+      <Text
+        style={[styles.title, textStyles.body15_SB135]}
+      >{`'역삼동' 검색 결과`}</Text>
 
       <FlatList
         data={mockResultData}
@@ -50,7 +54,7 @@ interface ResultItemProps {
 const ResultItem = ({ text }: ResultItemProps) => {
   return (
     <TouchableOpacity>
-      <Text style={styles.resultText}>{text}</Text>
+      <Text style={[styles.resultText, textStyles.body16_M135]}>{text}</Text>
     </TouchableOpacity>
   );
 };
@@ -59,10 +63,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, paddingVertical: 12 },
   title: {
     alignSelf: "stretch",
-    color: "#888",
-    fontSize: 15,
-    fontWeight: 600,
-    lineHeight: 20.25,
+    color: colors.gray[1],
     marginBottom: 24,
   },
 
@@ -75,10 +76,7 @@ const styles = StyleSheet.create({
   },
   resultText: {
     alignSelf: "stretch",
-    color: "#222",
-    fontSize: 16,
-    fontWeight: 500,
-    lineHeight: 21.6,
+    color: colors.black,
   },
 });
 

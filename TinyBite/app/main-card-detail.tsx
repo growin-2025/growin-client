@@ -3,6 +3,8 @@ import MainCardDetailHostNote from "@/components/main/main-card-detail/MainCardD
 import MainCardDetailInfo from "@/components/main/main-card-detail/MainCardDetailInfo";
 import MainCardDetailPill from "@/components/main/main-card-detail/MainCardDetailPill";
 import MainCardDetailProductLink from "@/components/main/main-card-detail/MainCardDetailProductLink";
+import { colors } from "@/styles/colors";
+import { textStyles } from "@/styles/typography/textStyles";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -17,7 +19,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const MainCardDetail = () => {
+export default function MainCardDetailScreen() {
   const router = useRouter();
 
   return (
@@ -47,7 +49,7 @@ const MainCardDetail = () => {
                 style={styles.backButton}
               >
                 <Image
-                  source={require("@/assets/images/mainlist/detail/back-button.png")}
+                  source={require("@/assets/images/chevron/chevron-left-36.png")}
                   style={styles.backButtonImage}
                   resizeMode="contain"
                 />
@@ -55,7 +57,9 @@ const MainCardDetail = () => {
 
               <ScrollView style={styles.contentContainer} bounces={false}>
                 <View style={[styles.content]}>
-                  <Text style={styles.title}>후문 엽떡 나누실 분 ㅃㄹ</Text>
+                  <Text style={[styles.title, textStyles.title20_B135]}>
+                    후문 엽떡 나누실 분 ㅃㄹ
+                  </Text>
 
                   <View style={styles.pillsRow}>
                     <MainCardDetailPill type="delivery" />
@@ -105,16 +109,16 @@ const MainCardDetail = () => {
           {/* 참여하기 버튼 */}
           <SafeAreaView style={styles.ctaContainer} edges={["bottom"]}>
             <TouchableOpacity style={styles.cta}>
-              <Text style={styles.ctaText}>5,000원으로 참여하기</Text>
+              <Text style={[styles.ctaText, textStyles.title18_SB135]}>
+                5,000원으로 참여하기
+              </Text>
             </TouchableOpacity>
           </SafeAreaView>
         </View>
       </View>
     </>
   );
-};
-
-export default MainCardDetail;
+}
 
 const styles = StyleSheet.create({
   container: { flex: 1, position: "relative" },
@@ -148,9 +152,9 @@ const styles = StyleSheet.create({
   backButton: {
     position: "absolute",
     padding: 2,
-    left: 20,
-    width: 40,
-    height: 40,
+    marginLeft: 20,
+    width: 36,
+    height: 36,
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
@@ -158,8 +162,8 @@ const styles = StyleSheet.create({
     zIndex: 3,
   },
   backButtonImage: {
-    width: 40,
-    height: 40,
+    width: 36,
+    height: 36,
   },
 
   contentContainer: {
@@ -169,17 +173,13 @@ const styles = StyleSheet.create({
   content: {
     marginTop: 220,
     width: "100%",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.white,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     paddingHorizontal: 20,
     paddingVertical: 28,
   },
   title: {
-    fontSize: 20,
-    lineHeight: 27,
-    fontFamily: "Pretendard",
-    fontWeight: "700",
     color: "#000000",
     marginBottom: 8,
   },
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     width: "100%",
     height: 4,
-    backgroundColor: "#F1F1F1",
+    backgroundColor: colors.gray[4],
     marginBottom: 16,
   },
 
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
     paddingTop: 12,
     paddingBottom: 18,
     paddingHorizontal: 20,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.white,
     alignItems: "center",
     justifyContent: "center",
     shadowColor: "#000000",
@@ -213,15 +213,11 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingVertical: 16,
     borderRadius: 16,
-    backgroundColor: "#FE870F",
+    backgroundColor: colors.main,
     alignItems: "center",
     justifyContent: "center",
   },
   ctaText: {
-    color: "#FFFFFF",
-    fontSize: 18,
-    fontWeight: "600",
-    fontFamily: "Pretendard",
-    lineHeight: 24.3,
+    color: colors.white,
   },
 });
