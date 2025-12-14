@@ -62,7 +62,7 @@ export default function MyPageScreen() {
           </Text>
           <Pressable
             style={styles.editButton}
-            onPress={() => router.push("./edit")}
+            onPress={() => router.push("../(mypage)/edit")}
           >
             <Image
               source={require("@/assets/images/mypage/edit.png")}
