@@ -145,6 +145,7 @@ const styles = StyleSheet.create({
   settingItem: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
   },
   settingItemLeft: {
     flexDirection: "row",

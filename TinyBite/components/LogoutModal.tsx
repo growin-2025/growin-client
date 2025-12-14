@@ -41,9 +41,7 @@ export default function LogoutModal({
               style={[styles.modalButton, styles.confirmButton]}
               onPress={onConfirm}
             >
-              <Text
-                style={[styles.confirmButtonText, textStyles.title18_SB135]}
-              >
+              <Text style={[styles.confirmButtonText, textStyles.body16_SB135]}>
                 예
               </Text>
             </Pressable>
@@ -66,7 +64,6 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     backgroundColor: colors.white,
     borderRadius: 16,
-    padding: 24,
     width: "100%",
     maxWidth: 362,
   },

@@ -84,14 +84,12 @@ export default function MyPageScreen() {
       {/* Content */}
       <ScrollView style={styles.contentWrapper}>
         {/* Participating Parties Section */}
-        <View style={styles.section}>
-          <MainCard containerStyle={styles.mypageCard} />
-          <MainCard containerStyle={styles.mypageCard} />
-          <MainCard containerStyle={styles.mypageCard} />
-          <MainCard containerStyle={styles.mypageCard} />
-          <MainCard containerStyle={styles.mypageCard} />
-          <MainCard containerStyle={styles.mypageCard} />
-        </View>
+        <MainCard containerStyle={styles.mypageCard} />
+        <MainCard containerStyle={styles.mypageCard} />
+        <MainCard containerStyle={styles.mypageCard} />
+        <MainCard containerStyle={styles.mypageCard} />
+        <MainCard containerStyle={styles.mypageCard} />
+        <MainCard containerStyle={styles.mypageCard} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -103,7 +101,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.main,
   },
   headerWrapper: {
-    backgroundColor: colors.main,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -156,15 +153,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 8,
   },
-  section: {
-    paddingHorizontal: 20,
-  },
   sectionTitle: {
     color: colors.black,
   },
   contentWrapper: {
     flex: 1,
     backgroundColor: colors.background,
+    paddingHorizontal: 20,
   },
   mypageCard: {
     borderRadius: 0,
