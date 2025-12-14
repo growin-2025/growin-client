@@ -21,9 +21,6 @@ export default function MyPageScreen() {
       {/* Header */}
       <View style={styles.headerWrapper}>
         <View style={styles.headerContent}>
-          <Text style={[styles.headerTitle, textStyles.title20_B135]}>
-            내 정보
-          </Text>
           <Image
             source={require("@/assets/images/main/mainlogo.png")}
             style={{
@@ -36,6 +33,9 @@ export default function MyPageScreen() {
               resizeMode: "contain",
             }}
           />
+          <Text style={[styles.headerTitle, textStyles.title20_B135]}>
+            내 정보
+          </Text>
         </View>
         <Pressable>
           <Image
