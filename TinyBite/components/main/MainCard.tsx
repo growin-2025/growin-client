@@ -31,7 +31,7 @@ export default MainCard;
 
 const styles = StyleSheet.create({
   card: {
-    width: 362,
+    width: "100%",
     height: 122,
     backgroundColor: colors.white,
     borderRadius: 16,
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     color: "#000000",
   },
   price: {
-    marginTop: 6,
+    marginTop: 4,
     color: "#000000",
   },
   footerRow: {
