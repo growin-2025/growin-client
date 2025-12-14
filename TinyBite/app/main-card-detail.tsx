@@ -139,8 +139,8 @@ const styles = StyleSheet.create({
     zIndex: 3,
   },
   backButtonImage: {
-    width: 40,
-    height: 40,
+    width: 36,
+    height: 36,
   },
 
   contentContainer: {
