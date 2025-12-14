@@ -41,7 +41,9 @@ export default function LogoutModal({
               style={[styles.modalButton, styles.confirmButton]}
               onPress={onConfirm}
             >
-              <Text style={[styles.confirmButtonText, textStyles.body16_SB135]}>
+              <Text
+                style={[styles.confirmButtonText, textStyles.title18_SB135]}
+              >
                 예
               </Text>
             </Pressable>
