@@ -67,8 +67,8 @@ export default function MyPageScreen() {
             <Image
               source={require("@/assets/images/mypage/edit.png")}
               style={{
-                width: 16,
-                height: 16,
+                width: 20,
+                height: 20,
                 padding: 0.83333,
                 resizeMode: "contain",
               }}
