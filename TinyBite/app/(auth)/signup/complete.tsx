@@ -1,3 +1,5 @@
+import { colors } from "@/styles/colors";
+import { textStyles } from "@/styles/typography/textStyles";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -24,7 +26,9 @@ export default function CompleteScreen() {
           style={styles.nextBtn}
           onPress={() => router.replace("/(tabs)")}
         >
-          <Text style={styles.nextText}>내 동네 파티 목록 확인하기</Text>
+          <Text style={[styles.nextText, textStyles.title18_SB135]}>
+            내 동네 파티 목록 확인하기
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -41,7 +45,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   contentText: {
-    color: "#FE870F",
+    color: colors.main,
     textAlign: "center",
     fontSize: 32,
     fontWeight: 700,
@@ -53,13 +57,10 @@ const styles = StyleSheet.create({
   nextBtn: {
     paddingVertical: 16,
     borderRadius: 16,
-    backgroundColor: "#FE870F",
+    backgroundColor: colors.main,
   },
   nextText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: 600,
-    lineHeight: 24.3,
+    color: colors.white,
     textAlign: "center",
   },
 });

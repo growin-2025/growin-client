@@ -1,6 +1,8 @@
+import { colors } from "@/styles/colors";
+import { textStyles } from "@/styles/typography/textStyles";
 import { Image, StyleSheet, Text, View } from "react-native";
 
-const PRIMARY_COLOR = "#FE870F";
+const PRIMARY_COLOR = colors.main;
 
 const MainHeader = () => (
   <View style={styles.container}>
@@ -13,11 +15,11 @@ const MainHeader = () => (
             resizeMode="contain"
           />
         </View>
-        <Text style={styles.location}>역삼동</Text>
+        <Text style={[styles.location, textStyles.title20_B135]}>역삼동</Text>
       </View>
-      <Text style={styles.greetingLine1}>
+      <Text style={[styles.greetingLine1, textStyles.title20_B135]}>
         가짜대학생
-        <Text style={styles.greetingLine2}>
+        <Text style={[styles.greetingLine2, textStyles.title18_SB135]}>
           님,{"\n"}오늘은 무엇을 나눌까요 ?
         </Text>
       </Text>
@@ -59,11 +61,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   location: {
-    fontSize: 20,
-    lineHeight: 27,
-    fontWeight: "700",
-    color: "#FFFFFF",
-    fontFamily: "Pretendard",
+    color: colors.white,
   },
   mainLogo: {
     width: 24,
@@ -77,18 +75,10 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   greetingLine1: {
-    fontSize: 20,
-    lineHeight: 30,
-    fontWeight: "700",
-    color: "#FFFFFF",
-    fontFamily: "Pretendard",
+    color: colors.white,
   },
   greetingLine2: {
-    fontSize: 18,
-    lineHeight: 27,
-    fontWeight: "700",
-    color: "#FFFFFF",
-    fontFamily: "Pretendard",
+    color: colors.white,
   },
   characterWrapper: {
     position: "absolute",

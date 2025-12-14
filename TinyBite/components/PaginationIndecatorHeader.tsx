@@ -1,3 +1,4 @@
+import { colors } from "@/styles/colors";
 import { useRouter } from "expo-router";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
@@ -6,8 +7,8 @@ interface PaginationIndecatorHeaderProps {
 }
 
 const DOT_SIZE = 8;
-const ACTIVE_COLOR = "#FE870F";
-const INACTIVE_COLOR = "#D9D9D9";
+const ACTIVE_COLOR = colors.main;
+const INACTIVE_COLOR = colors.gray[3];
 
 const PaginationIndecatorHeader = ({
   page,

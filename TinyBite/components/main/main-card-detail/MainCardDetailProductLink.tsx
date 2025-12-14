@@ -1,3 +1,5 @@
+import { colors } from "@/styles/colors";
+import { textStyles } from "@/styles/typography/textStyles";
 import { Image, StyleSheet, Text, View } from "react-native";
 
 interface MainCardDetailProductLinkProps {
@@ -17,7 +19,9 @@ const MainCardDetailProductLink = ({
           style={styles.linkIcon}
           resizeMode="contain"
         />
-        <Text style={styles.linkLabel}>구매 예정 상품</Text>
+        <Text style={[styles.linkLabel, textStyles.body13_SB135]}>
+          구매 예정 상품
+        </Text>
       </View>
       <View style={styles.linkContent}>
         <Image
@@ -26,8 +30,12 @@ const MainCardDetailProductLink = ({
           resizeMode="cover"
         />
         <View style={styles.linkTexts}>
-          <Text style={styles.linkTitle}>{productTitle}</Text>
-          <Text style={styles.linkUrl}>{productUrl}</Text>
+          <Text style={[styles.linkTitle, textStyles.body13_SB150]}>
+            {productTitle}
+          </Text>
+          <Text style={[styles.linkUrl, textStyles.body13_M135]}>
+            {productUrl}
+          </Text>
         </View>
       </View>
     </View>
@@ -42,7 +50,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     width: "100%",
     height: 110,
-    backgroundColor: "#FCFBFF",
+    backgroundColor: colors.background,
     borderRadius: 16,
     padding: 12,
     shadowColor: "#000000",
@@ -67,11 +75,7 @@ const styles = StyleSheet.create({
     height: 20,
   },
   linkLabel: {
-    fontSize: 13,
-    lineHeight: 17.55,
-    fontWeight: "600",
-    color: "#222222",
-    fontFamily: "Pretendard",
+    color: colors.black,
   },
   linkPhoto: {
     width: 60,
@@ -84,17 +88,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   linkTitle: {
-    fontSize: 13,
-    lineHeight: 19.5,
-    fontWeight: "600",
-    color: "#222222",
-    fontFamily: "Pretendard",
+    color: colors.black,
   },
   linkUrl: {
-    fontSize: 13,
-    lineHeight: 17.55,
-    fontWeight: "500",
-    color: "#888888",
-    fontFamily: "Pretendard",
+    color: colors.gray[1],
   },
 });
