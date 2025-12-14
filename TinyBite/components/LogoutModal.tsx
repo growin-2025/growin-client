@@ -91,14 +91,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   cancelButton: {
-    width: "32%",
+    width: 116,
     backgroundColor: colors.gray[2],
   },
   cancelButtonText: {
     color: colors.white,
   },
   confirmButton: {
-    width: "64%",
+    width: 214,
     backgroundColor: colors.main,
   },
   confirmButtonText: {
