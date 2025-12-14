@@ -1,3 +1,4 @@
+import FloatingMenuButton from "@/components/main/FloatingMenuButton";
 import MainCard from "@/components/main/MainCard";
 import MainCategory from "@/components/main/MainCategory";
 import MainHeader from "@/components/main/MainHeader";
@@ -28,6 +29,11 @@ export default function HomeScreen() {
             <MainCard />
           </View>
         </ScrollView>
+
+        {/* 플로팅 버튼 */}
+        <View style={styles.floatingBtn}>
+          <FloatingMenuButton />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -40,6 +46,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    position: "relative",
     backgroundColor: colors.background,
   },
   scroll: {
@@ -53,5 +60,11 @@ const styles = StyleSheet.create({
   cardWrapper: {
     gap: 16,
     marginBottom: 16,
+  },
+
+  floatingBtn: {
+    position: "absolute",
+    right: 20,
+    bottom: 8,
   },
 });
