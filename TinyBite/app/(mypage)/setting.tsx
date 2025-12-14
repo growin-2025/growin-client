@@ -1,12 +1,15 @@
+import LogoutModal from "@/components/LogoutModal";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SettingScreen() {
   const router = useRouter();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -77,7 +80,10 @@ export default function SettingScreen() {
         <View style={styles.divider} />
 
         {/* 로그아웃 */}
-        <Pressable style={styles.settingItem}>
+        <Pressable
+          style={styles.settingItem}
+          onPress={() => setShowLogoutModal(true)}
+        >
           <View style={styles.settingItemLeft}>
             <Image
               source={require("@/assets/images/mypage/logout.png")}
@@ -93,6 +99,16 @@ export default function SettingScreen() {
           />
         </Pressable>
       </View>
+
+      {/* 로그아웃 확인 모달 */}
+      <LogoutModal
+        visible={showLogoutModal}
+        onClose={() => setShowLogoutModal(false)}
+        onConfirm={() => {
+          setShowLogoutModal(false);
+          // TODO: 로그아웃 로직 구현
+        }}
+      />
     </SafeAreaView>
   );
 }
@@ -158,7 +174,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: colors.gray[4],
+    backgroundColor: colors.gray[3],
     marginVertical: 8,
   },
 });
