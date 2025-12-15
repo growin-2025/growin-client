@@ -8,7 +8,7 @@ import { textStyles } from "@/styles/typography/textStyles";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useState } from "react";
 import {
   Image,
   ScrollView,
@@ -22,6 +22,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MainCardDetailScreen() {
   const router = useRouter();
+  const [currentPage, setCurrentPage] = useState(0);
 
   // 이미지 슬라이더용 이미지 배열 (5장)
   const images = [
@@ -35,31 +36,42 @@ export default function MainCardDetailScreen() {
   return (
     <>
       <StatusBar style="light" />
-      <View style={styles.container}>
-        {/* 이미지 슬라이더 */}
-        <View style={styles.swiperContainer}>
-          <PagerView style={styles.pagerView} initialPage={0}>
-            {images.map((image, index) => (
-              <View key={index} style={styles.slide}>
-                <Image
-                  style={styles.heroImage}
-                  source={image}
-                  resizeMode="cover"
-                />
-              </View>
-            ))}
-          </PagerView>
-        </View>
-        {/* 딤드 효과 */}
-        <LinearGradient
-          colors={["rgba(0, 0, 0, 0.3)", "rgba(0, 0, 0, 0)"]}
-          locations={[0, 0.36]}
-          style={styles.dimmedOverlay}
-        />
 
-        {/* 컨텐츠 */}
-        <View style={{ flex: 1 }}>
-          {/* 내용 */}
+      {/* 컨텐츠 */}
+      <View style={{ flex: 1 }}>
+        {/* 내용 */}
+        <View style={styles.container}>
+          {/* 이미지 슬라이더 */}
+          <View style={styles.swiperContainer}>
+            <PagerView
+              style={styles.pagerView}
+              initialPage={0}
+              onPageSelected={(e) => setCurrentPage(e.nativeEvent.position)}
+            >
+              {images.map((image, index) => (
+                <View key={index} style={styles.slide}>
+                  <Image
+                    style={styles.heroImage}
+                    source={image}
+                    resizeMode="cover"
+                  />
+                </View>
+              ))}
+            </PagerView>
+
+            {/* 페이지네이션 텍스트 (오른쪽 아래) */}
+            <View style={styles.paginationContainer}>
+              <Text style={[styles.paginationText, textStyles.body13_SB135]}>
+                {currentPage + 1} / {images.length}
+              </Text>
+            </View>
+          </View>
+          {/* 딤드 효과 */}
+          <LinearGradient
+            colors={["rgba(0, 0, 0, 0.3)", "rgba(0, 0, 0, 0)"]}
+            locations={[0, 0.36]}
+            style={styles.dimmedOverlay}
+          />
           <SafeAreaView style={styles.safeArea} edges={["top"]}>
             <View style={styles.inner}>
               <TouchableOpacity
@@ -175,7 +187,21 @@ const styles = StyleSheet.create({
     zIndex: 1,
     pointerEvents: "none",
   },
-
+  paginationContainer: {
+    position: "absolute",
+    bottom: 30,
+    right: 20,
+    zIndex: 2,
+    backgroundColor: "rgba(34, 34, 34, 0.5)",
+    borderRadius: 100,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  paginationText: {
+    color: colors.white,
+  },
   safeArea: {
     flex: 1,
   },
