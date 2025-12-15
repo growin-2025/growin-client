@@ -17,21 +17,39 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import PagerView from "react-native-pager-view";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MainCardDetailScreen() {
   const router = useRouter();
 
+  // 이미지 슬라이더용 이미지 배열 (5장)
+  const images = [
+    require("@/assets/images/mainlist/food1.jpg"),
+    require("@/assets/images/mainlist/food1.jpg"),
+    require("@/assets/images/mainlist/food1.jpg"),
+    require("@/assets/images/mainlist/food1.jpg"),
+    require("@/assets/images/mainlist/food1.jpg"),
+  ];
+
   return (
     <>
       <StatusBar style="light" />
       <View style={styles.container}>
-        {/* 상단 이미지 */}
-        <Image
-          style={styles.heroImage}
-          source={require("@/assets/images/mainlist/food1.jpg")}
-          resizeMode="cover"
-        />
+        {/* 이미지 슬라이더 */}
+        <View style={styles.swiperContainer}>
+          <PagerView style={styles.pagerView} initialPage={0}>
+            {images.map((image, index) => (
+              <View key={index} style={styles.slide}>
+                <Image
+                  style={styles.heroImage}
+                  source={image}
+                  resizeMode="cover"
+                />
+              </View>
+            ))}
+          </PagerView>
+        </View>
         {/* 딤드 효과 */}
         <LinearGradient
           colors={["rgba(0, 0, 0, 0.3)", "rgba(0, 0, 0, 0)"]}
@@ -123,14 +141,29 @@ export default function MainCardDetailScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, position: "relative" },
 
-  heroImage: {
+  swiperContainer: {
     position: "absolute",
-    backgroundColor: "#000000",
     top: 0,
     left: 0,
     right: 0,
     width: "100%",
     height: 300,
+    zIndex: 0,
+  },
+  pagerView: {
+    width: "100%",
+    height: "100%",
+  },
+  slide: {
+    flex: 1,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  heroImage: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#000000",
   },
   dimmedOverlay: {
     position: "absolute",
@@ -139,6 +172,8 @@ const styles = StyleSheet.create({
     right: 0,
     width: "100%",
     height: 300,
+    zIndex: 1,
+    pointerEvents: "none",
   },
 
   safeArea: {
@@ -169,6 +204,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     zIndex: 2,
+    backgroundColor: "transparent",
   },
   content: {
     marginTop: 220,
