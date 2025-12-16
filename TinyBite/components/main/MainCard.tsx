@@ -1,9 +1,22 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
+} from "react-native";
 
-const MainCard = ({ onPress }: { onPress?: () => void }) => (
-  <Pressable onPress={onPress} style={styles.card}>
+const MainCard = ({
+  onPress,
+  containerStyle,
+}: {
+  onPress?: () => void;
+  containerStyle?: ViewStyle;
+}) => (
+  <Pressable onPress={onPress} style={[styles.card, containerStyle]}>
     <Image
       source={require("@/assets/images/mainlist/food1.jpg")}
       style={styles.thumbnail}
