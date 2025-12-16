@@ -32,7 +32,10 @@ const FloatingMenuOverlay = () => {
           <View style={styles.menuContainer}>
             <TouchableOpacity
               style={styles.menuButton}
-              onPress={() => console.log("배달 클릭")}
+              onPress={() => {
+                console.log("배달 클릭");
+                setIsMenuOpen(false);
+              }}
             >
               <Image
                 style={styles.menuIcon}
@@ -47,7 +50,10 @@ const FloatingMenuOverlay = () => {
 
             <TouchableOpacity
               style={styles.menuButton}
-              onPress={() => console.log("생필품 클릭")}
+              onPress={() => {
+                console.log("생필품 클릭");
+                setIsMenuOpen(false);
+              }}
             >
               <Image
                 style={styles.menuIcon}
@@ -62,7 +68,10 @@ const FloatingMenuOverlay = () => {
 
             <TouchableOpacity
               style={styles.menuButton}
-              onPress={() => console.log("장보기 클릭")}
+              onPress={() => {
+                console.log("장보기 클릭");
+                setIsMenuOpen(false);
+              }}
             >
               <Image
                 style={styles.menuIcon}
