@@ -34,10 +34,12 @@ export default function HomeScreen() {
             </View>
           </ScrollView>
 
-          {/* 플로팅 버튼 */}
-          <View style={styles.floatingBtn}>
-            <FloatingMenuButton onPress={() => setIsMenuOpen(true)} />
-          </View>
+          {/* 플로팅 버튼 - Modal이 닫혔을 때만 표시 */}
+          {!isMenuOpen && (
+            <View style={styles.floatingBtn}>
+              <FloatingMenuButton onPress={() => setIsMenuOpen(true)} />
+            </View>
+          )}
         </View>
       </SafeAreaView>
 
@@ -45,6 +47,7 @@ export default function HomeScreen() {
       <FloatingMenuOverlay
         visible={isMenuOpen}
         onClose={() => setIsMenuOpen(false)}
+        onToggle={() => setIsMenuOpen(!isMenuOpen)}
       />
     </View>
   );

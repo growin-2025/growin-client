@@ -1,3 +1,4 @@
+import FloatingMenuButton from "@/components/main/FloatingMenuButton";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import {
@@ -13,11 +14,13 @@ import {
 interface FloatingMenuOverlayProps {
   visible: boolean;
   onClose: () => void;
+  onToggle: () => void;
 }
 
 const FloatingMenuOverlay = ({
   visible,
   onClose,
+  onToggle,
 }: FloatingMenuOverlayProps) => {
   return (
     <Modal
@@ -27,6 +30,7 @@ const FloatingMenuOverlay = ({
       onRequestClose={onClose}
       statusBarTranslucent={true}
     >
+      {/* 메뉴 */}
       <Pressable style={styles.overlay} onPress={onClose}>
         <View style={styles.menuContainer}>
           <TouchableOpacity
@@ -73,6 +77,11 @@ const FloatingMenuOverlay = ({
           </TouchableOpacity>
         </View>
       </Pressable>
+
+      {/* 버튼 */}
+      <View style={styles.floatingBtn}>
+        <FloatingMenuButton onPress={onToggle} />
+      </View>
     </Modal>
   );
 };
@@ -80,11 +89,12 @@ const FloatingMenuOverlay = ({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: "rgba(34, 34, 34, 0.50)",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "flex-end",
     alignItems: "flex-end",
+    // 플로팅 버튼 위에 위치
     paddingRight: 20,
-    paddingBottom: 160,
+    paddingBottom: 100,
   },
 
   menuContainer: {
@@ -119,6 +129,12 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: colors.gray[4],
     paddingHorizontal: 8,
+  },
+
+  floatingBtn: {
+    position: "absolute",
+    right: 20,
+    bottom: 8,
   },
 });
 
