@@ -1,16 +1,18 @@
 import { colors } from "@/styles/colors";
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Image, Pressable, StyleSheet } from "react-native";
 
-const FloatingMenuButton = () => {
+interface FloatingMenuButtonProps {
+  onPress?: () => void;
+}
+
+const FloatingMenuButton = ({ onPress }: FloatingMenuButtonProps) => {
   return (
-    <View style={styles.container}>
-      <TouchableOpacity>
-        <Image
-          source={require("@/assets/images/plus.png")}
-          style={styles.image}
-        />
-      </TouchableOpacity>
-    </View>
+    <Pressable onPress={onPress} style={styles.container}>
+      <Image
+        source={require("@/assets/images/plus.png")}
+        style={styles.image}
+      />
+    </Pressable>
   );
 };
 

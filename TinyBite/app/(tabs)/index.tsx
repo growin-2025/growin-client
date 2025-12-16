@@ -5,12 +5,14 @@ import MainCategory from "@/components/main/MainCategory";
 import MainHeader from "@/components/main/MainHeader";
 import { colors } from "@/styles/colors";
 import { useRouter } from "expo-router";
+import { useState } from "react";
 
 import { ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
   const router = useRouter();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <View style={{ flex: 1 }}>
@@ -32,9 +34,10 @@ export default function HomeScreen() {
             </View>
           </ScrollView>
 
-        {/* 플로팅 버튼 */}
-        <View style={styles.floatingBtn}>
-          <FloatingMenuButton />
+          {/* 플로팅 버튼 */}
+          <View style={styles.floatingBtn}>
+            <FloatingMenuButton onPress={() => setIsMenuOpen(true)} />
+          </View>
         </View>
       </SafeAreaView>
 
