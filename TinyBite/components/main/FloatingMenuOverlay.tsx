@@ -1,6 +1,7 @@
 import FloatingMenuButton from "@/components/main/FloatingMenuButton";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { useState } from "react";
 import {
   Image,
   Modal,
@@ -11,27 +12,19 @@ import {
   View,
 } from "react-native";
 
-interface FloatingMenuOverlayProps {
-  visible: boolean;
-  onClose: () => void;
-  onToggle: () => void;
-}
+const FloatingMenuOverlay = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-const FloatingMenuOverlay = ({
-  visible,
-  onClose,
-  onToggle,
-}: FloatingMenuOverlayProps) => {
   return (
     <Modal
-      visible={visible}
+      visible={isMenuOpen}
       transparent={true}
       animationType="fade"
-      onRequestClose={onClose}
+      onRequestClose={() => setIsMenuOpen(false)}
       statusBarTranslucent={true}
     >
-      {/* 메뉴 */}
-      <Pressable style={styles.overlay} onPress={onClose}>
+      <Pressable style={styles.container} onPress={() => setIsMenuOpen(false)}>
+        {/* 메뉴 */}
         <View style={styles.menuContainer}>
           <TouchableOpacity
             style={styles.menuButton}
@@ -76,25 +69,23 @@ const FloatingMenuOverlay = ({
             </Text>
           </TouchableOpacity>
         </View>
-      </Pressable>
 
-      {/* 버튼 */}
-      <View style={styles.floatingBtn}>
-        <FloatingMenuButton onPress={onToggle} />
-      </View>
+        {/* 버튼 */}
+        <FloatingMenuButton onPress={() => setIsMenuOpen((prev) => !prev)} />
+      </Pressable>
     </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  overlay: {
+  container: {
     flex: 1,
+    gap: 8,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "flex-end",
     alignItems: "flex-end",
-    // 플로팅 버튼 위에 위치
-    paddingRight: 20,
-    paddingBottom: 100,
+    paddingHorizontal: 20,
+    paddingVertical: 100,
   },
 
   menuContainer: {
@@ -129,12 +120,6 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: colors.gray[4],
     paddingHorizontal: 8,
-  },
-
-  floatingBtn: {
-    position: "absolute",
-    right: 20,
-    bottom: 8,
   },
 });
 
