@@ -1,4 +1,5 @@
 import FloatingMenuButton from "@/components/main/FloatingMenuButton";
+import FloatingMenuOverlay from "@/components/main/FloatingMenuOverlay";
 import MainCard from "@/components/main/MainCard";
 import MainCategory from "@/components/main/MainCategory";
 import MainHeader from "@/components/main/MainHeader";
@@ -12,30 +13,34 @@ export default function HomeScreen() {
   const router = useRouter();
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={["top"]}>
-      <View style={styles.container}>
-        <MainHeader />
-        <MainCategory />
-        <ScrollView
-          style={styles.scroll}
-          contentContainerStyle={styles.listWrapper}
-        >
-          <View style={styles.cardWrapper}>
-            <MainCard onPress={() => router.push("/main-card-detail")} />
-            <MainCard />
-            <MainCard />
-            <MainCard />
-            <MainCard />
-            <MainCard />
-          </View>
-        </ScrollView>
+    <View style={{ flex: 1 }}>
+      <SafeAreaView style={styles.safeArea} edges={["top"]}>
+        <View style={styles.container}>
+          <MainHeader />
+          <MainCategory />
+          <ScrollView
+            style={styles.scroll}
+            contentContainerStyle={styles.listWrapper}
+          >
+            <View style={styles.cardWrapper}>
+              <MainCard onPress={() => router.push("/main-card-detail")} />
+              <MainCard />
+              <MainCard />
+              <MainCard />
+              <MainCard />
+              <MainCard />
+            </View>
+          </ScrollView>
 
         {/* 플로팅 버튼 */}
         <View style={styles.floatingBtn}>
           <FloatingMenuButton />
         </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+
+      {/* 오버레이 Modal */}
+      <FloatingMenuOverlay />
+    </View>
   );
 }
 
