@@ -42,7 +42,10 @@ export default function HomeScreen() {
       </SafeAreaView>
 
       {/* 오버레이 Modal */}
-      <FloatingMenuOverlay />
+      <FloatingMenuOverlay
+        visible={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+      />
     </View>
   );
 }

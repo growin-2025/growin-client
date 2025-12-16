@@ -1,11 +1,27 @@
-import { Modal, Pressable, StyleSheet, Text } from "react-native";
+import {
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-const FloatingMenuOverlay = () => {
+interface FloatingMenuOverlayProps {
+  visible: boolean;
+  onClose: () => void;
+}
+
+const FloatingMenuOverlay = ({
+  visible,
+  onClose,
+}: FloatingMenuOverlayProps) => {
   return (
     <Modal
-      visible={true}
+      visible={visible}
       transparent={true}
       animationType="fade"
+      onRequestClose={onClose}
       statusBarTranslucent={true}
     >
       <Pressable style={styles.overlay}>
