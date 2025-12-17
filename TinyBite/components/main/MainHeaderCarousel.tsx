@@ -142,12 +142,12 @@ const styles = StyleSheet.create({
   // 캐릭터 이미지 래퍼: 오른쪽 상단에 절대 위치로 배치
   characterWrapper: {
     position: "absolute",
-    right: 3,
-    top: -10,
+    right: 25,
+    top: 3,
   },
   // 캐릭터 이미지 크기
   character: {
-    width: 195,
-    height: 191,
+    width: 156,
+    height: 150,
   },
 });

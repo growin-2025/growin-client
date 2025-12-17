@@ -20,11 +20,11 @@ const carouselData: CarouselItem[] = [
     character: require("@/assets/images/main/character.png"),
     backgroundColor: PRIMARY_COLOR,
     greeting1Style: textStyles.title20_B135,
-    greeting2Style: textStyles.title18_SB135,
+    greeting2Style: textStyles.title18_B135,
   },
   {
     greeting1: "저희 앱 어때요?\n의견이 필요해요",
-    greeting2: "\n츄비 눌러서 의견 주기 >",
+    greeting2: "\n츄비 눌러서 의견 주기   >",
     character: require("@/assets/images/main/character-opinion.png"),
     backgroundColor: PRIMARY_COLOR,
     greeting1Style: textStyles.title24_SB135,
