@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    position: "relative",
     backgroundColor: colors.background,
   },
   scroll: {
@@ -60,11 +59,5 @@ const styles = StyleSheet.create({
   cardWrapper: {
     gap: 16,
     marginBottom: 16,
-  },
-
-  floatingBtn: {
-    position: "absolute",
-    right: 20,
-    bottom: 8,
   },
 });
