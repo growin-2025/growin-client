@@ -1,15 +1,18 @@
+import FloatingMenuButton from "@/components/main/FloatingMenuButton";
 import FloatingMenuOverlay from "@/components/main/FloatingMenuOverlay";
 import MainCard from "@/components/main/MainCard";
 import MainCategory from "@/components/main/MainCategory";
 import MainHeader from "@/components/main/MainHeader";
 import { colors } from "@/styles/colors";
 import { useRouter } from "expo-router";
+import { useState } from "react";
 
 import { ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
   const router = useRouter();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <View style={{ flex: 1 }}>
@@ -33,8 +36,16 @@ export default function HomeScreen() {
         </View>
       </SafeAreaView>
 
-      {/* 플로팅 메뉴 오버레이 Modal */}
-      <FloatingMenuOverlay />
+      {/* 플로팅 버튼 - 항상 표시 */}
+      <View style={styles.floatingButtonContainer}>
+        <FloatingMenuButton onPress={() => setIsMenuOpen(true)} />
+      </View>
+
+      {/* 플로팅 메뉴 오버레이 */}
+      <FloatingMenuOverlay
+        isMenuOpen={isMenuOpen}
+        setIsMenuOpen={setIsMenuOpen}
+      />
     </View>
   );
 }
@@ -59,5 +70,11 @@ const styles = StyleSheet.create({
   cardWrapper: {
     gap: 16,
     marginBottom: 16,
+  },
+
+  floatingButtonContainer: {
+    position: "absolute",
+    right: 20,
+    bottom: 8,
   },
 });

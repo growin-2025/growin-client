@@ -1,7 +1,5 @@
-import FloatingMenuButton from "@/components/main/FloatingMenuButton";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { useState } from "react";
 import {
   Image,
   Modal,
@@ -11,97 +9,108 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import FloatingMenuButton from "./FloatingMenuButton";
 
-const FloatingMenuOverlay = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+interface FloatingMenuOverlayProps {
+  isMenuOpen: boolean;
+  setIsMenuOpen: (value: boolean) => void;
+}
 
+const FloatingMenuOverlay = ({
+  isMenuOpen,
+  setIsMenuOpen,
+}: FloatingMenuOverlayProps) => {
   return (
-    <Modal
-      visible={true}
-      transparent={true}
-      animationType="none"
-      statusBarTranslucent={true}
-    >
-      <Pressable
-        style={[styles.container, isMenuOpen && styles.containerBackground]}
-        onPress={() => setIsMenuOpen(false)}
-        pointerEvents={isMenuOpen ? "auto" : "box-none"}
-      >
-        {/* 메뉴 - isMenuOpen이 true일 때만 표시 */}
-        {isMenuOpen && (
-          <View style={styles.menuContainer}>
-            <TouchableOpacity
-              style={styles.menuButton}
-              onPress={() => {
-                console.log("배달 클릭");
-                setIsMenuOpen(false);
-              }}
+    <>
+      {/* 메뉴가 열렸을 때만 Modal 렌더링 */}
+      {isMenuOpen && (
+        <Modal
+          visible={true}
+          transparent={true}
+          animationType="fade"
+          statusBarTranslucent={true}
+          onRequestClose={() => setIsMenuOpen(false)}
+        >
+          <Pressable
+            style={styles.modalOverlay}
+            onPress={() => setIsMenuOpen(false)}
+          >
+            <View
+              style={styles.menuContainer}
+              onStartShouldSetResponder={() => true}
             >
-              <Image
-                style={styles.menuIcon}
-                source={require("@/assets/images/main/category/delivery.png")}
-              />
-              <Text style={[styles.menuText, textStyles.title20_SB135]}>
-                배달
-              </Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.menuButton}
+                onPress={() => {
+                  console.log("배달 클릭");
+                  setIsMenuOpen(false);
+                }}
+              >
+                <Image
+                  style={styles.menuIcon}
+                  source={require("@/assets/images/main/category/delivery.png")}
+                />
+                <Text style={[styles.menuText, textStyles.title20_SB135]}>
+                  배달
+                </Text>
+              </TouchableOpacity>
 
-            <View style={styles.divider} />
+              <View style={styles.divider} />
 
-            <TouchableOpacity
-              style={styles.menuButton}
-              onPress={() => {
-                console.log("생필품 클릭");
-                setIsMenuOpen(false);
-              }}
-            >
-              <Image
-                style={styles.menuIcon}
-                source={require("@/assets/images/main/category/essentials.png")}
-              />
-              <Text style={[styles.menuText, textStyles.title20_SB135]}>
-                생필품
-              </Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.menuButton}
+                onPress={() => {
+                  console.log("생필품 클릭");
+                  setIsMenuOpen(false);
+                }}
+              >
+                <Image
+                  style={styles.menuIcon}
+                  source={require("@/assets/images/main/category/essentials.png")}
+                />
+                <Text style={[styles.menuText, textStyles.title20_SB135]}>
+                  생필품
+                </Text>
+              </TouchableOpacity>
 
-            <View style={styles.divider} />
+              <View style={styles.divider} />
 
-            <TouchableOpacity
-              style={styles.menuButton}
-              onPress={() => {
-                console.log("장보기 클릭");
-                setIsMenuOpen(false);
-              }}
-            >
-              <Image
-                style={styles.menuIcon}
-                source={require("@/assets/images/main/category/grocery.png")}
-              />
-              <Text style={[styles.menuText, textStyles.title20_SB135]}>
-                장보기
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
+              <TouchableOpacity
+                style={styles.menuButton}
+                onPress={() => {
+                  console.log("장보기 클릭");
+                  setIsMenuOpen(false);
+                }}
+              >
+                <Image
+                  style={styles.menuIcon}
+                  source={require("@/assets/images/main/category/grocery.png")}
+                />
+                <Text style={[styles.menuText, textStyles.title20_SB135]}>
+                  장보기
+                </Text>
+              </TouchableOpacity>
+            </View>
 
-        {/* 버튼 - 항상 표시 */}
-        <FloatingMenuButton onPress={() => setIsMenuOpen((prev) => !prev)} />
-      </Pressable>
-    </Modal>
+            {/* 플로팅 버튼 - Modal 내부에 배치하여 최상위 유지 */}
+            <View style={styles.floatingButtonInModal} pointerEvents="box-none">
+              <FloatingMenuButton onPress={() => setIsMenuOpen(false)} />
+            </View>
+          </Pressable>
+        </Modal>
+      )}
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  modalOverlay: {
     flex: 1,
     gap: 8,
     justifyContent: "flex-end",
     alignItems: "flex-end",
     paddingHorizontal: 20,
-    paddingVertical: 100,
-  },
-  // 메뉴가 열렸을 때만 적용되는 배경색
-  containerBackground: {
+    paddingVertical: 160,
     backgroundColor: "rgba(34, 34, 34, 0.5)",
   },
 
@@ -137,6 +146,12 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: colors.gray[4],
     paddingHorizontal: 8,
+  },
+
+  floatingButtonInModal: {
+    position: "absolute",
+    right: 20,
+    bottom: 100,
   },
 });
 
