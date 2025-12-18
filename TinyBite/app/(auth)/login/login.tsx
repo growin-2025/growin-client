@@ -1,35 +1,26 @@
-import { postLoginGoogle, postSignupGoogle } from "@/api/authApi";
 import { getCurrentUser, signIn, signOut } from "@/hooks/useGoogleAuth";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import {
-  Image,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LoginScreen() {
   const router = useRouter();
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
-  const loginMutation = useMutation({
-    mutationFn: postLoginGoogle,
-  });
+  // const loginMutation = useMutation({
+  //   mutationFn: postLoginGoogle,
+  // });
 
-  const signupMutation = useMutation({
-    mutationFn: postSignupGoogle,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["me"] });
-      router.replace("/(tabs)");
-    },
-  });
+  // const signupMutation = useMutation({
+  //   mutationFn: postSignupGoogle,
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({ queryKey: ["me"] });
+  //     router.replace("/(tabs)");
+  //   },
+  // });
 
   // useEffect(() => {
   //   if (response?.type === "success") {
@@ -45,16 +36,9 @@ export default function LoginScreen() {
   // }, [loginMutation, response]);
 
   const handleGoogleLogin = async () => {
-    console.log("handleGoogleLogin 클릭");
     try {
-      console.log("1");
       const idToken = await signIn();
-      console.log("8");
       console.log("handleGoogleLogin - idToken: ", idToken);
-      console.log(
-        "platformType: ",
-        Platform.OS.toUpperCase() as "ANDROID" | "IOS"
-      );
 
       // await loginMutation.mutateAsync({
       //   idToken: idToken,
@@ -64,7 +48,6 @@ export default function LoginScreen() {
       // queryClient.invalidateQueries({ queryKey: ["me"] });
       // router.replace("/(tabs)");
     } catch (error) {
-      console.log("handleGoogleLogin - error");
       console.error(error);
       // if (error?.response?.status === 404) {
       //   await signupMutation.mutateAsync({
