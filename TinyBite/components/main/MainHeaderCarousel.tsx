@@ -1,4 +1,6 @@
 import { colors } from "@/styles/colors";
+import { textStyles } from "@/styles/typography/textStyles";
+import { useState } from "react";
 import {
   Dimensions,
   Image,
@@ -43,17 +45,25 @@ const MainHeaderCarousel = ({
   onPageChange,
   height = 178,
 }: MainHeaderCarouselProps) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const totalPages = data.length;
+
+  const handlePageChange = (index: number) => {
+    setCurrentIndex(index);
+    onPageChange?.(index);
+  };
+
   return (
     <View style={styles.carouselContainer}>
       <Carousel
         width={SCREEN_WIDTH}
         height={height}
         data={data}
-        scrollAnimationDuration={600}
+        scrollAnimationDuration={900}
         autoPlay={true}
         autoPlayInterval={5000}
         loop={true}
-        onSnapToItem={(index: number) => onPageChange?.(index)}
+        onSnapToItem={handlePageChange}
         renderItem={({
           item,
           index,
@@ -102,6 +112,12 @@ const MainHeaderCarousel = ({
           </View>
         )}
       />
+      {/* 페이지네이션 인디케이터 (오른쪽 아래) */}
+      <View style={styles.paginationContainer}>
+        <Text style={[textStyles.body12_M135, styles.paginationText]}>
+          {currentIndex + 1} / {totalPages}
+        </Text>
+      </View>
     </View>
   );
 };
@@ -129,7 +145,7 @@ const styles = StyleSheet.create({
   // 텍스트 블록: 인사말이 표시되는 영역
   textBlock: {
     flex: 1,
-    marginTop: 10,
+    marginTop: 14,
   },
   // 첫 번째 인사말 기본 스타일 (흰색)
   greetingLine1: {
@@ -149,5 +165,21 @@ const styles = StyleSheet.create({
   character: {
     width: 156,
     height: 150,
+  },
+  // 페이지네이션 컨테이너: 왼쪽 아래에 절대 위치
+  paginationContainer: {
+    position: "absolute",
+    left: 20,
+    bottom: 8,
+    backgroundColor: "rgba(34, 34, 34, 0.5)",
+    borderRadius: 100,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  // 페이지네이션 텍스트 스타일
+  paginationText: {
+    color: colors.white,
   },
 });
