@@ -4,25 +4,21 @@ import {
   isSuccessResponse,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
+import Constants from "expo-constants";
 
-GoogleSignin.configure();
+GoogleSignin.configure({
+  webClientId: Constants.expoConfig?.extra?.googleWebClientId,
+});
 
 export const signIn = async () => {
-  console.log("2");
   try {
-    console.log("3");
     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-    console.log("4");
     const response = await GoogleSignin.signIn();
-    const idToken = await GoogleSignin.getTokens();
-    console.log("5");
     if (isSuccessResponse(response)) {
       // use signInResponse.data
-      console.log("6");
-      console.log("userInfo: ", response);
+      const idToken = await GoogleSignin.getTokens();
       console.log("idToken: ", idToken);
-      console.log("7");
-      return response.data.idToken;
+      return idToken;
     } else {
       // sign in was cancelled by user
     }
