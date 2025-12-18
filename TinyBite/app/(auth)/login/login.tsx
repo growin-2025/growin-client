@@ -1,5 +1,5 @@
 import { postLoginGoogle, postSignupGoogle } from "@/api/authApi";
-import { useGoogleAuth } from "@/hooks/useGoogleAuth";
+import { getCurrentUser, signIn, signOut } from "@/hooks/useGoogleAuth";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -18,7 +18,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function LoginScreen() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { getIdToken } = useGoogleAuth();
 
   const loginMutation = useMutation({
     mutationFn: postLoginGoogle,
@@ -48,7 +47,9 @@ export default function LoginScreen() {
   const handleGoogleLogin = async () => {
     console.log("handleGoogleLogin 클릭");
     try {
-      const idToken = await getIdToken();
+      console.log("1");
+      const idToken = await signIn();
+      console.log("8");
       console.log("handleGoogleLogin - idToken: ", idToken);
       console.log(
         "platformType: ",
@@ -98,6 +99,24 @@ export default function LoginScreen() {
       />
 
       <View style={styles.buttons}>
+        <TouchableOpacity
+          style={[styles.socialButton, styles.google]}
+          onPress={signOut}
+        >
+          <Text style={[styles.socialText, textStyles.title18_SB135]}>
+            임시 google 로그아웃 버튼
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.socialButton, styles.google]}
+          onPress={getCurrentUser}
+        >
+          <Text style={[styles.socialText, textStyles.title18_SB135]}>
+            임시 google getCurrentUser 버튼
+          </Text>
+        </TouchableOpacity>
+
         <TouchableOpacity
           style={[styles.socialButton, styles.kakao]}
           onPress={() => handleLoginPress("kakao")}
