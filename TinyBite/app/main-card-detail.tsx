@@ -10,6 +10,7 @@ import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import {
+  Dimensions,
   Image,
   ScrollView,
   StyleSheet,
@@ -17,8 +18,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import PagerView from "react-native-pager-view";
+import Carousel from "react-native-reanimated-carousel";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function MainCardDetailScreen() {
   const router = useRouter();
@@ -43,21 +46,22 @@ export default function MainCardDetailScreen() {
         <View style={styles.container}>
           {/* 이미지 슬라이더 */}
           <View style={styles.swiperContainer}>
-            <PagerView
-              style={styles.pagerView}
-              initialPage={0}
-              onPageSelected={(e) => setCurrentPage(e.nativeEvent.position)}
-            >
-              {images.map((image, index) => (
+            <Carousel
+              width={SCREEN_WIDTH}
+              height={300}
+              data={images}
+              scrollAnimationDuration={600}
+              onSnapToItem={(index) => setCurrentPage(index)}
+              renderItem={({ item, index }) => (
                 <View key={index} style={styles.slide}>
                   <Image
                     style={styles.heroImage}
-                    source={image}
+                    source={item}
                     resizeMode="cover"
                   />
                 </View>
-              ))}
-            </PagerView>
+              )}
+            />
 
             {/* 페이지네이션 텍스트 (오른쪽 아래) */}
             <View style={styles.paginationContainer}>
@@ -161,10 +165,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 300,
     zIndex: 0,
-  },
-  pagerView: {
-    width: "100%",
-    height: "100%",
   },
   slide: {
     flex: 1,
