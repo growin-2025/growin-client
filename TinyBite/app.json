@@ -35,7 +35,13 @@
           "faceIDPermission": "Allow 한입만 to access your Face ID biometric data."
         }
       ],
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.957263580328-asskf9580sk280aae7v51fg3leg6u6t5"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
