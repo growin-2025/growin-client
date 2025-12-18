@@ -1,12 +1,78 @@
+import { postLoginGoogle, postSignupGoogle } from "@/api/authApi";
+import { useGoogleAuth } from "@/hooks/useGoogleAuth";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LoginScreen() {
   const router = useRouter();
+  const queryClient = useQueryClient();
+  const { getIdToken } = useGoogleAuth();
+
+  const loginMutation = useMutation({
+    mutationFn: postLoginGoogle,
+  });
+
+  const signupMutation = useMutation({
+    mutationFn: postSignupGoogle,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["me"] });
+      router.replace("/(tabs)");
+    },
+  });
+
+  // useEffect(() => {
+  //   if (response?.type === "success") {
+  //     const idToken = response.params.id_token;
+
+  //     const loginData: LoginGoogle = {
+  //       idToken,
+  //       platformType: Platform.OS.toUpperCase() as "ANDROID" | "IOS",
+  //     };
+
+  //     loginMutation.mutate(loginData);
+  //   }
+  // }, [loginMutation, response]);
+
+  const handleGoogleLogin = async () => {
+    console.log("handleGoogleLogin 클릭");
+    try {
+      const idToken = await getIdToken();
+      console.log("handleGoogleLogin - idToken: ", idToken);
+      console.log(
+        "platformType: ",
+        Platform.OS.toUpperCase() as "ANDROID" | "IOS"
+      );
+
+      // await loginMutation.mutateAsync({
+      //   idToken: idToken,
+      //   platformType: Platform.OS.toUpperCase() as "ANDROID" | "IOS",
+      // });
+
+      // queryClient.invalidateQueries({ queryKey: ["me"] });
+      // router.replace("/(tabs)");
+    } catch (error) {
+      console.log("handleGoogleLogin - error");
+      console.error(error);
+      // if (error?.response?.status === 404) {
+      //   await signupMutation.mutateAsync({
+      //     provider: "google",
+      //     token: error.token ?? "",
+      //   });
+      // }
+    }
+  };
 
   const handleLoginPress = (provider: string) => {
     console.log("소셜 로그인:", provider);
@@ -44,7 +110,7 @@ export default function LoginScreen() {
 
         <TouchableOpacity
           style={[styles.socialButton, styles.google]}
-          onPress={() => handleLoginPress("google")}
+          onPress={handleGoogleLogin}
         >
           <Image source={require("@/assets/images/login/icon-google.png")} />
           <Text style={[styles.socialText, textStyles.title18_SB135]}>
