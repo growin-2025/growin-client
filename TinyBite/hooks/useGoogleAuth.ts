@@ -16,47 +16,36 @@ export const signIn = async () => {
     const response = await GoogleSignin.signIn();
     if (isSuccessResponse(response)) {
       // use signInResponse.data
-      const idToken = await GoogleSignin.getTokens();
-      console.log("idToken: ", idToken);
+      const { idToken } = await GoogleSignin.getTokens();
       return idToken;
     } else {
       // sign in was cancelled by user
     }
   } catch (error) {
-    console.log("error 1");
     if (isErrorWithCode(error)) {
-      console.log("error 2");
       switch (error.code) {
         case statusCodes.IN_PROGRESS:
           // operation (eg. sign in) already in progress
-          console.log("error 3");
           break;
         case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
           // Android only, play services not available or outdated
-          console.log("error 4");
           break;
         default:
-          // some other error happened
-          console.log("error 5");
+        // some other error happened
       }
       console.error(error);
-      console.log("error code: ", error.code);
     } else {
       // an error that's not related to google sign in occurred
-      console.log("error 6");
     }
   }
 };
 
 export const signOut = async () => {
-  console.log("signOut 시도");
   try {
     await GoogleSignin.signOut();
-    console.log("signOut 완료");
     // Remember to remove the user from your app's state as well
   } catch (error) {
     console.error(error);
-    console.log("signOut 에러");
   }
 };
 
