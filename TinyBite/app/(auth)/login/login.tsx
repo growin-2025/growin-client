@@ -1,18 +1,27 @@
+import { postLoginGoogle } from "@/api/authApi";
 import { getCurrentUser, signIn, signOut } from "@/hooks/useGoogleAuth";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LoginScreen() {
   const router = useRouter();
   // const queryClient = useQueryClient();
 
-  // const loginMutation = useMutation({
-  //   mutationFn: postLoginGoogle,
-  // });
+  const loginMutation = useMutation({
+    mutationFn: postLoginGoogle,
+  });
 
   // const signupMutation = useMutation({
   //   mutationFn: postSignupGoogle,
@@ -38,12 +47,13 @@ export default function LoginScreen() {
   const handleGoogleLogin = async () => {
     try {
       const idToken = await signIn();
-      console.log("handleGoogleLogin - idToken: ", idToken);
 
-      // await loginMutation.mutateAsync({
-      //   idToken: idToken,
-      //   platformType: Platform.OS.toUpperCase() as "ANDROID" | "IOS",
-      // });
+      if (idToken) {
+        await loginMutation.mutateAsync({
+          idToken: idToken,
+          platformType: Platform.OS.toUpperCase() as "ANDROID" | "IOS",
+        });
+      }
 
       // queryClient.invalidateQueries({ queryKey: ["me"] });
       // router.replace("/(tabs)");
