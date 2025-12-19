@@ -4,9 +4,7 @@ import { LoginGoogle, SignupGoogle } from "@/types/auth";
 
 export const postLoginGoogle = async (loginData: LoginGoogle) => {
   try {
-    const res = await publicAxios.post(ENDPOINT.USER.LOGIN_GOOGLE, {
-      loginData,
-    });
+    const res = await publicAxios.post(ENDPOINT.USER.LOGIN_GOOGLE, loginData);
     console.log("res: ", res);
     return res;
   } catch (e) {
@@ -16,9 +14,7 @@ export const postLoginGoogle = async (loginData: LoginGoogle) => {
 
 export const postSignupGoogle = async (signupData: SignupGoogle) => {
   try {
-    const res = await publicAxios.post(ENDPOINT.USER.SIGNUP_GOOGLE, {
-      signupData,
-    });
+    const res = await publicAxios.post(ENDPOINT.USER.SIGNUP_GOOGLE, signupData);
     console.log("res: ", res);
     return res;
   } catch (e) {
