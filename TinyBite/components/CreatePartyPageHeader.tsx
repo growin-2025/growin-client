@@ -2,7 +2,7 @@ import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const CHEVRON_LEFT_ICON = require("@/assets/images/chevron/chevron-left-36-gray.png");
@@ -24,9 +24,9 @@ const CreatePartyPageHeader = ({
       <StatusBar style="dark" />
 
       <View style={styles.container}>
-        <Pressable onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => router.back()}>
           <Image style={styles.image} source={CHEVRON_LEFT_ICON} />
-        </Pressable>
+        </TouchableOpacity>
 
         <Text style={[styles.text, textStyles.title20_B135]}>{title}</Text>
       </View>

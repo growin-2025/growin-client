@@ -1,7 +1,7 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { useState } from "react";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const MINUS_ICON = require("@/assets/images/minus-24-gray.png");
 const PLUS_ICON = require("@/assets/images/plus-24-gray.png");
@@ -24,9 +24,12 @@ const NumberOfPeopleBox = () => {
   return (
     <View style={styles.container}>
       <View style={styles.inner}>
-        <Pressable style={styles.buttonContainer} onPress={handleClickMinus}>
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={handleClickMinus}
+        >
           <Image style={styles.image} source={MINUS_ICON} />
-        </Pressable>
+        </TouchableOpacity>
 
         <View style={styles.textContainer}>
           <Text style={[styles.textNumber, textStyles.title20_SB135]}>
@@ -35,9 +38,12 @@ const NumberOfPeopleBox = () => {
           <Text style={[styles.textUnit, textStyles.body16_SB135]}>명</Text>
         </View>
 
-        <Pressable style={styles.buttonContainer} onPress={handleClickPlus}>
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={handleClickPlus}
+        >
           <Image style={styles.image} source={PLUS_ICON} />
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -67,6 +73,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 16,
     backgroundColor: colors.gray[4],
+  },
+  image: {
+    width: 24,
+    height: 24,
   },
   textContainer: {
     flexDirection: "row",
