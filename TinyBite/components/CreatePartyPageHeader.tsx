@@ -1,7 +1,6 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { router } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -9,20 +8,11 @@ const CHEVRON_LEFT_ICON = require("@/assets/images/chevron/chevron-left-36-gray.
 
 interface CreatePartyPageHeaderProps {
   title: string;
-  mBottom?: number;
 }
 
-const CreatePartyPageHeader = ({
-  title,
-  mBottom,
-}: CreatePartyPageHeaderProps) => {
+const CreatePartyPageHeader = ({ title }: CreatePartyPageHeaderProps) => {
   return (
-    <SafeAreaView
-      style={[styles.safeAreaView, { marginBottom: mBottom }]}
-      edges={["top"]}
-    >
-      <StatusBar style="dark" />
-
+    <SafeAreaView style={styles.safeAreaView} edges={["top"]}>
       <View style={styles.container}>
         <TouchableOpacity onPress={() => router.back()}>
           <Image style={styles.image} source={CHEVRON_LEFT_ICON} />
