@@ -7,17 +7,29 @@ const X_MARK_ICON = require("@/assets/images/x-mark-14-gray.png");
 interface PhotoItemProps {
   id: string;
   url: string;
+  representativePhoto: string;
+  setRepresentativePhoto: (number: string) => void;
 }
 
-const PhotoItem = ({ id, url }: PhotoItemProps) => {
+const PhotoItem = ({
+  id,
+  url,
+  representativePhoto,
+  setRepresentativePhoto,
+}: PhotoItemProps) => {
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onLongPress={() => setRepresentativePhoto(id)}
+    >
       <View style={styles.imageContainer}>
         <Image style={styles.image} source={{ uri: url }} resizeMode="cover" />
 
-        <View style={styles.textContainer}>
-          <Text style={[styles.text, textStyles.body12_M135]}>대표</Text>
-        </View>
+        {id === representativePhoto && (
+          <View style={styles.textContainer}>
+            <Text style={[styles.text, textStyles.body12_M135]}>대표</Text>
+          </View>
+        )}
       </View>
 
       <TouchableOpacity style={styles.xButton}>
