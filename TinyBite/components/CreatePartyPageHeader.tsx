@@ -40,6 +40,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 12,
     backgroundColor: "#fff",
+    shadowColor: "rgba(0, 0, 0, 0.25)",
+    shadowRadius: 4,
+    elevation: 4,
   },
   container: {
     flexDirection: "row",
