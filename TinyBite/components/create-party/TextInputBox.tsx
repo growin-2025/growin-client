@@ -51,8 +51,8 @@ const TextInputBox = ({
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 16,
     borderRadius: 16,
     backgroundColor: colors.white,
     shadowColor: "rgba(0, 0, 0, 0.25)",
