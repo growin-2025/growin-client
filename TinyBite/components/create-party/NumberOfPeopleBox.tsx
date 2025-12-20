@@ -3,6 +3,9 @@ import { textStyles } from "@/styles/typography/textStyles";
 import { useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
+const MINUS_ICON = require("@/assets/images/minus-24-gray.png");
+const PLUS_ICON = require("@/assets/images/plus-24-gray.png");
+
 const NumberOfPeopleBox = () => {
   const [value, setValue] = useState(2);
 
@@ -22,7 +25,7 @@ const NumberOfPeopleBox = () => {
     <View style={styles.container}>
       <View style={styles.inner}>
         <Pressable style={styles.buttonContainer} onPress={handleClickMinus}>
-          <Image source={require("@/assets/images/minus-24-gray.png")} />
+          <Image style={styles.image} source={MINUS_ICON} />
         </Pressable>
 
         <View style={styles.textContainer}>
@@ -33,7 +36,7 @@ const NumberOfPeopleBox = () => {
         </View>
 
         <Pressable style={styles.buttonContainer} onPress={handleClickPlus}>
-          <Image source={require("@/assets/images/plus-24-gray.png")} />
+          <Image style={styles.image} source={PLUS_ICON} />
         </Pressable>
       </View>
     </View>

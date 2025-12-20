@@ -5,6 +5,8 @@ import { StatusBar } from "expo-status-bar";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+const CHEVRON_LEFT_ICON = require("@/assets/images/chevron/chevron-left-36-gray.png");
+
 interface CreatePartyPageHeaderProps {
   title: string;
   mBottom?: number;
@@ -23,10 +25,7 @@ const CreatePartyPageHeader = ({
 
       <View style={styles.container}>
         <Pressable onPress={() => router.back()}>
-          <Image
-            style={styles.image}
-            source={require("@/assets/images/chevron/chevron-left-36-gray.png")}
-          />
+          <Image style={styles.image} source={CHEVRON_LEFT_ICON} />
         </Pressable>
 
         <Text style={[styles.text, textStyles.title20_B135]}>{title}</Text>
