@@ -64,6 +64,7 @@ const MainCardDetailImageCarousel = ({
           height={300}
           data={images}
           scrollAnimationDuration={600}
+          enabled={images.length > 1} // 이미지가 2개 이상일 때만 슬라이드 활성화
           onSnapToItem={(index) => setCurrentPage(index)} // 페이지 변경 시 인덱스 업데이트
           renderItem={({ item, index }) => (
             <View key={index} style={styles.slide}>
@@ -82,13 +83,15 @@ const MainCardDetailImageCarousel = ({
           style={styles.dimmedOverlay}
         />
       </Animated.View>
-      {/* 페이지네이션 텍스트 (오른쪽 아래) */}
+      {/* 페이지네이션 텍스트 (오른쪽 아래) - 이미지가 2개 이상일 때만 표시 */}
       {/* Animated.View 밖에 배치하여 확대되지 않도록 */}
-      <View style={styles.paginationContainer}>
-        <Text style={[styles.paginationText, textStyles.body13_SB135]}>
-          {currentPage + 1} / {images.length}
-        </Text>
-      </View>
+      {images.length > 1 && (
+        <View style={styles.paginationContainer}>
+          <Text style={[styles.paginationText, textStyles.body13_SB135]}>
+            {currentPage + 1} / {images.length}
+          </Text>
+        </View>
+      )}
     </View>
   );
 };
