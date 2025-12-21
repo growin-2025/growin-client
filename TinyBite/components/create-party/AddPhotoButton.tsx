@@ -8,9 +8,10 @@ import { useShallow } from "zustand/shallow";
 const CAMERA_ICON = require("@/assets/images/camera-24-gray.png");
 
 const AddPhotoButton = () => {
-  const { addPhoto } = usecreatingPartyStore(
+  const { addPhoto, photos } = usecreatingPartyStore(
     useShallow((state) => ({
       addPhoto: state.addPhoto,
+      photos: state.photos,
     }))
   );
 
@@ -25,6 +26,8 @@ const AddPhotoButton = () => {
       );
       return;
     }
+
+    if (photos.length >= 5) return;
 
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
