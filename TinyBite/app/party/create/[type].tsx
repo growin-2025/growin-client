@@ -18,10 +18,17 @@ const PARTY_TITLES = {
   necessities: "생필품 파티 생성",
 } as const;
 
+const PARTY_CONFIG = {
+  delivery: { showProductLink: false },
+  shopping: { showProductLink: true },
+  necessities: { showProductLink: true },
+} as const;
+
 export default function PartyCreateScreen() {
   const { type } = useLocalSearchParams<{ type: "shopping" | "necessities" }>();
 
   const title = PARTY_TITLES[type];
+  const config = PARTY_CONFIG[type];
 
   const { photos } = usecreatingPartyStore(
     useShallow((state) => ({
@@ -91,7 +98,7 @@ export default function PartyCreateScreen() {
               />
             </View>
 
-            {(type === "shopping" || type === "necessities") && (
+            {config.showProductLink && (
               <View style={styles.section}>
                 <SubTitle subTitle="상품 링크" />
                 <TextInputBox
