@@ -1,29 +1,45 @@
+import { usecreatingPartyStore } from "@/stores/creatingPartyStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useShallow } from "zustand/shallow";
 
 const X_MARK_ICON = require("@/assets/images/x-mark-14-gray.png");
 
 interface PhotoItemProps {
-  id: string;
-  url: string;
-  representativePhoto: string;
-  setRepresentativePhoto: (number: string) => void;
+  id: number;
+  imageUri: string;
+  representativePhoto: number;
+  setRepresentativePhoto: (number: number) => void;
 }
 
 const PhotoItem = ({
   id,
-  url,
+  imageUri,
   representativePhoto,
   setRepresentativePhoto,
 }: PhotoItemProps) => {
+  const { deletePhoto } = usecreatingPartyStore(
+    useShallow((state) => ({
+      deletePhoto: state.deletePhoto,
+    }))
+  );
+
+  const onClickDeletePhoto = () => {
+    deletePhoto(id);
+  };
+
   return (
     <TouchableOpacity
       style={styles.container}
       onLongPress={() => setRepresentativePhoto(id)}
     >
       <View style={styles.imageContainer}>
-        <Image style={styles.image} source={{ uri: url }} resizeMode="cover" />
+        <Image
+          style={styles.image}
+          source={{ uri: imageUri }}
+          resizeMode="cover"
+        />
 
         {id === representativePhoto && (
           <View style={styles.textContainer}>
@@ -32,7 +48,7 @@ const PhotoItem = ({
         )}
       </View>
 
-      <TouchableOpacity style={styles.xButton}>
+      <TouchableOpacity style={styles.xButton} onPress={onClickDeletePhoto}>
         <Image style={styles.xIcon} source={X_MARK_ICON} />
       </TouchableOpacity>
     </TouchableOpacity>
