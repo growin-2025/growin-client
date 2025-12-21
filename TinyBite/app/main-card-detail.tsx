@@ -74,6 +74,29 @@ export default function MainCardDetailScreen() {
             resizeMode="contain"
           />
         </TouchableOpacity>
+        {/* 더보기 버튼 (오른쪽) - 헤더 위에 고정 */}
+        <View
+          style={[
+            styles.moreButtonContainer,
+            { marginTop: insets.top + 2, padding: 1 },
+          ]}
+        >
+          <Image
+            source={require("@/assets/images/mainlist/detail/more-6.png")}
+            style={styles.moreIcon}
+            resizeMode="contain"
+          />
+          <Image
+            source={require("@/assets/images/mainlist/detail/more-6.png")}
+            style={styles.moreIcon}
+            resizeMode="contain"
+          />
+          <Image
+            source={require("@/assets/images/mainlist/detail/more-6.png")}
+            style={styles.moreIcon}
+            resizeMode="contain"
+          />
+        </View>
         {/* 스크롤 가능한 콘텐츠 영역 */}
         <Animated.ScrollView
           style={styles.contentContainer}
@@ -194,6 +217,24 @@ const styles = StyleSheet.create({
   backButtonImage: {
     width: 36,
     height: 36,
+  },
+  // 더보기 버튼 컨테이너 (오른쪽)
+  moreButtonContainer: {
+    position: "absolute",
+    right: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 36,
+    height: 36,
+    borderRadius: 20,
+    backgroundColor: "rgba(0,0,0,0.3)", // 반투명 배경
+    zIndex: 11, // 헤더 배경 위에 표시
+  },
+  moreIcon: {
+    width: 6,
+    height: 6,
+    marginHorizontal: 2.44, // gap 4.88 / 2 = 2.44 (양쪽 마진)
   },
   // 스크롤 가능한 콘텐츠 컨테이너
   contentContainer: {
