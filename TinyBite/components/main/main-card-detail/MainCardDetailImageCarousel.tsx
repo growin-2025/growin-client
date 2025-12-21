@@ -1,13 +1,15 @@
 import { textStyles } from "@/styles/typography/textStyles";
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Image,
   ImageSourcePropType,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
+import ImageViewing from "react-native-image-viewing";
 import Animated, {
   SharedValue,
   useAnimatedStyle,
@@ -32,6 +34,8 @@ const MainCardDetailImageCarousel = ({
   screenWidth,
 }: MainCardDetailImageCarouselProps) => {
   const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 인덱스
+  const [imageViewerVisible, setImageViewerVisible] = useState(false); // 이미지 뷰어 표시 여부
+  const [imageViewerIndex, setImageViewerIndex] = useState(0); // 이미지 뷰어에서 보여줄 이미지 인덱스
 
   /**
    * 이미지 확대 애니메이션 스타일
@@ -54,6 +58,23 @@ const MainCardDetailImageCarousel = ({
     };
   });
 
+  // ImageViewing용 이미지 데이터 변환 (images가 변경될 때만 재계산)
+  const viewerImages = useMemo(
+    () =>
+      images.map((img) => {
+        if (typeof img === "number") {
+          // require()로 가져온 이미지
+          const resolved = Image.resolveAssetSource(img);
+          return { uri: resolved.uri };
+        } else if (typeof img === "object" && "uri" in img) {
+          // ImageURISource
+          return { uri: img.uri || "" };
+        }
+        return { uri: "" };
+      }),
+    [images]
+  );
+
   return (
     <View style={styles.imageWrapper}>
       {/* 확대 애니메이션이 적용되는 이미지 컨테이너 */}
@@ -67,13 +88,21 @@ const MainCardDetailImageCarousel = ({
           enabled={images.length > 1} // 이미지가 2개 이상일 때만 슬라이드 활성화
           onSnapToItem={(index) => setCurrentPage(index)} // 페이지 변경 시 인덱스 업데이트
           renderItem={({ item, index }) => (
-            <View key={index} style={styles.slide}>
+            <TouchableOpacity
+              key={index}
+              style={styles.slide}
+              activeOpacity={0.9}
+              onPress={() => {
+                setImageViewerIndex(index);
+                setImageViewerVisible(true);
+              }}
+            >
               <Image
                 style={styles.heroImage}
                 source={item}
                 resizeMode="cover"
               />
-            </View>
+            </TouchableOpacity>
           )}
         />
         {/* 하단 그라데이션 딤드 효과 */}
@@ -92,6 +121,15 @@ const MainCardDetailImageCarousel = ({
           </Text>
         </View>
       )}
+      {/* 이미지 뷰어 (전체 화면) */}
+      <ImageViewing
+        images={viewerImages}
+        imageIndex={imageViewerIndex}
+        visible={imageViewerVisible}
+        onRequestClose={() => setImageViewerVisible(false)}
+        swipeToCloseEnabled={true}
+        doubleTapToZoomEnabled={true}
+      />
     </View>
   );
 };
