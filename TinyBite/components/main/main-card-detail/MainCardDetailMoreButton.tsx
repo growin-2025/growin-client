@@ -1,3 +1,4 @@
+import ConfirmModal from "@/components/ConfirmModal";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import React, { useState } from "react";
@@ -7,7 +8,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 interface MainCardDetailMoreButtonProps {
   marginTop: number; // SafeArea insets에 따른 marginTop
   onEdit?: () => void; // 수정 버튼 클릭 시 호출
-  onDelete?: () => void; // 삭제 버튼 클릭 시 호출
+  onDelete?: () => Promise<boolean> | boolean | void; // 삭제 버튼 클릭 시 호출 (성공 시 true, 실패 시 false 반환)
 }
 
 /**
@@ -21,6 +22,12 @@ const MainCardDetailMoreButton = ({
   onDelete,
 }: MainCardDetailMoreButtonProps) => {
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false); // 바텀 시트 표시 여부
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false); // 삭제 확인 모달 표시 여부
+  const [deleteFailedModalVisible, setDeleteFailedModalVisible] =
+    useState(false); // 삭제 실패 모달 표시 여부
+
+  // 더보기 아이콘 배열
+  const moreIcons = [1, 2, 3];
 
   return (
     <>
@@ -29,21 +36,14 @@ const MainCardDetailMoreButton = ({
         onPress={() => setBottomSheetVisible(true)}
         style={[styles.moreButtonContainer, { marginTop, padding: 1 }]}
       >
-        <Image
-          source={require("@/assets/images/mainlist/detail/more-6.png")}
-          style={styles.moreIcon}
-          resizeMode="contain"
-        />
-        <Image
-          source={require("@/assets/images/mainlist/detail/more-6.png")}
-          style={styles.moreIcon}
-          resizeMode="contain"
-        />
-        <Image
-          source={require("@/assets/images/mainlist/detail/more-6.png")}
-          style={styles.moreIcon}
-          resizeMode="contain"
-        />
+        {moreIcons.map((_, index) => (
+          <Image
+            key={index}
+            source={require("@/assets/images/mainlist/detail/more-6.png")}
+            style={styles.moreIcon}
+            resizeMode="contain"
+          />
+        ))}
       </TouchableOpacity>
 
       {/* 바텀 시트 메뉴 */}
@@ -78,8 +78,8 @@ const MainCardDetailMoreButton = ({
             <TouchableOpacity
               style={styles.bottomSheetOption}
               onPress={() => {
-                onDelete?.();
                 setBottomSheetVisible(false);
+                setDeleteModalVisible(true);
               }}
             >
               <Text
@@ -95,6 +95,33 @@ const MainCardDetailMoreButton = ({
           </SafeAreaView>
         </>
       )}
+
+      {/* 삭제 확인 모달 */}
+      <ConfirmModal
+        visible={deleteModalVisible}
+        title="게시글을 삭제할까요?"
+        message={`게시글을 삭제하면\n모든 데이터가 삭제되고 다시 볼 수 없어요`}
+        cancelText="취소"
+        confirmText="삭제"
+        onClose={() => setDeleteModalVisible(false)}
+        onConfirm={async () => {
+          const result = await onDelete?.();
+          // onDelete가 false를 반환하면 삭제 실패 모달 표시
+          if (result === false) {
+            setDeleteModalVisible(false);
+            setDeleteFailedModalVisible(true);
+            return false; // 모달을 닫지 않음 (실패 모달이 열림)
+          }
+        }}
+      />
+
+      {/* 삭제 실패 모달 */}
+      <ConfirmModal
+        visible={deleteFailedModalVisible}
+        title={`파티를 삭제할 수 없습니다.\n승인된 파티원이 있어 삭제가 불가능해요.`}
+        singleButtonText="닫기"
+        onClose={() => setDeleteFailedModalVisible(false)}
+      />
     </>
   );
 };
