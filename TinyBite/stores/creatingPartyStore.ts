@@ -9,15 +9,34 @@ export interface creatingPartyState {
   seq: number;
   photos: photo[];
   representativePhoto: number;
+  partyTitle: string;
+  totalAmount: string;
+  numberOfPeople: number;
+  pickUpLocation: string;
+  detailedDescription: string;
+  productLink: string;
   addPhoto: (uri: string) => void;
   deletePhoto: (id: number) => void;
   setRepresentativePhoto: (id: number) => void;
+  setPartyTitle: (title: string) => void;
+  setTotalAmount: (amount: string) => void;
+  setNumberOfPeople: (number: number) => void;
+  setPickUpLocation: (location: string) => void;
+  setDetailedDescription: (description: string) => void;
+  setProductLink: (link: string) => void;
+  resetCreateParty: () => void;
 }
 
 export const usecreatingPartyStore = create<creatingPartyState>((set, get) => ({
   seq: 0,
   photos: [],
   representativePhoto: 0,
+  partyTitle: "",
+  totalAmount: "",
+  numberOfPeople: 2,
+  pickUpLocation: "",
+  detailedDescription: "",
+  productLink: "",
   addPhoto: (uri: string) => {
     set((state) => {
       const newPhoto: photo = {
@@ -51,4 +70,47 @@ export const usecreatingPartyStore = create<creatingPartyState>((set, get) => ({
     set(() => ({
       representativePhoto: id,
     })),
+  setPartyTitle: (title: string) => {
+    set(() => ({
+      partyTitle: title,
+    }));
+  },
+  setTotalAmount: (amount: string) => {
+    set(() => ({
+      totalAmount: amount,
+    }));
+  },
+  setNumberOfPeople: (number: number) => {
+    set(() => ({
+      numberOfPeople: number,
+    }));
+  },
+  setPickUpLocation: (location: string) => {
+    set(() => ({
+      pickUpLocation: location,
+    }));
+  },
+  setDetailedDescription: (description: string) => {
+    set(() => ({
+      detailedDescription: description,
+    }));
+  },
+  setProductLink: (link: string) => {
+    set(() => ({
+      productLink: link,
+    }));
+  },
+  resetCreateParty: () => {
+    set(() => ({
+      seq: 0,
+      photos: [],
+      representativePhoto: 0,
+      partyTitle: "",
+      totalAmount: "",
+      numberOfPeople: 2,
+      pickUpLocation: "",
+      detailedDescription: "",
+      productLink: "",
+    }));
+  },
 }));
