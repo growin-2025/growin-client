@@ -1,6 +1,8 @@
+import { usecreatingPartyStore } from "@/stores/creatingPartyStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { StyleSheet, Text, View } from "react-native";
+import { useShallow } from "zustand/shallow";
 
 interface SubTitleProps {
   subTitle: string;
@@ -9,6 +11,12 @@ interface SubTitleProps {
 }
 
 const SubTitle = ({ subTitle, caption, isPic }: SubTitleProps) => {
+  const { photos } = usecreatingPartyStore(
+    useShallow((state) => ({
+      photos: state.photos,
+    }))
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.subTitleContainer}>
@@ -18,7 +26,7 @@ const SubTitle = ({ subTitle, caption, isPic }: SubTitleProps) => {
 
         {isPic ? (
           <Text style={[styles.picCaptionText, textStyles.body16_B150]}>
-            (0/5)
+            ({photos.length}/5)
           </Text>
         ) : (
           <Text style={[styles.captionText, textStyles.body16_SB135]}>
