@@ -1,12 +1,46 @@
+import { usecreatingPartyStore } from "@/stores/creatingPartyStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import { Alert, Image, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { useShallow } from "zustand/shallow";
 
 const CAMERA_ICON = require("@/assets/images/camera-24-gray.png");
 
 const AddPhotoButton = () => {
+  const { addPhoto } = usecreatingPartyStore(
+    useShallow((state) => ({
+      addPhoto: state.addPhoto,
+    }))
+  );
+
+  const pickImage = async () => {
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (!permissionResult.granted) {
+      Alert.alert(
+        "Permission required",
+        "Permission to access the media library is required."
+      );
+      return;
+    }
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      addPhoto(result.assets[0].uri);
+    }
+  };
+
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={pickImage}>
       <Image style={styles.image} source={CAMERA_ICON} />
       <Text style={[styles.text, textStyles.body16_SB135]}>추가</Text>
     </TouchableOpacity>
