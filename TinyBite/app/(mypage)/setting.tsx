@@ -1,4 +1,4 @@
-import LogoutModal from "@/components/LogoutModal";
+import ConfirmModal from "@/components/ConfirmModal";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { useRouter } from "expo-router";
@@ -101,11 +101,14 @@ export default function SettingScreen() {
       </View>
 
       {/* 로그아웃 확인 모달 */}
-      <LogoutModal
+      <ConfirmModal
         visible={showLogoutModal}
+        title="로그아웃"
+        message="로그아웃 하시겠습니까?"
+        cancelText="아니요"
+        confirmText="예"
         onClose={() => setShowLogoutModal(false)}
         onConfirm={() => {
-          setShowLogoutModal(false);
           // TODO: 로그아웃 로직 구현
         }}
       />
