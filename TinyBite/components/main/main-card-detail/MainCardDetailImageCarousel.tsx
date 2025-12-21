@@ -63,19 +63,22 @@ const MainCardDetailImageCarousel = ({
   });
 
   // ImageViewing용 이미지 데이터 변환 (images가 변경될 때만 재계산)
+  // 유효하지 않은 이미지는 필터링하여 제외
   const viewerImages = useMemo(
     () =>
-      images.map((img) => {
-        if (typeof img === "number") {
-          // require()로 가져온 이미지
-          const resolved = Image.resolveAssetSource(img);
-          return { uri: resolved.uri };
-        } else if (typeof img === "object" && "uri" in img) {
-          // ImageURISource
-          return { uri: img.uri || "" };
-        }
-        return { uri: "" };
-      }),
+      images
+        .map((img) => {
+          if (typeof img === "number") {
+            // require()로 가져온 이미지
+            const resolved = Image.resolveAssetSource(img);
+            return resolved.uri ? { uri: resolved.uri } : null;
+          } else if (typeof img === "object" && "uri" in img && img.uri) {
+            // ImageURISource (uri가 유효한 경우만)
+            return { uri: img.uri };
+          }
+          return null; // 유효하지 않은 이미지
+        })
+        .filter((item): item is { uri: string } => item !== null), // null 제거 및 타입 가드
     [images]
   );
 
@@ -145,7 +148,6 @@ const styles = StyleSheet.create({
   imageWrapper: {
     width: "100%",
     height: CAROUSEL_HEIGHT,
-    position: "relative", // 페이지네이션 absolute 배치를 위한 기준점
   },
   // 확대 애니메이션이 적용되는 컨테이너
   swiperContainer: {
@@ -158,6 +160,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
+    position: "relative",
   },
   // 이미지 스타일
   heroImage: {
