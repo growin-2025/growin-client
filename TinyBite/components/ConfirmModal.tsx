@@ -37,6 +37,8 @@ export default function ConfirmModal({
   singleButtonColor = colors.main,
 }: ConfirmModalProps) {
   const isSingleButtonMode = !!singleButtonText || !!onSingleButtonPress;
+  // 메시지가 없고 단일 버튼 모드일 때 타이틀 하단 마진 20 (실패 모달 등)
+  const titleMarginBottom = !message && isSingleButtonMode ? 20 : 4;
 
   const handleConfirm = async () => {
     if (onConfirm) {
@@ -64,7 +66,9 @@ export default function ConfirmModal({
     >
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
-          <View style={styles.titleContainer}>
+          <View
+            style={[styles.titleContainer, { marginBottom: titleMarginBottom }]}
+          >
             {title.split("\n").map((line, index) => (
               <Text
                 key={index}
@@ -150,7 +154,6 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     alignItems: "center",
-    marginBottom: 4,
   },
   modalTitle: {
     color: colors.black,
