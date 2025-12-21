@@ -9,21 +9,17 @@ const X_MARK_ICON = require("@/assets/images/x-mark-14-gray.png");
 interface PhotoItemProps {
   id: number;
   imageUri: string;
-  representativePhoto: number;
-  setRepresentativePhoto: (number: number) => void;
 }
 
-const PhotoItem = ({
-  id,
-  imageUri,
-  representativePhoto,
-  setRepresentativePhoto,
-}: PhotoItemProps) => {
-  const { deletePhoto } = usecreatingPartyStore(
-    useShallow((state) => ({
-      deletePhoto: state.deletePhoto,
-    }))
-  );
+const PhotoItem = ({ id, imageUri }: PhotoItemProps) => {
+  const { deletePhoto, representativePhoto, setRepresentativePhoto } =
+    usecreatingPartyStore(
+      useShallow((state) => ({
+        deletePhoto: state.deletePhoto,
+        representativePhoto: state.representativePhoto,
+        setRepresentativePhoto: state.setRepresentativePhoto,
+      }))
+    );
 
   const onClickDeletePhoto = () => {
     deletePhoto(id);
