@@ -59,6 +59,12 @@ export default function MainCardDetailScreen() {
                     source={item}
                     resizeMode="cover"
                   />
+                  {/* 딤드 효과 */}
+                  <LinearGradient
+                    colors={["rgba(0, 0, 0, 0.3)", "rgba(0, 0, 0, 0)"]}
+                    locations={[0, 0.36]}
+                    style={styles.dimmedOverlay}
+                  />
                 </View>
               )}
             />
@@ -70,12 +76,6 @@ export default function MainCardDetailScreen() {
               </Text>
             </View>
           </View>
-          {/* 딤드 효과 */}
-          <LinearGradient
-            colors={["rgba(0, 0, 0, 0.3)", "rgba(0, 0, 0, 0)"]}
-            locations={[0, 0.36]}
-            style={styles.dimmedOverlay}
-          />
           <SafeAreaView style={styles.safeArea} edges={["top"]}>
             <View style={styles.inner}>
               <TouchableOpacity
@@ -171,6 +171,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
+    position: "relative",
   },
   heroImage: {
     width: "100%",
@@ -184,7 +185,6 @@ const styles = StyleSheet.create({
     right: 0,
     width: "100%",
     height: 300,
-    zIndex: 1,
     pointerEvents: "none",
   },
   paginationContainer: {
