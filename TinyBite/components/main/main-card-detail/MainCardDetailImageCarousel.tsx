@@ -16,6 +16,11 @@ import Animated, {
 } from "react-native-reanimated";
 import Carousel from "react-native-reanimated-carousel";
 
+// 캐러셀 높이 상수 (디자인 변경 시 한 곳만 수정하면 됨)
+const CAROUSEL_HEIGHT = 300;
+// 이미지 확대 기준점 Y 좌표 (상단에서부터의 거리)
+const ZOOM_CENTER_Y = 150;
+
 interface MainCardDetailImageCarouselProps {
   images: ImageSourcePropType[]; // 이미지 배열
   scrollY: SharedValue<number>; // 스크롤 위치 (react-native-reanimated용)
@@ -40,18 +45,17 @@ const MainCardDetailImageCarousel = ({
   /**
    * 이미지 확대 애니메이션 스타일
    * 스크롤을 위로 당길 때(bounce) 이미지가 확대되는 효과
-   * 상단에서 150px 위치를 기준으로 확대
+   * 상단에서 ZOOM_CENTER_Y 위치를 기준으로 확대
    */
   const animatedImageStyle = useAnimatedStyle(() => {
     // 스크롤을 위로 당길 때(bounce) 이미지 확대
     // scrollY.value < 0일 때만 확대 (음수 = 위로 당김)
-    const scale = scrollY.value < 0 ? 1 - scrollY.value / 300 : 1;
+    const scale = scrollY.value < 0 ? 1 - scrollY.value / CAROUSEL_HEIGHT : 1;
     const finalScale = Math.max(scale, 1); // 최소값 1 (축소 방지)
 
-    // 이미지 상단에서 150px 위치를 기준으로 확대
+    // 이미지 상단에서 ZOOM_CENTER_Y 위치를 기준으로 확대
     // 확대 시 기준점이 고정되도록 translateY 계산
-    const centerY = 150; // 상단에서 150px 위치
-    const translateY = centerY * (1 - finalScale); // 확대 시 기준점 고정을 위한 이동량
+    const translateY = ZOOM_CENTER_Y * (1 - finalScale); // 확대 시 기준점 고정을 위한 이동량
 
     return {
       transform: [{ translateY }, { scale: finalScale }],
@@ -82,7 +86,7 @@ const MainCardDetailImageCarousel = ({
         {/* 이미지 캐러셀 */}
         <Carousel
           width={screenWidth}
-          height={300}
+          height={CAROUSEL_HEIGHT}
           data={images}
           scrollAnimationDuration={600}
           enabled={images.length > 1} // 이미지가 2개 이상일 때만 슬라이드 활성화
@@ -140,13 +144,13 @@ const styles = StyleSheet.create({
   // 이미지 영역 스타일
   imageWrapper: {
     width: "100%",
-    height: 300,
+    height: CAROUSEL_HEIGHT,
     position: "relative", // 페이지네이션 absolute 배치를 위한 기준점
   },
   // 확대 애니메이션이 적용되는 컨테이너
   swiperContainer: {
     width: "100%",
-    height: 300,
+    height: CAROUSEL_HEIGHT,
   },
   // 캐러셀 슬라이드 스타일
   slide: {
@@ -167,7 +171,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    height: 300,
+    height: CAROUSEL_HEIGHT,
     pointerEvents: "none", // 터치 이벤트 차단 (이미지 터치 가능하도록)
   },
   // 페이지네이션 컨테이너 (오른쪽 아래)
