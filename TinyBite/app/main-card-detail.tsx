@@ -42,10 +42,10 @@ export default function MainCardDetailScreen() {
   // 이미지 슬라이더용 이미지 배열
   const images = [
     require("@/assets/images/mainlist/food1.jpg"),
-    require("@/assets/images/mainlist/food1.jpg"),
-    require("@/assets/images/mainlist/food1.jpg"),
-    require("@/assets/images/mainlist/food1.jpg"),
-    require("@/assets/images/mainlist/food1.jpg"),
+    require("@/assets/images/mainlist/detail/default-delivery.png"),
+    require("@/assets/images/mainlist/detail/default-essential.png"),
+    require("@/assets/images/mainlist/detail/default-grocery.png"),
+    require("@/assets/images/mainlist/detail/link-photo.png"),
   ];
 
   return (
