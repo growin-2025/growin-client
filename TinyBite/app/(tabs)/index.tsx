@@ -5,41 +5,34 @@ import { colors } from "@/styles/colors";
 import { useRouter } from "expo-router";
 
 import { ScrollView, StyleSheet, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
   const router = useRouter();
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={["top"]}>
-      <View style={styles.container}>
-        <MainHeader />
-        <View style={styles.categoryWrapper}>
-          <MainCategory />
-        </View>
-        <ScrollView
-          style={styles.scroll}
-          contentContainerStyle={styles.listWrapper}
-        >
-          <View style={styles.cardWrapper}>
-            <MainCard onPress={() => router.push("/main-card-detail")} />
-            <MainCard />
-            <MainCard />
-            <MainCard />
-            <MainCard />
-            <MainCard />
-          </View>
-        </ScrollView>
+    <View style={styles.container}>
+      <MainHeader />
+      <View style={styles.categoryWrapper}>
+        <MainCategory />
       </View>
-    </SafeAreaView>
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.listWrapper}
+      >
+        <View style={styles.cardWrapper}>
+          <MainCard onPress={() => router.push("/main-card-detail")} />
+          <MainCard />
+          <MainCard />
+          <MainCard />
+          <MainCard />
+          <MainCard />
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: colors.main,
-  },
   container: {
     flex: 1,
     backgroundColor: colors.background,
