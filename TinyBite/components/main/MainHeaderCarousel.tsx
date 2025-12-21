@@ -2,17 +2,14 @@ import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { useState } from "react";
 import {
-  Dimensions,
   Image,
   ImageSourcePropType,
   StyleSheet,
   Text,
   View,
+  useWindowDimensions,
 } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
-
-// 화면 너비를 가져와서 캐러셀 너비로 사용
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 /**
  * 캐러셀 아이템 인터페이스
@@ -45,6 +42,7 @@ const MainHeaderCarousel = ({
   onPageChange,
   height = 178,
 }: MainHeaderCarouselProps) => {
+  const { width: SCREEN_WIDTH } = useWindowDimensions(); // 화면 너비 (동적 업데이트)
   const [currentIndex, setCurrentIndex] = useState(0);
   const totalPages = data.length;
 
