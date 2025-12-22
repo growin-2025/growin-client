@@ -30,6 +30,11 @@ export default function NicknameScreen() {
     }
   }, []);
 
+  const handleClickNextButton = async () => {
+    // 닉네임 중복 확인 api 작성
+    router.push("/signup/region");
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
@@ -71,7 +76,7 @@ export default function NicknameScreen() {
         <TouchableOpacity
           style={[styles.nextBtn, !verified && styles.disabled]}
           disabled={!verified}
-          onPress={() => router.push("/signup/region")}
+          onPress={handleClickNextButton}
         >
           <Text style={[styles.nextText, textStyles.title18_SB135]}>다음</Text>
         </TouchableOpacity>
