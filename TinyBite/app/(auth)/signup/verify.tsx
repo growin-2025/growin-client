@@ -24,7 +24,7 @@ export default function VerifyScreen() {
   const [code, setCode] = useState("");
   const [verified, setVerified] = useState(false);
 
-  const { status, startTimer, timeLeft } = useTimerStore();
+  const { status, startTimer, timeLeft, resetTimer } = useTimerStore();
 
   const handleResendSms = async () => {
     // 인증번호 발송 api 작성
@@ -48,6 +48,16 @@ export default function VerifyScreen() {
       setVerified(false);
     }
   }, []);
+
+  const handleClickNextButton = async () => {
+    // 인증번호 확인 api 작성
+    if (false) {
+      // alert("인증번호가 일치하지 않아요.");
+      // return;
+    }
+    resetTimer();
+    router.push("/signup/nickname");
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -99,7 +109,7 @@ export default function VerifyScreen() {
         <TouchableOpacity
           style={[styles.nextBtn, !verified && styles.disabled]}
           disabled={!verified}
-          onPress={() => router.push("/signup/nickname")}
+          onPress={handleClickNextButton}
         >
           <Text style={[styles.nextText, textStyles.title18_SB135]}>다음</Text>
         </TouchableOpacity>
