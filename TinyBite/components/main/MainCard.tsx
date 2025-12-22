@@ -1,9 +1,22 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
+} from "react-native";
 
-const MainCard = ({ onPress }: { onPress?: () => void }) => (
-  <Pressable onPress={onPress} style={styles.card}>
+const MainCard = ({
+  onPress,
+  containerStyle,
+}: {
+  onPress?: () => void;
+  containerStyle?: ViewStyle;
+}) => (
+  <Pressable onPress={onPress} style={[styles.card, containerStyle]}>
     <Image
       source={require("@/assets/images/mainlist/food1.jpg")}
       style={styles.thumbnail}
@@ -31,7 +44,7 @@ export default MainCard;
 
 const styles = StyleSheet.create({
   card: {
-    width: 362,
+    width: "100%",
     height: 122,
     backgroundColor: colors.white,
     borderRadius: 16,
@@ -61,7 +74,7 @@ const styles = StyleSheet.create({
     color: "#000000",
   },
   price: {
-    marginTop: 6,
+    marginTop: 4,
     color: "#000000",
   },
   footerRow: {

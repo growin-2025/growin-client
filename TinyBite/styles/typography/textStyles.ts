@@ -16,7 +16,10 @@ export const textStyles = {
     ...fontScale.title[20][135],
     fontFamily: "Pretendard-SemiBold",
   },
-
+  title18_B135: {
+    ...fontScale.title[18][135],
+    fontFamily: "Pretendard-Bold",
+  },
   title18_SB135: {
     ...fontScale.title[18][135],
     fontFamily: "Pretendard-SemiBold",

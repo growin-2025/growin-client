@@ -5,9 +5,12 @@ import MainCardDetailPill from "@/components/main/main-card-detail/MainCardDetai
 import MainCardDetailProductLink from "@/components/main/main-card-detail/MainCardDetailProductLink";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import React from "react";
+import { StatusBar } from "expo-status-bar";
+import React, { useState } from "react";
 import {
+  Dimensions,
   Image,
   ScrollView,
   StyleSheet,
@@ -15,113 +18,190 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import Carousel from "react-native-reanimated-carousel";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function MainCardDetailScreen() {
   const router = useRouter();
+  const [currentPage, setCurrentPage] = useState(0);
+
+  // 이미지 슬라이더용 이미지 배열 (5장)
+  const images = [
+    require("@/assets/images/mainlist/food1.jpg"),
+    require("@/assets/images/mainlist/food1.jpg"),
+    require("@/assets/images/mainlist/food1.jpg"),
+    require("@/assets/images/mainlist/food1.jpg"),
+    require("@/assets/images/mainlist/food1.jpg"),
+  ];
 
   return (
-    <View style={styles.container}>
-      {/* 상단 이미지 */}
-      <Image
-        style={styles.heroImage}
-        source={require("@/assets/images/mainlist/food1.jpg")}
-        resizeMode="cover"
-      />
+    <>
+      <StatusBar style="light" />
 
       {/* 컨텐츠 */}
       <View style={{ flex: 1 }}>
         {/* 내용 */}
-        <SafeAreaView style={styles.safeArea} edges={["top"]}>
-          <View style={styles.inner}>
-            <TouchableOpacity
-              onPress={() => router.back()}
-              style={styles.backButton}
-            >
-              <Image
-                source={require("@/assets/images/chevron/chevron-left-36.png")}
-                style={styles.backButtonImage}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-
-            <ScrollView style={styles.contentContainer} bounces={false}>
-              <View style={[styles.content]}>
-                <Text style={[styles.title, textStyles.title20_B135]}>
-                  후문 엽떡 나누실 분 ㅃㄹ
-                </Text>
-
-                <View style={styles.pillsRow}>
-                  <MainCardDetailPill type="delivery" />
-                  <MainCardDetailPill type="time" label="10분전" />
+        <View style={styles.container}>
+          {/* 이미지 슬라이더 */}
+          <View style={styles.swiperContainer}>
+            <Carousel
+              width={SCREEN_WIDTH}
+              height={300}
+              data={images}
+              scrollAnimationDuration={600}
+              onSnapToItem={(index) => setCurrentPage(index)}
+              renderItem={({ item, index }) => (
+                <View key={index} style={styles.slide}>
+                  <Image
+                    style={styles.heroImage}
+                    source={item}
+                    resizeMode="cover"
+                  />
+                  {/* 딤드 효과 */}
+                  <LinearGradient
+                    colors={["rgba(0, 0, 0, 0.3)", "rgba(0, 0, 0, 0)"]}
+                    locations={[0, 0.36]}
+                    style={styles.dimmedOverlay}
+                  />
                 </View>
+              )}
+            />
 
-                <MainCardDetailHost
-                  //url="https://www.google.com"
-                  avatar={require("@/assets/images/mainlist/detail/default-host-profile.png")}
-                  name="엽떡조아"
-                  location="서울시 강남구 역삼동"
-                />
-
-                <View style={styles.divider} />
-
-                <MainCardDetailInfo
-                  items={[
-                    {
-                      type: "location",
-                      title: "역삼 래미안 앞",
-                      meta: "내 위치에서 150M",
-                    },
-                    {
-                      type: "group",
-                      title: "2/4명 모집 중",
-                      meta: "2명 남았어요!",
-                    },
-                    {
-                      type: "money",
-                      title: "1인당 5,000원",
-                      meta: "총 20,000원",
-                    },
-                  ]}
-                />
-
-                <MainCardDetailProductLink
-                  productTitle="코스트코 베이글 & 크림치즈"
-                  productUrl="https://www.costco.co.kr/"
-                />
-
-                <MainCardDetailHostNote body="배달 팁 나누실 분 구해요! 엽떡 매운맛 시킬 예정입니다. 쿨피스는 제가 쏠게요." />
-              </View>
-            </ScrollView>
+            {/* 페이지네이션 텍스트 (오른쪽 아래) */}
+            <View style={styles.paginationContainer}>
+              <Text style={[styles.paginationText, textStyles.body13_SB135]}>
+                {currentPage + 1} / {images.length}
+              </Text>
+            </View>
           </View>
-        </SafeAreaView>
+          <SafeAreaView style={styles.safeArea} edges={["top"]}>
+            <View style={styles.inner}>
+              <TouchableOpacity
+                onPress={() => router.back()}
+                style={styles.backButton}
+              >
+                <Image
+                  source={require("@/assets/images/chevron/chevron-left-36.png")}
+                  style={styles.backButtonImage}
+                  resizeMode="contain"
+                />
+              </TouchableOpacity>
 
-        {/* 참여하기 버튼 */}
-        <SafeAreaView style={styles.ctaContainer} edges={["bottom"]}>
-          <TouchableOpacity style={styles.cta}>
-            <Text style={[styles.ctaText, textStyles.title18_SB135]}>
-              5,000원으로 참여하기
-            </Text>
-          </TouchableOpacity>
-        </SafeAreaView>
+              <ScrollView style={styles.contentContainer} bounces={false}>
+                <View style={[styles.content]}>
+                  <Text style={[styles.title, textStyles.title20_B135]}>
+                    후문 엽떡 나누실 분 ㅃㄹ
+                  </Text>
+
+                  <View style={styles.pillsRow}>
+                    <MainCardDetailPill type="delivery" />
+                    <MainCardDetailPill type="time" label="10분전" />
+                  </View>
+
+                  <MainCardDetailHost
+                    //url="https://www.google.com"
+                    avatar={require("@/assets/images/mainlist/detail/default-host-profile.png")}
+                    name="엽떡조아"
+                    location="서울시 강남구 역삼동"
+                  />
+
+                  <View style={styles.divider} />
+
+                  <MainCardDetailInfo
+                    items={[
+                      {
+                        type: "location",
+                        title: "역삼 래미안 앞",
+                        meta: "내 위치에서 150M",
+                      },
+                      {
+                        type: "group",
+                        title: "2/4명 모집 중",
+                        meta: "2명 남았어요!",
+                      },
+                      {
+                        type: "money",
+                        title: "1인당 5,000원",
+                        meta: "총 20,000원",
+                      },
+                    ]}
+                  />
+
+                  <MainCardDetailProductLink
+                    productTitle="코스트코 베이글 & 크림치즈"
+                    productUrl="https://www.costco.co.kr/"
+                  />
+
+                  <MainCardDetailHostNote body="배달 팁 나누실 분 구해요! 엽떡 매운맛 시킬 예정입니다. 쿨피스는 제가 쏠게요." />
+                </View>
+              </ScrollView>
+            </View>
+          </SafeAreaView>
+
+          {/* 참여하기 버튼 */}
+          <SafeAreaView style={styles.ctaContainer} edges={["bottom"]}>
+            <TouchableOpacity style={styles.cta}>
+              <Text style={[styles.ctaText, textStyles.title18_SB135]}>
+                5,000원으로 참여하기
+              </Text>
+            </TouchableOpacity>
+          </SafeAreaView>
+        </View>
       </View>
-    </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, position: "relative" },
 
-  heroImage: {
+  swiperContainer: {
     position: "absolute",
-    backgroundColor: "#000000",
     top: 0,
     left: 0,
     right: 0,
     width: "100%",
     height: 300,
+    zIndex: 0,
   },
-
+  slide: {
+    flex: 1,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
+  },
+  heroImage: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#000000",
+  },
+  dimmedOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    width: "100%",
+    height: 300,
+    pointerEvents: "none",
+  },
+  paginationContainer: {
+    position: "absolute",
+    bottom: 30,
+    right: 20,
+    zIndex: 2,
+    backgroundColor: "rgba(34, 34, 34, 0.5)",
+    borderRadius: 100,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  paginationText: {
+    color: colors.white,
+  },
   safeArea: {
     flex: 1,
   },
@@ -150,6 +230,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     zIndex: 2,
+    backgroundColor: "transparent",
   },
   content: {
     marginTop: 220,

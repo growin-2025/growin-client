@@ -58,19 +58,20 @@ export default MainCategory;
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 16,
-    marginTop: 18,
-    marginBottom: 32,
+    paddingHorizontal: 20,
+    marginBottom: 5,
+    marginTop: 5,
     gap: 12,
   },
   chip: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 11,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
     height: 36,
     borderRadius: 100,
-    gap: 8,
+    gap: 6,
     // shadow
     shadowColor: "#000000",
     shadowOpacity: 0.25,
