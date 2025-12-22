@@ -18,6 +18,7 @@ export default function NicknameScreen() {
   const router = useRouter();
   const [nickname, setNickname] = useState("");
   const [verified, setVerified] = useState(false);
+  const [showDuplicateMessage, setShowDuplicateMessage] = useState(false);
 
   const handleTextChange = useCallback((text: string) => {
     const validatedText = validateAndFilterNickname(text);
@@ -32,6 +33,11 @@ export default function NicknameScreen() {
 
   const handleClickNextButton = async () => {
     // 닉네임 중복 확인 api 작성
+    if (nickname === "중복") {
+      setShowDuplicateMessage(true);
+      return;
+    }
+    setShowDuplicateMessage(false);
     router.push("/signup/region");
   };
 
@@ -66,11 +72,13 @@ export default function NicknameScreen() {
           </View>
         </View>
 
-        <View style={styles.row}>
-          <Text style={[styles.status, textStyles.body16_M135]}>
-            이미 사용 중인 닉네임입니다.
-          </Text>
-        </View>
+        {showDuplicateMessage && (
+          <View style={styles.row}>
+            <Text style={[styles.status, textStyles.body16_M135]}>
+              이미 사용 중인 닉네임입니다.
+            </Text>
+          </View>
+        )}
 
         {/* 다음 버튼 */}
         <TouchableOpacity
