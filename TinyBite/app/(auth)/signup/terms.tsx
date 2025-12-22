@@ -1,67 +1,50 @@
 import PaginationIndecatorHeader from "@/components/PaginationIndecatorHeader";
 import PhoneNumberInput from "@/components/PhoneNumberInput";
 import { SignupTerms } from "@/constants/terms";
+import { termTypes, useSignupStore } from "@/stores/signupStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useMemo, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useShallow } from "zustand/shallow";
+
 const CHECKBOX_ON_IMAGE = require("@/assets/images/checkbox/checkbox-on.png");
 const CHECKBOX_OFF_IMAGE = require("@/assets/images/checkbox/checkbox-off.png");
-
-const initialChecks = {
-  age: false,
-  service: false,
-  finance: false,
-  collectingPrivacy: false,
-  providingPrivacy: false,
-  offer: false,
-};
-type CheckKeys = keyof typeof initialChecks;
 
 export default function TermsScreen() {
   const router = useRouter();
 
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const handlePhoneNumberChange = (rawNumber: string) => {
-    setPhoneNumber(rawNumber);
-    console.log("최종 추출된 번호 (하이픈 제외):", rawNumber);
-  };
-
-  const [checks, setChecks] = useState(initialChecks);
-  const allChecked = useMemo(() => {
-    return Object.values(checks).every((value) => value === true);
-  }, [checks]);
-
-  const toggleAll = () => {
-    const nextState = !allChecked;
-    const newChecks = Object.fromEntries(
-      Object.keys(checks).map((key) => [key, nextState])
-    ) as typeof initialChecks;
-    setChecks(newChecks);
-  };
-  const toggle = (key: CheckKeys) =>
-    setChecks({ ...checks, [key]: !checks[key] });
-
-  const allRequiredChecked =
-    checks.age &&
-    checks.service &&
-    checks.finance &&
-    checks.collectingPrivacy &&
-    checks.providingPrivacy;
-
-  const isNextButtonEnabled = allRequiredChecked && phoneNumber.length === 11;
+  const {
+    terms,
+    isAllEssentialChecked,
+    isNextButtonEnabled,
+    toggleTerm,
+    checkAllEssentialsOnly,
+  } = useSignupStore(
+    useShallow((state) => ({
+      terms: state.terms,
+      isAllEssentialChecked: state.getIsCheckedAllEssentialsOnly(),
+      isNextButtonEnabled: state.getIsNextButtonEnabled(),
+      toggleTerm: state.toggleTerm,
+      checkAllEssentialsOnly: state.checkAllEssentialsOnly,
+    }))
+  );
 
   // 전체 동의 항목을 렌더링하는 컴포넌트
-  const AllCheckItem: React.FC = () => {
+  const AllCheckItem = () => {
     return (
       <View>
-        <TouchableOpacity style={styles.checkRow} onPress={toggleAll}>
+        <TouchableOpacity
+          style={styles.checkRow}
+          onPress={checkAllEssentialsOnly}
+        >
           {/* 이미지 체크박스 */}
           <Image
-            source={allChecked ? CHECKBOX_ON_IMAGE : CHECKBOX_OFF_IMAGE}
+            source={
+              isAllEssentialChecked ? CHECKBOX_ON_IMAGE : CHECKBOX_OFF_IMAGE
+            }
             style={styles.allCheckBoxImage}
           />
           <Text style={[styles.allCheckText, textStyles.title20_SB135]}>
@@ -73,12 +56,15 @@ export default function TermsScreen() {
   };
 
   // 체크 항목을 렌더링하는 컴포넌트
-  const CheckItem: React.FC<{
-    checkKey: CheckKeys;
+  const CheckItem = ({
+    checkKey,
+    required,
+    content,
+  }: {
+    checkKey: termTypes;
     required: boolean;
     content: string;
-  }> = ({ checkKey, required, content }) => {
-    const isChecked = checks[checkKey];
+  }) => {
     return (
       <View>
         <TouchableOpacity
@@ -87,11 +73,11 @@ export default function TermsScreen() {
             alignItems: "center",
             justifyContent: "space-between",
           }}
-          onPress={() => toggle(checkKey)}
+          onPress={() => toggleTerm(checkKey)}
         >
           <View style={styles.checkRow}>
             <Image
-              source={isChecked ? CHECKBOX_ON_IMAGE : CHECKBOX_OFF_IMAGE}
+              source={terms[checkKey] ? CHECKBOX_ON_IMAGE : CHECKBOX_OFF_IMAGE}
               style={styles.checkBoxImage}
             />
             <Text style={[styles.checkText, textStyles.body16_M135]}>
@@ -134,7 +120,7 @@ export default function TermsScreen() {
           {SignupTerms.map((term) => (
             <CheckItem
               key={term.checkKey}
-              checkKey={term.checkKey as CheckKeys}
+              checkKey={term.checkKey as termTypes}
               required={term.required}
               content={term.content}
             />
