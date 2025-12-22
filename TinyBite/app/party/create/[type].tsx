@@ -30,14 +30,51 @@ export default function PartyCreateScreen() {
   const title = PARTY_TITLES[type];
   const config = PARTY_CONFIG[type];
 
-  const { photos } = usecreatingPartyStore(
+  const {
+    photos,
+    partyTitle,
+    totalAmount,
+    numberOfPeople,
+    pickUpLocation,
+    detailedDescription,
+    productLink,
+    setPartyTitle,
+    setTotalAmount,
+    setPickUpLocation,
+    setDetailedDescription,
+    setProductLink,
+    resetCreateParty,
+  } = usecreatingPartyStore(
     useShallow((state) => ({
-      photos: state.photos as photo[],
+      photos: state.photos,
+      partyTitle: state.partyTitle,
+      totalAmount: state.totalAmount,
+      numberOfPeople: state.numberOfPeople,
+      pickUpLocation: state.pickUpLocation,
+      detailedDescription: state.detailedDescription,
+      productLink: state.productLink,
+      setPartyTitle: state.setPartyTitle,
+      setTotalAmount: state.setTotalAmount,
+      setPickUpLocation: state.setPickUpLocation,
+      setDetailedDescription: state.setDetailedDescription,
+      setProductLink: state.setProductLink,
+      resetCreateParty: state.resetCreateParty,
     }))
   );
 
   const renderItem = ({ item }: { item: photo }) => {
     return <PhotoItem id={item.id} imageUri={item.imageUri} />;
+  };
+
+  const onClickCreateParty = () => {
+    console.log("partyTitle: ", partyTitle);
+    console.log("totalAmount: ", totalAmount);
+    console.log("numberOfPeople: ", numberOfPeople);
+    console.log("pickUpLocation: ", pickUpLocation);
+    console.log("detailedDescription: ", detailedDescription);
+    console.log("productLink: ", productLink);
+
+    resetCreateParty();
   };
 
   return (
@@ -68,12 +105,19 @@ export default function PartyCreateScreen() {
               <TextInputBox
                 placeholder="예) 엽떡 매운맛 같이 드실 분"
                 maxLength={30}
+                onChangeText={setPartyTitle}
+                value={partyTitle}
               />
             </View>
 
             <View style={styles.section}>
               <SubTitle subTitle="예상 총 주문 금액" />
-              <TextInputBox placeholder="0" isAmount />
+              <TextInputBox
+                placeholder="0"
+                isAmount
+                onChangeText={setTotalAmount}
+                value={totalAmount}
+              />
             </View>
 
             <View style={styles.section}>
@@ -87,6 +131,8 @@ export default function PartyCreateScreen() {
                 iconType="location"
                 placeholder="예) 역삼역 1번 출구"
                 maxLength={30}
+                onChangeText={setPickUpLocation}
+                value={pickUpLocation}
               />
             </View>
 
@@ -95,6 +141,8 @@ export default function PartyCreateScreen() {
               <TextInputBox
                 placeholder="추가로 전달 할 내용이 있다면 적어주세요."
                 maxLength={60}
+                onChangeText={setDetailedDescription}
+                value={detailedDescription}
               />
             </View>
 
@@ -104,6 +152,8 @@ export default function PartyCreateScreen() {
                 <TextInputBox
                   iconType="link"
                   placeholder="구매할 상품의 URL을 입력하세요."
+                  onChangeText={setProductLink}
+                  value={productLink}
                 />
               </View>
             )}

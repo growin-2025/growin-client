@@ -1,23 +1,29 @@
+import { usecreatingPartyStore } from "@/stores/creatingPartyStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useShallow } from "zustand/shallow";
 
 const MINUS_ICON = require("@/assets/images/minus-24-gray.png");
 const PLUS_ICON = require("@/assets/images/plus-24-gray.png");
 
 const NumberOfPeopleBox = () => {
-  const [value, setValue] = useState(2);
+  const { numberOfPeople, setNumberOfPeople } = usecreatingPartyStore(
+    useShallow((state) => ({
+      numberOfPeople: state.numberOfPeople,
+      setNumberOfPeople: state.setNumberOfPeople,
+    }))
+  );
 
   const handleClickMinus = () => {
-    if (value > 2) {
-      setValue(value - 1);
+    if (numberOfPeople > 2) {
+      setNumberOfPeople(numberOfPeople - 1);
     }
   };
 
   const handleClickPlus = () => {
-    if (value < 10) {
-      setValue(value + 1);
+    if (numberOfPeople < 10) {
+      setNumberOfPeople(numberOfPeople + 1);
     }
   };
 
@@ -33,7 +39,7 @@ const NumberOfPeopleBox = () => {
 
         <View style={styles.textContainer}>
           <Text style={[styles.textNumber, textStyles.title20_SB135]}>
-            {value}
+            {numberOfPeople}
           </Text>
           <Text style={[styles.textUnit, textStyles.body16_SB135]}>명</Text>
         </View>

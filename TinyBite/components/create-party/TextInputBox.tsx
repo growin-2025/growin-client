@@ -1,6 +1,5 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { useState } from "react";
 import { Image, StyleSheet, Text, TextInput, View } from "react-native";
 
 const iconUrl = {
@@ -13,6 +12,8 @@ interface TextInputBoxProps {
   isAmount?: boolean;
   maxLength?: number;
   placeholder: string;
+  onChangeText: (text: string) => void;
+  value: string;
 }
 
 const TextInputBox = ({
@@ -20,9 +21,9 @@ const TextInputBox = ({
   isAmount,
   maxLength,
   placeholder,
+  onChangeText,
+  value,
 }: TextInputBoxProps) => {
-  const [value, onChangValue] = useState("");
-
   return (
     <View style={styles.container}>
       <View style={styles.inner}>
@@ -36,7 +37,7 @@ const TextInputBox = ({
           multiline={!isAmount}
           keyboardType={isAmount ? "number-pad" : "default"}
           onChangeText={(text) => {
-            onChangValue(isAmount ? text.replace(/[^0-9]/g, "") : text);
+            onChangeText(isAmount ? text.replace(/[^0-9]/g, "") : text);
           }}
           value={value}
         />
