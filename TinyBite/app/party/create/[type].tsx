@@ -20,9 +20,18 @@ const PARTY_TITLES = {
 } as const;
 
 const PARTY_CONFIG = {
-  delivery: { showProductLink: false },
-  shopping: { showProductLink: true },
-  necessities: { showProductLink: true },
+  delivery: {
+    showProductLink: false,
+    titlePlaceholder: "예) 엽떡 매운맛 같이 드실 분",
+  },
+  shopping: {
+    showProductLink: true,
+    titlePlaceholder: "예) 코스트코 베이글 나누실 분",
+  },
+  necessities: {
+    showProductLink: true,
+    titlePlaceholder: "예) 코스트코 베이글 나누실 분",
+  },
 } as const;
 
 export default function PartyCreateScreen() {
@@ -111,7 +120,7 @@ export default function PartyCreateScreen() {
             <View style={styles.section}>
               <SubTitle subTitle="파티 제목" caption="(메뉴명)" />
               <TextInputBox
-                placeholder="예) 엽떡 매운맛 같이 드실 분"
+                placeholder={config.titlePlaceholder}
                 maxLength={30}
                 onChangeText={setPartyTitle}
                 value={partyTitle}
