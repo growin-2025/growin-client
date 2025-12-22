@@ -11,6 +11,7 @@ import { useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { FlatList, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 import { useShallow } from "zustand/shallow";
 
 const PARTY_TITLES = {
@@ -90,9 +91,19 @@ export default function PartyCreateScreen() {
     return false;
   };
 
+  const showCorrectLinkToast = () => {
+    Toast.show({
+      type: "basicToast",
+      props: { text: "올바른 URL 형식으로 입력해주세요." },
+      position: "bottom",
+      bottomOffset: 133,
+      visibilityTime: 2000,
+    });
+  };
+
   const onClickCreateParty = () => {
     if (productLink && !isValidLink(productLink)) {
-      console.log("링크 올바른 형식으로 첨부하세요.");
+      showCorrectLinkToast();
       return;
     }
     console.log("partyTitle: ", partyTitle);
