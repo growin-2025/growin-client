@@ -1,11 +1,11 @@
 import PaginationIndecatorHeader from "@/components/PaginationIndecatorHeader";
-import { useTimer } from "@/hooks/useTimer";
+import { useTimerStore } from "@/stores/timerStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { formatSeconds } from "@/utils/formatSeconds";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Image,
   StyleSheet,
@@ -24,14 +24,18 @@ export default function VerifyScreen() {
   const [code, setCode] = useState("");
   const [verified, setVerified] = useState(false);
 
-  const { start, timeLeft } = useTimer(180, () => {
-    console.log("인증 시간이 만료되었어요");
-  });
+  const { status, startTimer, timeLeft } = useTimerStore();
 
   const handleResendSms = async () => {
     // 인증번호 발송 api 작성
-    start();
+    startTimer(180);
   };
+
+  useEffect(() => {
+    if (status === "done") {
+      alert("인증 시간이 만료되었어요.");
+    }
+  }, [status]);
 
   const handleCodeChange = useCallback((text: string) => {
     const rawNumber = text.replace(/[^0-9]/g, "");

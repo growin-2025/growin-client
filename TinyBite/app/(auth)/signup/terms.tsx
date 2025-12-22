@@ -3,6 +3,7 @@ import PaginationIndecatorHeader from "@/components/PaginationIndecatorHeader";
 import PhoneNumberInput from "@/components/PhoneNumberInput";
 import { SignupTerms } from "@/constants/terms";
 import { termTypes, useSignupStore } from "@/stores/signupStore";
+import { useTimerStore } from "@/stores/timerStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { ApiError } from "@/types/api";
@@ -39,10 +40,13 @@ export default function TermsScreen() {
     }))
   );
 
+  const { startTimer } = useTimerStore();
+
   const smsSendMutation = useMutation({
     mutationFn: postSendSms,
     onSuccess: (data) => {
       console.log("성공 처리 >>", data);
+      startTimer(180);
       router.push("/signup/verify");
     },
     onError: (error: AxiosError<ApiError>) => {
