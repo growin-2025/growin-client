@@ -1,4 +1,4 @@
-import { postSmsSend } from "@/api/authApi";
+import { postSendSms } from "@/api/authApi";
 import PaginationIndecatorHeader from "@/components/PaginationIndecatorHeader";
 import PhoneNumberInput from "@/components/PhoneNumberInput";
 import { SignupTerms } from "@/constants/terms";
@@ -40,7 +40,7 @@ export default function TermsScreen() {
   );
 
   const smsSendMutation = useMutation({
-    mutationFn: postSmsSend,
+    mutationFn: postSendSms,
     onSuccess: (data) => {
       console.log("성공 처리 >>", data);
       router.push("/signup/verify");
@@ -55,7 +55,7 @@ export default function TermsScreen() {
     },
   });
 
-  const onClickNextButton = async () => {
+  const handleClickNextButton = async () => {
     if (phoneNumber) {
       await smsSendMutation.mutateAsync({
         phone: phoneNumber,
@@ -162,7 +162,7 @@ export default function TermsScreen() {
         <TouchableOpacity
           style={[styles.nextBtn, !isNextButtonEnabled && styles.disabled]}
           disabled={!isNextButtonEnabled}
-          onPress={onClickNextButton}
+          onPress={handleClickNextButton}
         >
           <Text style={[styles.nextText, textStyles.title18_SB135]}>다음</Text>
         </TouchableOpacity>

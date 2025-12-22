@@ -12,7 +12,7 @@ export const postSignupGoogle = async (signupData: SignupGoogle) => {
   return res.data;
 };
 
-export const postSmsSend = async ({ phone }: { phone: string }) => {
+export const postSendSms = async ({ phone }: { phone: string }) => {
   const res = await publicAxios.post(ENDPOINT.AUTH.SIGNUP_GOOGLE, phone);
   return res.data;
 };
