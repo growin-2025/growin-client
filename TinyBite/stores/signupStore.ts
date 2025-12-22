@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-enum termTypes {
+export enum termTypes {
   age = "age",
   service = "service",
   finance = "finance",
