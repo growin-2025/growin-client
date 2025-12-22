@@ -29,6 +29,10 @@ export default function LoginScreen() {
     },
     onError: (error: AxiosError<ApiError>) => {
       if (error.response?.data) {
+        if (error.response?.data.code === "USER_NOT_EXISTS") {
+          router.push("/(auth)/signup/terms");
+          return;
+        }
         const message = getErrorMessage(error.response.data);
         console.error(message);
       } else {
