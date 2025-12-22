@@ -1,6 +1,8 @@
 import PaginationIndecatorHeader from "@/components/PaginationIndecatorHeader";
+import { useTimer } from "@/hooks/useTimer";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { formatSeconds } from "@/utils/formatSeconds";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useState } from "react";
@@ -13,6 +15,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
 const CHECKBOX_ON_IMAGE = require("@/assets/images/verify-number/verify-number-on.png");
 const CHECKBOX_OFF_IMAGE = require("@/assets/images/verify-number/verify-number-off.png");
 
@@ -20,6 +23,13 @@ export default function VerifyScreen() {
   const router = useRouter();
   const [code, setCode] = useState("");
   const [verified, setVerified] = useState(false);
+
+  const { status, start, timeLeft } = useTimer(180);
+
+  const handleSendSms = async () => {
+    // 인증번호 발송 api 작성
+    start();
+  };
 
   const handleCodeChange = useCallback((text: string) => {
     const rawNumber = text.replace(/[^0-9]/g, "");
@@ -64,7 +74,7 @@ export default function VerifyScreen() {
               style={styles.inputCheckbox}
             />
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleSendSms}>
             <View style={styles.resend}>
               <Text style={[styles.resendText, textStyles.title18_SB135]}>
                 재발송
@@ -75,7 +85,7 @@ export default function VerifyScreen() {
 
         <View style={styles.timerContainer}>
           <Text style={[styles.timer, textStyles.body15_SB135]}>
-            남은 시간 3:00
+            남은 시간 {formatSeconds(timeLeft)}
           </Text>
         </View>
 
