@@ -4,6 +4,7 @@ import PhotoItem from "@/components/create-party/PhotoItem";
 import SubTitle from "@/components/create-party/SubTitle";
 import TextInputBox from "@/components/create-party/TextInputBox";
 import CreatePartyPageHeader from "@/components/CreatePartyPageHeader";
+import GlobalButton from "@/components/GlobalButton";
 import { photo, usecreatingPartyStore } from "@/stores/creatingPartyStore";
 import { colors } from "@/styles/colors";
 import { useLocalSearchParams } from "expo-router";
@@ -64,6 +65,13 @@ export default function PartyCreateScreen() {
 
   const renderItem = ({ item }: { item: photo }) => {
     return <PhotoItem id={item.id} imageUri={item.imageUri} />;
+  };
+
+  const isValid = (): boolean => {
+    if (partyTitle && totalAmount && numberOfPeople && pickUpLocation) {
+      return true;
+    }
+    return false;
   };
 
   const onClickCreateParty = () => {
@@ -159,6 +167,14 @@ export default function PartyCreateScreen() {
             )}
           </SafeAreaView>
         </ScrollView>
+
+        <SafeAreaView style={styles.createButtonContainer} edges={["bottom"]}>
+          <GlobalButton
+            onClick={onClickCreateParty}
+            text="파티 시작하기"
+            disabled={!isValid()}
+          />
+        </SafeAreaView>
       </View>
     </>
   );
@@ -184,5 +200,16 @@ const styles = StyleSheet.create({
   photoContainer: {
     flexDirection: "row",
     gap: 8,
+  },
+  createButtonContainer: {
+    paddingTop: 12,
+    paddingHorizontal: 20,
+    paddingBottom: 17,
+    backgroundColor: "#fff",
+    shadowColor: "rgba(0, 0, 0, 0.25)",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 4,
   },
 });
