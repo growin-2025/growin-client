@@ -2,7 +2,10 @@ import { postLoginGoogle } from "@/api/authApi";
 import { getCurrentUser, signIn, signOut } from "@/hooks/useGoogleAuth";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { ApiError } from "@/types/api";
+import { getErrorMessage } from "@/utils/getErrorMessage ";
 import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import {
@@ -21,6 +24,18 @@ export default function LoginScreen() {
 
   const loginMutation = useMutation({
     mutationFn: postLoginGoogle,
+    onSuccess: (data) => {
+      console.log("성공 처리");
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      if (error.response?.data) {
+        const message = getErrorMessage(error.response.data);
+        console.error(message);
+      } else {
+        // 네트워크 에러 등
+        console.error("네트워크 연결을 확인해주세요.");
+      }
+    },
   });
 
   // const signupMutation = useMutation({
