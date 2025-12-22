@@ -28,16 +28,19 @@ export default function NicknameScreen() {
     }))
   );
 
-  const handleTextChange = useCallback((text: string) => {
-    const validatedText = validateAndFilterNickname(text);
-    setNickname(validatedText);
+  const handleTextChange = useCallback(
+    (text: string) => {
+      const validatedText = validateAndFilterNickname(text);
+      setNickname(validatedText);
 
-    if (validatedText.length >= 2) {
-      setVerified(true);
-    } else {
-      setVerified(false);
-    }
-  }, []);
+      if (validatedText.length >= 2) {
+        setVerified(true);
+      } else {
+        setVerified(false);
+      }
+    },
+    [setNickname]
+  );
 
   const handleClickNextButton = async () => {
     // 닉네임 중복 확인 api 작성
