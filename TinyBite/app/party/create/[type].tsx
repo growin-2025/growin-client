@@ -76,6 +76,13 @@ export default function PartyCreateScreen() {
     return <PhotoItem id={item.id} imageUri={item.imageUri} />;
   };
 
+  const isValidLink = (str: string): boolean => {
+    if (str.startsWith("http://") || str.startsWith("https://")) {
+      return true;
+    }
+    return false;
+  };
+
   const isValid = (): boolean => {
     if (partyTitle && totalAmount && numberOfPeople && pickUpLocation) {
       return true;
@@ -84,6 +91,10 @@ export default function PartyCreateScreen() {
   };
 
   const onClickCreateParty = () => {
+    if (productLink && !isValidLink(productLink)) {
+      console.log("링크 올바른 형식으로 첨부하세요.");
+      return;
+    }
     console.log("partyTitle: ", partyTitle);
     console.log("totalAmount: ", totalAmount);
     console.log("numberOfPeople: ", numberOfPeople);
