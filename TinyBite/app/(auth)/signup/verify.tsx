@@ -28,7 +28,7 @@ export default function VerifyScreen() {
     console.log("인증 시간이 만료되었어요");
   });
 
-  const handleSendSms = async () => {
+  const handleResendSms = async () => {
     // 인증번호 발송 api 작성
     start();
   };
@@ -76,7 +76,7 @@ export default function VerifyScreen() {
               style={styles.inputCheckbox}
             />
           </View>
-          <TouchableOpacity onPress={handleSendSms}>
+          <TouchableOpacity onPress={handleResendSms}>
             <View style={styles.resend}>
               <Text style={[styles.resendText, textStyles.title18_SB135]}>
                 재발송
