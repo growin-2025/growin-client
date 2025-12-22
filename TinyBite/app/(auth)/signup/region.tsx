@@ -25,7 +25,7 @@ export default function RegionScreen() {
     setVerified(true);
   }, []);
 
-  const handleFindLocationClick = () => {
+  const handleClickFindLocation = () => {
     console.log("위치 찾기 버튼 클릭");
   };
 
@@ -63,7 +63,7 @@ export default function RegionScreen() {
 
           <TouchableOpacity
             style={styles.findBtn}
-            onPress={handleFindLocationClick}
+            onPress={handleClickFindLocation}
           >
             <Image
               source={require("@/assets/images/location-tracking.png")}
