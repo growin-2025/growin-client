@@ -121,7 +121,7 @@ export default function TermsScreen() {
           style={[styles.title, textStyles.title24_SB135]}
         >{`전화번호를 \n입력해 주세요.`}</Text>
         <View style={{ marginBottom: 60 }}>
-          <PhoneNumberInput onChangeText={handlePhoneNumberChange} />
+          <PhoneNumberInput />
         </View>
 
         {/* 약관 전체 동의 */}
