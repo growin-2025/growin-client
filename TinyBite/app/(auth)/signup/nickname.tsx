@@ -1,6 +1,7 @@
 import PaginationIndecatorHeader from "@/components/PaginationIndecatorHeader";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { validateAndFilterNickname } from "@/utils/validateAndFilterText";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useState } from "react";
@@ -19,9 +20,10 @@ export default function NicknameScreen() {
   const [verified, setVerified] = useState(false);
 
   const handleTextChange = useCallback((text: string) => {
-    setNickname(text);
+    const validatedText = validateAndFilterNickname(text);
+    setNickname(validatedText);
 
-    if (text.length >= 2) {
+    if (validatedText.length >= 2) {
       setVerified(true);
     } else {
       setVerified(false);
