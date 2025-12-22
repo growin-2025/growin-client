@@ -24,7 +24,9 @@ export default function VerifyScreen() {
   const [code, setCode] = useState("");
   const [verified, setVerified] = useState(false);
 
-  const { status, start, timeLeft } = useTimer(180);
+  const { start, timeLeft } = useTimer(180, () => {
+    console.log("인증 시간이 만료되었어요");
+  });
 
   const handleSendSms = async () => {
     // 인증번호 발송 api 작성

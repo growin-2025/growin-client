@@ -2,7 +2,7 @@ import { useCallback, useRef, useState } from "react";
 
 type TimerStatus = "pending" | "start" | "counting" | "done";
 
-export const useTimer = (initialSeconds: number) => {
+export const useTimer = (initialSeconds: number, onFinish?: () => void) => {
   const [timeLeft, setTimeLeft] = useState(initialSeconds);
   const [status, setStatus] = useState<TimerStatus>("pending");
   const endTimeRef = useRef<number | null>(null);
@@ -25,6 +25,7 @@ export const useTimer = (initialSeconds: number) => {
       if (remaining <= 0) {
         setTimeLeft(0);
         setStatus("done");
+        onFinish?.();
         return;
       }
 
@@ -34,7 +35,7 @@ export const useTimer = (initialSeconds: number) => {
     };
 
     update();
-  }, [initialSeconds]);
+  }, [initialSeconds, onFinish]);
 
   return { timeLeft, status, start };
 };
