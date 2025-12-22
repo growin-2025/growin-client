@@ -17,6 +17,8 @@ export interface SignupStoreState {
   setPhoneNumber: (number: string) => void;
   toggleTerm: (term: string) => void;
   checkAllEssentialsOnly: () => void;
+  getIsCheckedAllEssentialsOnly: () => boolean;
+  getIsNextButtonEnabled: () => boolean;
 }
 
 export const useSignupStore = create<SignupStoreState>((set, get) => ({
@@ -48,13 +50,9 @@ export const useSignupStore = create<SignupStoreState>((set, get) => ({
         (key) => key !== termTypes.offer
       );
 
-      const isAllEssentialChecked = essentialKeys.every(
-        (key) => state.terms[key]
-      );
-
       const newTerms = { ...state.terms };
 
-      if (isAllEssentialChecked) {
+      if (get().getIsCheckedAllEssentialsOnly()) {
         essentialKeys.forEach((key) => {
           newTerms[key] = false;
         });
@@ -66,5 +64,22 @@ export const useSignupStore = create<SignupStoreState>((set, get) => ({
 
       return { terms: newTerms };
     });
+  },
+  getIsCheckedAllEssentialsOnly: () => {
+    const { terms } = get();
+    return (
+      terms.age &&
+      terms.service &&
+      terms.finance &&
+      terms.collectingPrivacy &&
+      terms.providingPrivacy
+    );
+  },
+  getIsNextButtonEnabled: () => {
+    const state = get();
+    const isAllEssentialChecked = state.getIsCheckedAllEssentialsOnly();
+    const isPhoneValid = state.phoneNumber.length === 11;
+
+    return isAllEssentialChecked && isPhoneValid;
   },
 }));
