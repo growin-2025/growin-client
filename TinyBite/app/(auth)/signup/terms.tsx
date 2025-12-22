@@ -1,9 +1,14 @@
+import { postSmsSend } from "@/api/authApi";
 import PaginationIndecatorHeader from "@/components/PaginationIndecatorHeader";
 import PhoneNumberInput from "@/components/PhoneNumberInput";
 import { SignupTerms } from "@/constants/terms";
 import { termTypes, useSignupStore } from "@/stores/signupStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { ApiError } from "@/types/api";
+import { getErrorMessage } from "@/utils/getErrorMessage ";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -17,6 +22,7 @@ export default function TermsScreen() {
   const router = useRouter();
 
   const {
+    phoneNumber,
     terms,
     isAllEssentialChecked,
     isNextButtonEnabled,
@@ -24,6 +30,7 @@ export default function TermsScreen() {
     checkAllEssentialsOnly,
   } = useSignupStore(
     useShallow((state) => ({
+      phoneNumber: state.phoneNumber,
       terms: state.terms,
       isAllEssentialChecked: state.getIsCheckedAllEssentialsOnly(),
       isNextButtonEnabled: state.getIsNextButtonEnabled(),
@@ -31,6 +38,30 @@ export default function TermsScreen() {
       checkAllEssentialsOnly: state.checkAllEssentialsOnly,
     }))
   );
+
+  const smsSendMutation = useMutation({
+    mutationFn: postSmsSend,
+    onSuccess: (data) => {
+      console.log("성공 처리 >>", data);
+      router.push("/signup/verify");
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      if (error.response?.data) {
+        const message = getErrorMessage(error.response.data);
+        console.error(message);
+      } else {
+        console.error("네트워크 연결을 확인해주세요.");
+      }
+    },
+  });
+
+  const onClickNextButton = async () => {
+    if (phoneNumber) {
+      await smsSendMutation.mutateAsync({
+        phone: phoneNumber,
+      });
+    }
+  };
 
   // 전체 동의 항목을 렌더링하는 컴포넌트
   const AllCheckItem = () => {
@@ -131,7 +162,7 @@ export default function TermsScreen() {
         <TouchableOpacity
           style={[styles.nextBtn, !isNextButtonEnabled && styles.disabled]}
           disabled={!isNextButtonEnabled}
-          onPress={() => router.push("/signup/verify")}
+          onPress={onClickNextButton}
         >
           <Text style={[styles.nextText, textStyles.title18_SB135]}>다음</Text>
         </TouchableOpacity>
