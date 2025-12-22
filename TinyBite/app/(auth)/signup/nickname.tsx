@@ -1,4 +1,5 @@
 import PaginationIndecatorHeader from "@/components/PaginationIndecatorHeader";
+import { useSignupStore } from "@/stores/signupStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { validateAndFilterNickname } from "@/utils/validateAndFilterText";
@@ -13,12 +14,19 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useShallow } from "zustand/shallow";
 
 export default function NicknameScreen() {
   const router = useRouter();
-  const [nickname, setNickname] = useState("");
   const [verified, setVerified] = useState(false);
   const [showDuplicateMessage, setShowDuplicateMessage] = useState(false);
+
+  const { nickname, setNickname } = useSignupStore(
+    useShallow((state) => ({
+      nickname: state.nickname,
+      setNickname: state.setNickname,
+    }))
+  );
 
   const handleTextChange = useCallback((text: string) => {
     const validatedText = validateAndFilterNickname(text);

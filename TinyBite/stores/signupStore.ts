@@ -14,15 +14,18 @@ export interface SignupStoreState {
   terms: {
     [key in termTypes]: boolean;
   };
+  nickname: string;
   setPhoneNumber: (number: string) => void;
   toggleTerm: (term: string) => void;
   checkAllEssentialsOnly: () => void;
   getIsCheckedAllEssentialsOnly: () => boolean;
   getIsNextButtonEnabled: () => boolean;
+  setNickname: (nickname: string) => void;
 }
 
 export const useSignupStore = create<SignupStoreState>((set, get) => ({
   phoneNumber: "",
+  nickname: "",
   terms: {
     age: false,
     service: false,
@@ -81,5 +84,10 @@ export const useSignupStore = create<SignupStoreState>((set, get) => ({
     const isPhoneValid = state.phoneNumber.length === 11;
 
     return isAllEssentialChecked && isPhoneValid;
+  },
+  setNickname: (nickname: string) => {
+    set(() => ({
+      nickname,
+    }));
   },
 }));
