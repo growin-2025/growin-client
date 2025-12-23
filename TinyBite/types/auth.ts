@@ -10,3 +10,8 @@ export type LoginGoogle = {
   idToken: string;
   platformType: "ANDROID" | "IOS";
 };
+
+export type CheckSms = {
+  phone: string;
+  authCode: string;
+};

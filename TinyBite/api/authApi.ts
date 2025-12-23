@@ -1,6 +1,6 @@
 import { publicAxios } from "@/api/axios";
 import { ENDPOINT } from "@/api/urls";
-import { LoginGoogle, SignupGoogle } from "@/types/auth";
+import { CheckSms, LoginGoogle, SignupGoogle } from "@/types/auth";
 
 export const postLoginGoogle = async (loginData: LoginGoogle) => {
   const res = await publicAxios.post(ENDPOINT.AUTH.LOGIN_GOOGLE, loginData);
@@ -14,4 +14,8 @@ export const postSignupGoogle = async (signupData: SignupGoogle) => {
 
 export const postSendSms = async ({ phone }: { phone: string }) => {
   await publicAxios.post(ENDPOINT.SMS_AUTH.SMS_SEND, { phone });
+};
+
+export const postCheckSms = async (checkSmsData: CheckSms) => {
+  await publicAxios.post(ENDPOINT.SMS_AUTH.SMS_CHECK, checkSmsData);
 };

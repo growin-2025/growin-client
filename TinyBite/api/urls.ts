@@ -5,6 +5,7 @@ export const BASE_URL = API_URL;
 export const ENDPOINT = {
   SMS_AUTH: {
     SMS_SEND: "/api/v1/auth/sms/send",
+    SMS_CHECK: "/api/v1/auth/sms/check",
   },
   AUTH: {
     SIGNUP_GOOGLE: "/api/v1/auth/google/signup",

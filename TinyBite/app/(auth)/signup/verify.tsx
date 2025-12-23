@@ -1,4 +1,4 @@
-import { postSendSms } from "@/api/authApi";
+import { postCheckSms, postSendSms } from "@/api/authApi";
 import PaginationIndecatorHeader from "@/components/PaginationIndecatorHeader";
 import { useSignupStore } from "@/stores/signupStore";
 import { useTimerStore } from "@/stores/timerStore";
@@ -53,7 +53,26 @@ export default function VerifyScreen() {
     },
   });
 
+  const smsCheckMutation = useMutation({
+    mutationFn: postCheckSms,
+    onSuccess: (data) => {
+      console.log("postCheckSms 성공", data);
+      setVerified(true);
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      setVerified(false);
+      if (error.response?.data) {
+        const message = getErrorMessage(error.response.data);
+        alert(message);
+        console.error(message);
+      } else {
+        console.error("네트워크 연결을 확인해주세요.");
+      }
+    },
+  });
+
   const handleResendSms = () => {
+    setCode("");
     smsResendMutation.mutate({
       phone: phoneNumber,
     });
@@ -65,24 +84,25 @@ export default function VerifyScreen() {
     }
   }, [status]);
 
-  const handleCodeChange = useCallback((text: string) => {
-    const rawNumber = text.replace(/[^0-9]/g, "");
-    setCode(rawNumber);
+  const handleCodeChange = useCallback(
+    (text: string) => {
+      const rawNumber = text.replace(/[^0-9]/g, "");
+      setCode(rawNumber);
 
-    if (rawNumber.length === 5) {
-      console.log("5자리 입력 완료된 값:", rawNumber);
-      setVerified(true);
-    } else {
-      setVerified(false);
-    }
-  }, []);
+      if (rawNumber.length === 6) {
+        console.log("6자리 입력 완료된 값:", rawNumber);
+        smsCheckMutation.mutate({
+          phone: phoneNumber,
+          authCode: rawNumber,
+        });
+      } else {
+        setVerified(false);
+      }
+    },
+    [phoneNumber, smsCheckMutation]
+  );
 
   const handleClickNextButton = async () => {
-    // 인증번호 확인 api 작성
-    if (false) {
-      // alert("인증번호가 일치하지 않아요.");
-      // return;
-    }
     resetTimer();
     router.push("/signup/nickname");
   };
@@ -110,7 +130,7 @@ export default function VerifyScreen() {
               placeholderTextColor={colors.gray[1]}
               keyboardType="numeric"
               style={[styles.input, textStyles.title18_SB135]}
-              maxLength={5}
+              maxLength={6}
               autoFocus={true}
             />
             <Image
