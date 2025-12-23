@@ -1,4 +1,3 @@
-import LocationSearchResult from "@/components/LocationSearchResult";
 import PaginationIndecatorHeader from "@/components/PaginationIndecatorHeader";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
@@ -125,6 +124,7 @@ export default function RegionScreen() {
               placeholderTextColor={colors.gray[1]}
               keyboardType="default"
               maxLength={8}
+              editable={false}
             />
           </View>
 
@@ -143,7 +143,7 @@ export default function RegionScreen() {
           </TouchableOpacity>
         </View>
 
-        <LocationSearchResult />
+        {/* <LocationSearchResult /> */}
 
         {/* 다음 버튼 */}
         <TouchableOpacity
