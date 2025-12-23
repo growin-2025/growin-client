@@ -23,6 +23,7 @@ export interface SignupStoreState {
   getIsNextButtonEnabled: () => boolean;
   setNickname: (nickname: string) => void;
   setLocationName: (locationName: string) => void;
+  resetSignupStore: () => void;
 }
 
 export const useSignupStore = create<SignupStoreState>((set, get) => ({
@@ -96,6 +97,21 @@ export const useSignupStore = create<SignupStoreState>((set, get) => ({
   setLocationName: (locationName: string) => {
     set(() => ({
       locationName,
+    }));
+  },
+  resetSignupStore: () => {
+    set(() => ({
+      phoneNumber: "",
+      nickname: "",
+      locationName: "",
+      terms: {
+        age: false,
+        service: false,
+        finance: false,
+        collectingPrivacy: false,
+        providingPrivacy: false,
+        offer: false,
+      },
     }));
   },
 }));

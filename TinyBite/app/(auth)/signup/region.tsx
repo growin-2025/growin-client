@@ -111,6 +111,11 @@ export default function RegionScreen() {
     }
   };
 
+  const handleClickNextButton = async () => {
+    // 회원가입 api 호출
+    router.replace("/(auth)/signup/complete");
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
@@ -164,7 +169,7 @@ export default function RegionScreen() {
         <TouchableOpacity
           style={[styles.nextBtn, !locationName && styles.disabled]}
           disabled={!locationName}
-          onPress={() => router.replace("/(auth)/signup/complete")}
+          onPress={handleClickNextButton}
         >
           <Text style={[styles.nextText, textStyles.title18_SB135]}>다음</Text>
         </TouchableOpacity>
