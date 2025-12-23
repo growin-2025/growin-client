@@ -85,7 +85,7 @@ export const useSignupStore = create<SignupStoreState>((set, get) => ({
   getIsNextButtonEnabled: () => {
     const state = get();
     const isAllEssentialChecked = state.getIsCheckedAllEssentialsOnly();
-    const isPhoneValid = state.phoneNumber.length === 11;
+    const isPhoneValid = state.phoneNumber.length === 13;
 
     return isAllEssentialChecked && isPhoneValid;
   },
