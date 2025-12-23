@@ -45,69 +45,6 @@ export default function RegionScreen() {
   }, [coords, setLocationName]);
 
   const handleClickFindLocation = async () => {
-    setIsLoadingLocation(true);
-
-    try {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      console.log("status:", status);
-      if (status !== Location.PermissionStatus.GRANTED) {
-        alert("위치 권한을 허용해주세요.");
-        return;
-      }
-
-      const servicesEnabled = await Location.hasServicesEnabledAsync();
-      console.log("servicesEnabled:", servicesEnabled);
-      if (!servicesEnabled) {
-        alert("디바이스의 위치 서비스를 켜주세요.");
-        return;
-      }
-
-      let location = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.Balanced,
-        timeInterval: 10000,
-        distanceInterval: 0,
-      });
-      console.log("현재 위치:", location.coords);
-      setCoords(location.coords);
-    } catch (error) {
-      console.error("위치 가져오기 실패:", error);
-
-      // 개발 환경: 기본 위치 사용
-      if (__DEV__) {
-        const defaultCoords = {
-          latitude: 37.5665,
-          longitude: 126.978,
-          altitude: 0,
-          accuracy: 0,
-          altitudeAccuracy: 0,
-          heading: 0,
-          speed: 0,
-        };
-        setCoords(defaultCoords);
-        console.log("개발 모드: 기본 위치 사용");
-        return;
-      }
-
-      await handleLocationFallback();
-    } finally {
-      setIsLoadingLocation(false);
-    }
-  };
-
-  const handleLocationFallback = async () => {
-    try {
-      const lastLocation = await Location.getLastKnownPositionAsync();
-
-      if (lastLocation) {
-        console.log("lastLocation:", lastLocation.coords);
-        setCoords(lastLocation.coords);
-        alert("최근 위치 정보를 사용합니다.");
-      } else {
-        alert("최근 위치를 가져올 수 없습니다. 잠시 후 다시 시도해주세요.");
-      }
-    } catch (fallbackError) {
-      console.error("최근 위치 가져오기 실패:", fallbackError);
-      alert("최근 위치를 가져올 수 없습니다. 위치 서비스를 확인해주세요.");
     }
   };
 
