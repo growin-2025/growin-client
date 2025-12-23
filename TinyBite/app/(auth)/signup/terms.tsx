@@ -45,7 +45,6 @@ export default function TermsScreen() {
   const smsSendMutation = useMutation({
     mutationFn: postSendSms,
     onSuccess: (data) => {
-      console.log("성공 처리 >>", data);
       startTimer(180);
       router.push("/signup/verify");
     },
