@@ -1,11 +1,15 @@
+import { getLocationName } from "@/api/authApi";
 import PaginationIndecatorHeader from "@/components/PaginationIndecatorHeader";
+import { useUserCoords } from "@/hooks/useUserCoords";
 import { useSignupStore } from "@/stores/signupStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import * as Location from "expo-location";
+import { ApiError } from "@/types/api";
+import { getErrorMessage } from "@/utils/getErrorMessage ";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
 import {
   Image,
   StyleSheet,
@@ -19,10 +23,7 @@ import { useShallow } from "zustand/shallow";
 
 export default function RegionScreen() {
   const router = useRouter();
-  const [coords, setCoords] = useState<Location.LocationObjectCoords | null>(
-    null
-  );
-  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
+  const { loading, refresh } = useUserCoords();
 
   const { locationName, setLocationName } = useSignupStore(
     useShallow((state) => ({
@@ -31,20 +32,36 @@ export default function RegionScreen() {
     }))
   );
 
+  const GetLocationNameMutation = useMutation({
+    mutationFn: getLocationName,
+    onSuccess: (data) => {},
+    onError: (error: AxiosError<ApiError>) => {
+      if (error.response?.data) {
+        const message = getErrorMessage(error.response.data);
+        alert(message);
+        console.error(message);
+      } else {
+        console.error("네트워크 연결을 확인해주세요.");
+      }
+    },
+  });
+
   // const handleTextChange = useCallback((text: string) => {
   //   setText(text);
   //   setVerified(true);
   // }, []);
 
-  useEffect(() => {
-    if (coords) {
-      // 동네 반환 api 호출
-      const mockResponse = "중구 명동";
-      setLocationName(mockResponse);
-    }
-  }, [coords, setLocationName]);
-
   const handleClickFindLocation = async () => {
+    const latestCoords = await refresh();
+    console.log("latestCoords >>", latestCoords);
+
+    if (latestCoords) {
+      const data = await GetLocationNameMutation.mutateAsync({
+        latitude: latestCoords.latitude.toString(),
+        longitude: latestCoords.longitude.toString(),
+      });
+      console.log("data >>", data);
+      setLocationName(data);
     }
   };
 
@@ -88,14 +105,14 @@ export default function RegionScreen() {
           <TouchableOpacity
             style={styles.findBtn}
             onPress={handleClickFindLocation}
-            disabled={isLoadingLocation}
+            disabled={loading}
           >
             <Image
               source={require("@/assets/images/location-tracking.png")}
               style={{ width: 24, height: 24, aspectRatio: 1 / 1 }}
             />
             <Text style={[styles.findText, textStyles.body15_SB135]}>
-              {isLoadingLocation ? "위치 확인 중..." : "현재 위치로 주소 찾기"}
+              {loading ? "위치 확인 중..." : "현재 위치로 주소 찾기"}
             </Text>
           </TouchableOpacity>
         </View>
