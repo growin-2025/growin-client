@@ -175,7 +175,7 @@ export default function RegionScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, paddingHorizontal: 20 },
-  inner: { flex: 1 },
+  inner: { flex: 1, position: "relative" },
 
   title: {
     marginBottom: 28,
@@ -219,6 +219,10 @@ const styles = StyleSheet.create({
   },
 
   nextBtn: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
     backgroundColor: colors.main,
     justifyContent: "center",
     alignItems: "center",
