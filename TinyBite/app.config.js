@@ -41,6 +41,13 @@ module.exports = {
         iosUrlScheme: process.env.EXPO_PUBLIC_GOOGLE_IOS_URL_SCHEME,
       },
     ],
+    [
+      "expo-location",
+      {
+        locationAlwaysAndWhenInUsePermission:
+          "Allow 한입만 to use your location.",
+      },
+    ],
   ],
   experiments: {
     typedRoutes: true,
