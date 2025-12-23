@@ -20,19 +20,17 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LoginScreen() {
   const router = useRouter();
-  // const queryClient = useQueryClient();
 
   const loginMutation = useMutation({
     mutationFn: postLoginGoogle,
     onSuccess: (data) => {
-      console.log("성공 처리");
+      if (data.signup) {
+        router.push("/(auth)/signup/terms");
+        return;
+      }
     },
     onError: (error: AxiosError<ApiError>) => {
       if (error.response?.data) {
-        if (error.response?.data.code === "USER_NOT_EXISTS") {
-          router.push("/(auth)/signup/terms");
-          return;
-        }
         const message = getErrorMessage(error.response.data);
         console.error(message);
       } else {
@@ -45,45 +43,25 @@ export default function LoginScreen() {
   // const signupMutation = useMutation({
   //   mutationFn: postSignupGoogle,
   //   onSuccess: () => {
-  //     queryClient.invalidateQueries({ queryKey: ["me"] });
   //     router.replace("/(tabs)");
   //   },
   // });
 
-  // useEffect(() => {
-  //   if (response?.type === "success") {
-  //     const idToken = response.params.id_token;
-
-  //     const loginData: LoginGoogle = {
-  //       idToken,
-  //       platformType: Platform.OS.toUpperCase() as "ANDROID" | "IOS",
-  //     };
-
-  //     loginMutation.mutate(loginData);
-  //   }
-  // }, [loginMutation, response]);
-
   const handleGoogleLogin = async () => {
-    try {
-      const idToken = await signIn();
+    let idToken;
 
-      if (idToken) {
-        await loginMutation.mutateAsync({
-          idToken: idToken,
-          platformType: Platform.OS.toUpperCase() as "ANDROID" | "IOS",
-        });
-      }
+    const user = await getCurrentUser();
+    if (user) {
+      idToken = user.idToken;
+    } else {
+      idToken = await signIn();
+    }
 
-      // queryClient.invalidateQueries({ queryKey: ["me"] });
-      // router.replace("/(tabs)");
-    } catch (error) {
-      console.error(error);
-      // if (error?.response?.status === 404) {
-      //   await signupMutation.mutateAsync({
-      //     provider: "google",
-      //     token: error.token ?? "",
-      //   });
-      // }
+    if (idToken) {
+      await loginMutation.mutateAsync({
+        idToken: idToken,
+        platformType: Platform.OS.toUpperCase() as "ANDROID" | "IOS",
+      });
     }
   };
 
@@ -117,15 +95,6 @@ export default function LoginScreen() {
         >
           <Text style={[styles.socialText, textStyles.title18_SB135]}>
             임시 google 로그아웃 버튼
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.socialButton, styles.google]}
-          onPress={getCurrentUser}
-        >
-          <Text style={[styles.socialText, textStyles.title18_SB135]}>
-            임시 google getCurrentUser 버튼
           </Text>
         </TouchableOpacity>
 

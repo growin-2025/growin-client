@@ -51,5 +51,5 @@ export const signOut = async () => {
 
 export const getCurrentUser = async () => {
   const currentUser = GoogleSignin.getCurrentUser();
-  console.log(currentUser);
+  return currentUser;
 };
