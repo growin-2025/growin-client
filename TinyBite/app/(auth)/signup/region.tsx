@@ -1,10 +1,11 @@
 import PaginationIndecatorHeader from "@/components/PaginationIndecatorHeader";
+import { useSignupStore } from "@/stores/signupStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import * as Location from "expo-location";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useCallback, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Image,
   StyleSheet,
@@ -14,19 +15,34 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useShallow } from "zustand/shallow";
 
 export default function RegionScreen() {
   const router = useRouter();
-  const [text, setText] = useState("");
-  const [verified, setVerified] = useState(false);
-  const [location, setLocation] =
-    useState<Location.LocationObjectCoords | null>(null);
+  const [coords, setCoords] = useState<Location.LocationObjectCoords | null>(
+    null
+  );
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
 
-  const handleTextChange = useCallback((text: string) => {
-    setText(text);
-    setVerified(true);
-  }, []);
+  const { locationName, setLocationName } = useSignupStore(
+    useShallow((state) => ({
+      locationName: state.locationName,
+      setLocationName: state.setLocationName,
+    }))
+  );
+
+  // const handleTextChange = useCallback((text: string) => {
+  //   setText(text);
+  //   setVerified(true);
+  // }, []);
+
+  useEffect(() => {
+    if (coords) {
+      // 동네 반환 api 호출
+      const mockResponse = "중구 명동";
+      setLocationName(mockResponse);
+    }
+  }, [coords, setLocationName]);
 
   const handleClickFindLocation = async () => {
     setIsLoadingLocation(true);
@@ -52,7 +68,7 @@ export default function RegionScreen() {
         distanceInterval: 0,
       });
       console.log("현재 위치:", location.coords);
-      setLocation(location.coords);
+      setCoords(location.coords);
     } catch (error) {
       console.error("위치 가져오기 실패:", error);
 
@@ -67,7 +83,7 @@ export default function RegionScreen() {
           heading: 0,
           speed: 0,
         };
-        setLocation(defaultCoords);
+        setCoords(defaultCoords);
         console.log("개발 모드: 기본 위치 사용");
         return;
       }
@@ -84,7 +100,7 @@ export default function RegionScreen() {
 
       if (lastLocation) {
         console.log("lastLocation:", lastLocation.coords);
-        setLocation(lastLocation.coords);
+        setCoords(lastLocation.coords);
         alert("최근 위치 정보를 사용합니다.");
       } else {
         alert("최근 위치를 가져올 수 없습니다. 잠시 후 다시 시도해주세요.");
@@ -118,12 +134,11 @@ export default function RegionScreen() {
             />
             <TextInput
               style={[styles.input, textStyles.title18_SB135]}
-              onChangeText={handleTextChange}
-              value={text}
+              // onChangeText={handleTextChange}
+              value={locationName}
               placeholder="동명(읍,면)으로 검색 (ex.역삼동)"
               placeholderTextColor={colors.gray[1]}
               keyboardType="default"
-              maxLength={8}
               editable={false}
             />
           </View>
@@ -147,8 +162,8 @@ export default function RegionScreen() {
 
         {/* 다음 버튼 */}
         <TouchableOpacity
-          style={[styles.nextBtn, !verified && styles.disabled]}
-          disabled={!verified}
+          style={[styles.nextBtn, !locationName && styles.disabled]}
+          disabled={!locationName}
           onPress={() => router.replace("/(auth)/signup/complete")}
         >
           <Text style={[styles.nextText, textStyles.title18_SB135]}>다음</Text>
