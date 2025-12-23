@@ -1,8 +1,14 @@
+import { postSendSms } from "@/api/authApi";
 import PaginationIndecatorHeader from "@/components/PaginationIndecatorHeader";
+import { useSignupStore } from "@/stores/signupStore";
 import { useTimerStore } from "@/stores/timerStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { ApiError } from "@/types/api";
 import { formatSeconds } from "@/utils/formatSeconds";
+import { getErrorMessage } from "@/utils/getErrorMessage ";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect, useState } from "react";
@@ -15,6 +21,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useShallow } from "zustand/shallow";
 
 const CHECKBOX_ON_IMAGE = require("@/assets/images/verify-number/verify-number-on.png");
 const CHECKBOX_OFF_IMAGE = require("@/assets/images/verify-number/verify-number-off.png");
@@ -25,10 +32,31 @@ export default function VerifyScreen() {
   const [verified, setVerified] = useState(false);
 
   const { status, startTimer, timeLeft, resetTimer } = useTimerStore();
+  const { phoneNumber } = useSignupStore(
+    useShallow((state) => ({
+      phoneNumber: state.phoneNumber,
+    }))
+  );
 
-  const handleResendSms = async () => {
-    // 인증번호 발송 api 작성
-    startTimer(180);
+  const smsResendMutation = useMutation({
+    mutationFn: postSendSms,
+    onSuccess: (data) => {
+      startTimer(180);
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      if (error.response?.data) {
+        const message = getErrorMessage(error.response.data);
+        console.error(message);
+      } else {
+        console.error("네트워크 연결을 확인해주세요.");
+      }
+    },
+  });
+
+  const handleResendSms = () => {
+    smsResendMutation.mutate({
+      phone: phoneNumber,
+    });
   };
 
   useEffect(() => {
