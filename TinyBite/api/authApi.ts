@@ -19,3 +19,11 @@ export const postSendSms = async ({ phone }: { phone: string }) => {
 export const postCheckSms = async (checkSmsData: CheckSms) => {
   await publicAxios.post(ENDPOINT.SMS_AUTH.SMS_CHECK, checkSmsData);
 };
+
+export const getCheckNickname = async (nickname: string) => {
+  await publicAxios.get(ENDPOINT.AUTH.NICKNAME_CHECK, {
+    params: {
+      nickname: nickname,
+    },
+  });
+};
