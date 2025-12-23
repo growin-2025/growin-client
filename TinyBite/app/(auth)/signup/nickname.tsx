@@ -1,8 +1,13 @@
+import { getCheckNickname } from "@/api/authApi";
 import PaginationIndecatorHeader from "@/components/PaginationIndecatorHeader";
 import { useSignupStore } from "@/stores/signupStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { ApiError } from "@/types/api";
+import { getErrorMessage } from "@/utils/getErrorMessage ";
 import { validateAndFilterNickname } from "@/utils/validateAndFilterText";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useState } from "react";
@@ -18,20 +23,42 @@ import { useShallow } from "zustand/shallow";
 
 export default function NicknameScreen() {
   const router = useRouter();
+  const [text, setText] = useState("");
   const [verified, setVerified] = useState(false);
   const [showDuplicateMessage, setShowDuplicateMessage] = useState(false);
 
-  const { nickname, setNickname } = useSignupStore(
+  const { setNickname } = useSignupStore(
     useShallow((state) => ({
-      nickname: state.nickname,
       setNickname: state.setNickname,
     }))
   );
 
+  const CheckNicknameMutation = useMutation({
+    mutationFn: getCheckNickname,
+    onSuccess: (data) => {
+      setNickname(text);
+      setShowDuplicateMessage(false);
+      router.push("/signup/region");
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      if (error.response?.data) {
+        if (error.response.data.code === "DUPLICATED_NICKNAME") {
+          setShowDuplicateMessage(true);
+          return;
+        }
+        const message = getErrorMessage(error.response.data);
+        alert(message);
+        console.error(message);
+      } else {
+        console.error("네트워크 연결을 확인해주세요.");
+      }
+    },
+  });
+
   const handleTextChange = useCallback(
     (text: string) => {
       const validatedText = validateAndFilterNickname(text);
-      setNickname(validatedText);
+      setText(validatedText);
 
       if (validatedText.length >= 2) {
         setVerified(true);
@@ -39,17 +66,11 @@ export default function NicknameScreen() {
         setVerified(false);
       }
     },
-    [setNickname]
+    [setText]
   );
 
-  const handleClickNextButton = async () => {
-    // 닉네임 중복 확인 api 작성
-    if (nickname === "중복") {
-      setShowDuplicateMessage(true);
-      return;
-    }
-    setShowDuplicateMessage(false);
-    router.push("/signup/region");
+  const handleClickNextButton = () => {
+    CheckNicknameMutation.mutate(text);
   };
 
   return (
@@ -72,13 +93,13 @@ export default function NicknameScreen() {
             <TextInput
               style={[styles.input, textStyles.title18_SB135]}
               onChangeText={handleTextChange}
-              value={nickname}
+              value={text}
               placeholder="닉네임 (2~12자)"
               keyboardType="default"
               maxLength={12}
             />
             <Text style={[styles.count, textStyles.body12_M135]}>
-              ({nickname.length}/12)
+              ({text.length}/12)
             </Text>
           </View>
         </View>
