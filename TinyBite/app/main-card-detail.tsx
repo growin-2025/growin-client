@@ -252,6 +252,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 0 },
     elevation: 4, // Android 그림자
+    zIndex: 10,
   },
   cta: {
     width: "100%",
