@@ -10,12 +10,14 @@ export enum termTypes {
 }
 
 export interface SignupStoreState {
+  googleIdToken: string;
   phoneNumber: string;
   terms: {
     [key in termTypes]: boolean;
   };
   nickname: string;
   locationName: string;
+  setGoogleIdToken: (token: string) => void;
   setPhoneNumber: (number: string) => void;
   toggleTerm: (term: string) => void;
   checkAllEssentialsOnly: () => void;
@@ -27,6 +29,7 @@ export interface SignupStoreState {
 }
 
 export const useSignupStore = create<SignupStoreState>((set, get) => ({
+  googleIdToken: "",
   phoneNumber: "",
   nickname: "",
   locationName: "",
@@ -37,6 +40,11 @@ export const useSignupStore = create<SignupStoreState>((set, get) => ({
     collectingPrivacy: false,
     providingPrivacy: false,
     offer: false,
+  },
+  setGoogleIdToken: (token: string) => {
+    set(() => ({
+      googleIdToken: token,
+    }));
   },
   setPhoneNumber: (number: string) => {
     set(() => ({
@@ -101,6 +109,7 @@ export const useSignupStore = create<SignupStoreState>((set, get) => ({
   },
   resetSignupStore: () => {
     set(() => ({
+      googleIdToken: "",
       phoneNumber: "",
       nickname: "",
       locationName: "",
