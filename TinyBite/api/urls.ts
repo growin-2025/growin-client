@@ -12,4 +12,7 @@ export const ENDPOINT = {
     LOGIN_GOOGLE: "/api/v1/auth/google/login",
     NICKNAME_CHECK: "/api/v1/auth/nickname/check",
   },
+  LOCATION: {
+    FIND_LOCATION: "/api/v1/auth/location",
+  },
 };

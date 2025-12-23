@@ -15,3 +15,8 @@ export type CheckSms = {
   phone: string;
   authCode: string;
 };
+
+export type UserCoords = {
+  latitude: string;
+  longitude: string;
+};

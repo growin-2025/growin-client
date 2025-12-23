@@ -1,6 +1,6 @@
 import { publicAxios } from "@/api/axios";
 import { ENDPOINT } from "@/api/urls";
-import { CheckSms, LoginGoogle, SignupGoogle } from "@/types/auth";
+import { CheckSms, LoginGoogle, SignupGoogle, UserCoords } from "@/types/auth";
 
 export const postLoginGoogle = async (loginData: LoginGoogle) => {
   const res = await publicAxios.post(ENDPOINT.AUTH.LOGIN_GOOGLE, loginData);
@@ -26,4 +26,14 @@ export const getCheckNickname = async (nickname: string) => {
       nickname: nickname,
     },
   });
+};
+
+export const getLocationName = async (coordsData: UserCoords) => {
+  const res = await publicAxios.get(ENDPOINT.LOCATION.FIND_LOCATION, {
+    params: {
+      latitude: coordsData.latitude,
+      longitude: coordsData.longitude,
+    },
+  });
+  return res.data.data;
 };
