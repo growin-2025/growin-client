@@ -20,9 +20,9 @@ export default function RegionScreen() {
   const router = useRouter();
   const [text, setText] = useState("");
   const [verified, setVerified] = useState(false);
-
   const [location, setLocation] =
     useState<Location.LocationObjectCoords | null>(null);
+  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
 
   const handleTextChange = useCallback((text: string) => {
     setText(text);
@@ -30,6 +30,8 @@ export default function RegionScreen() {
   }, []);
 
   const handleClickFindLocation = async () => {
+    setIsLoadingLocation(true);
+
     try {
       let { status } = await Location.requestForegroundPermissionsAsync();
       console.log("status:", status);
@@ -72,6 +74,8 @@ export default function RegionScreen() {
       }
 
       await handleLocationFallback();
+    } finally {
+      setIsLoadingLocation(false);
     }
   };
 
@@ -127,13 +131,14 @@ export default function RegionScreen() {
           <TouchableOpacity
             style={styles.findBtn}
             onPress={handleClickFindLocation}
+            disabled={isLoadingLocation}
           >
             <Image
               source={require("@/assets/images/location-tracking.png")}
               style={{ width: 24, height: 24, aspectRatio: 1 / 1 }}
             />
             <Text style={[styles.findText, textStyles.body15_SB135]}>
-              현재 위치로 주소 찾기
+              {isLoadingLocation ? "위치 확인 중..." : "현재 위치로 주소 찾기"}
             </Text>
           </TouchableOpacity>
         </View>
