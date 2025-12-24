@@ -1,13 +1,13 @@
 import { create } from "zustand";
 
-export type photo = {
+export type Photo = {
   id: number;
   imageUri: string;
 };
 
-export interface creatingPartyState {
+export interface CreatingPartyState {
   seq: number;
-  photos: photo[];
+  photos: Photo[];
   representativePhoto: number;
   partyTitle: string;
   totalAmount: string;
@@ -27,7 +27,7 @@ export interface creatingPartyState {
   resetCreateParty: () => void;
 }
 
-export const usecreatingPartyStore = create<creatingPartyState>((set, get) => ({
+export const useCreatingPartyStore = create<CreatingPartyState>((set, get) => ({
   seq: 0,
   photos: [],
   representativePhoto: 0,
@@ -39,7 +39,7 @@ export const usecreatingPartyStore = create<creatingPartyState>((set, get) => ({
   productLink: "",
   addPhoto: (uri: string) => {
     set((state) => {
-      const newPhoto: photo = {
+      const newPhoto: Photo = {
         id: state.seq++,
         imageUri: uri,
       };

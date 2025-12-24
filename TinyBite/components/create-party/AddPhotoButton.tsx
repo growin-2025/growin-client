@@ -1,4 +1,4 @@
-import { usecreatingPartyStore } from "@/stores/creatingPartyStore";
+import { useCreatingPartyStore } from "@/stores/creatingPartyStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import * as ImagePicker from "expo-image-picker";
@@ -8,7 +8,7 @@ import { useShallow } from "zustand/shallow";
 const CAMERA_ICON = require("@/assets/images/camera-24-gray.png");
 
 const AddPhotoButton = () => {
-  const { addPhoto, photos } = usecreatingPartyStore(
+  const { addPhoto, photos } = useCreatingPartyStore(
     useShallow((state) => ({
       addPhoto: state.addPhoto,
       photos: state.photos,

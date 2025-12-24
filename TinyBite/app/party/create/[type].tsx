@@ -5,7 +5,7 @@ import SubTitle from "@/components/create-party/SubTitle";
 import TextInputBox from "@/components/create-party/TextInputBox";
 import CreatePartyPageHeader from "@/components/CreatePartyPageHeader";
 import GlobalButton from "@/components/GlobalButton";
-import { photo, usecreatingPartyStore } from "@/stores/creatingPartyStore";
+import { Photo, useCreatingPartyStore } from "@/stores/creatingPartyStore";
 import { colors } from "@/styles/colors";
 import { useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -55,7 +55,7 @@ export default function PartyCreateScreen() {
     setDetailedDescription,
     setProductLink,
     resetCreateParty,
-  } = usecreatingPartyStore(
+  } = useCreatingPartyStore(
     useShallow((state) => ({
       photos: state.photos,
       partyTitle: state.partyTitle,
@@ -73,7 +73,7 @@ export default function PartyCreateScreen() {
     }))
   );
 
-  const renderItem = ({ item }: { item: photo }) => {
+  const renderItem = ({ item }: { item: Photo }) => {
     return <PhotoItem id={item.id} imageUri={item.imageUri} />;
   };
 
