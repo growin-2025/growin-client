@@ -36,7 +36,9 @@ const PARTY_CONFIG = {
 } as const;
 
 export default function PartyCreateScreen() {
-  const { type } = useLocalSearchParams<{ type: "shopping" | "necessities" }>();
+  const { type } = useLocalSearchParams<{
+    type: "delivery" | "shopping" | "necessities";
+  }>();
 
   const title = PARTY_TITLES[type];
   const config = PARTY_CONFIG[type];
@@ -78,10 +80,16 @@ export default function PartyCreateScreen() {
   };
 
   const isValidLink = (str: string): boolean => {
-    if (str.startsWith("http://") || str.startsWith("https://")) {
-      return true;
+    const trimmed = str.trim();
+    try {
+      const url = new URL(trimmed);
+      return (
+        (url.protocol === "http:" || url.protocol === "https:") &&
+        !!url.hostname
+      );
+    } catch {
+      return false;
     }
-    return false;
   };
 
   const isValid = (): boolean => {

@@ -39,14 +39,16 @@ export const useCreatingPartyStore = create<CreatingPartyState>((set, get) => ({
   productLink: "",
   addPhoto: (uri: string) => {
     set((state) => {
+      const nextSeq = state.seq + 1;
       const newPhoto: Photo = {
-        id: state.seq++,
+        id: nextSeq,
         imageUri: uri,
       };
       const newRepresentativePhoto =
         state.photos.length === 0 ? newPhoto.id : state.representativePhoto;
 
       return {
+        seq: nextSeq,
         photos: [...state.photos, newPhoto],
         representativePhoto: newRepresentativePhoto,
       };
@@ -56,7 +58,7 @@ export const useCreatingPartyStore = create<CreatingPartyState>((set, get) => ({
     set((state) => {
       const updatedPhotos = state.photos.filter((p) => p.id !== id);
       const newRepresentativePhoto =
-        state.representativePhoto === id && updatedPhotos.length > 0
+        updatedPhotos.length === 0
           ? updatedPhotos[0].id
           : state.representativePhoto;
 

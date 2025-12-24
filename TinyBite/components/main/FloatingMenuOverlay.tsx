@@ -43,13 +43,11 @@ const FloatingMenuOverlay = ({
               <TouchableOpacity
                 style={styles.menuButton}
                 onPress={() => {
-                  {
-                    setIsMenuOpen(false);
-                    router.navigate({
-                      pathname: "/party/create/[type]",
-                      params: { type: "delivery" },
-                    });
-                  }
+                  setIsMenuOpen(false);
+                  router.navigate({
+                    pathname: "/party/create/[type]",
+                    params: { type: "delivery" },
+                  });
                 }}
               >
                 <Image
