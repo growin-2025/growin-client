@@ -21,8 +21,8 @@ const AddPhotoButton = () => {
 
     if (!permissionResult.granted) {
       Alert.alert(
-        "Permission required",
-        "Permission to access the media library is required."
+        "권한이 필요해요",
+        "사진을 선택하려면 기기의 사진 접근 권한을 허용해 주세요."
       );
       return;
     }
