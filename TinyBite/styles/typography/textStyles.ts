@@ -31,6 +31,11 @@ export const textStyles = {
     fontFamily: "Pretendard-Bold",
   },
 
+  body16_SB150: {
+    ...fontScale.body[16][150],
+    fontFamily: "Pretendard-SemiBold",
+  },
+
   body16_SB135: {
     ...fontScale.body[16][135],
     fontFamily: "Pretendard-SemiBold",

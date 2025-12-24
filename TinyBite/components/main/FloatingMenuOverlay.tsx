@@ -1,5 +1,6 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { router } from "expo-router";
 import {
   Image,
   Modal,
@@ -42,8 +43,11 @@ const FloatingMenuOverlay = ({
               <TouchableOpacity
                 style={styles.menuButton}
                 onPress={() => {
-                  console.log("배달 클릭");
                   setIsMenuOpen(false);
+                  router.navigate({
+                    pathname: "/party/create/[type]",
+                    params: { type: "delivery" },
+                  });
                 }}
               >
                 <Image
@@ -60,8 +64,11 @@ const FloatingMenuOverlay = ({
               <TouchableOpacity
                 style={styles.menuButton}
                 onPress={() => {
-                  console.log("생필품 클릭");
                   setIsMenuOpen(false);
+                  router.navigate({
+                    pathname: "/party/create/[type]",
+                    params: { type: "necessities" },
+                  });
                 }}
               >
                 <Image
@@ -78,8 +85,11 @@ const FloatingMenuOverlay = ({
               <TouchableOpacity
                 style={styles.menuButton}
                 onPress={() => {
-                  console.log("장보기 클릭");
                   setIsMenuOpen(false);
+                  router.navigate({
+                    pathname: "/party/create/[type]",
+                    params: { type: "shopping" },
+                  });
                 }}
               >
                 <Image
