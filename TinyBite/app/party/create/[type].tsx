@@ -114,12 +114,6 @@ export default function PartyCreateScreen() {
       showCorrectLinkToast();
       return;
     }
-    console.log("partyTitle: ", partyTitle);
-    console.log("totalAmount: ", totalAmount);
-    console.log("numberOfPeople: ", numberOfPeople);
-    console.log("pickUpLocation: ", pickUpLocation);
-    console.log("detailedDescription: ", detailedDescription);
-    console.log("productLink: ", productLink);
 
     resetCreateParty();
   };

@@ -35,8 +35,6 @@ const AddPhotoButton = () => {
       quality: 1,
     });
 
-    console.log(result);
-
     if (!result.canceled) {
       addPhoto(result.assets[0].uri);
     }

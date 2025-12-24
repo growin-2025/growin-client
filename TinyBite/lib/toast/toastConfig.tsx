@@ -15,7 +15,6 @@ export const toastConfig: ToastConfig = {
         paddingHorizontal: 20,
         borderRadius: 100,
         backgroundColor: "rgba(34, 34, 34, 0.50)",
-        backdropFilter: "blur(2px)",
       }}
     >
       <Text
