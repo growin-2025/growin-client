@@ -49,13 +49,6 @@ export default function LoginScreen() {
     },
   });
 
-  // const signupMutation = useMutation({
-  //   mutationFn: postSignupGoogle,
-  //   onSuccess: () => {
-  //     router.replace("/(tabs)");
-  //   },
-  // });
-
   const handleGoogleLogin = async () => {
     let idToken;
 
