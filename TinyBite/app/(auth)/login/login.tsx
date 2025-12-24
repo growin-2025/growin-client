@@ -33,8 +33,9 @@ export default function LoginScreen() {
     mutationFn: postLoginGoogle,
     onSuccess: (data) => {
       if (data.signup) {
+        router.push("/(tabs)");
+      } else {
         router.push("/(auth)/signup/terms");
-        return;
       }
     },
     onError: (error: AxiosError<ApiError>) => {
