@@ -26,24 +26,18 @@ const MainCardDetailMoreButton = ({
   const [deleteFailedModalVisible, setDeleteFailedModalVisible] =
     useState(false); // 삭제 실패 모달 표시 여부
 
-  // 더보기 아이콘 배열
-  const moreIcons = [1, 2, 3];
-
   return (
     <>
       {/* 더보기 버튼 (오른쪽) - 헤더 위에 고정 */}
       <TouchableOpacity
         onPress={() => setBottomSheetVisible(true)}
-        style={[styles.moreButtonContainer, { marginTop, padding: 1 }]}
+        style={[styles.moreButtonContainer, { marginTop }]}
       >
-        {moreIcons.map((_, index) => (
-          <Image
-            key={index}
-            source={require("@/assets/images/mainlist/detail/more-6.png")}
-            style={styles.moreIcon}
-            resizeMode="contain"
-          />
-        ))}
+        <Image
+          source={require("@/assets/images/mainlist/detail/more-36.png")}
+          style={styles.moreIcon}
+          resizeMode="contain"
+        />
       </TouchableOpacity>
 
       {/* 바텀 시트 메뉴 */}
@@ -143,9 +137,8 @@ const styles = StyleSheet.create({
     zIndex: 11, // 헤더 배경 위에 표시
   },
   moreIcon: {
-    width: 6,
-    height: 6,
-    marginHorizontal: 2.44, // gap 4.88 / 2 = 2.44 (양쪽 마진)
+    width: 36,
+    height: 36,
   },
   // 바텀 시트 오버레이
   bottomSheetOverlay: {
