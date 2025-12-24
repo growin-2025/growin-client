@@ -1,4 +1,4 @@
-import { getLocationName } from "@/api/authApi";
+import { getLocationName, postSignupGoogle } from "@/api/authApi";
 import PaginationIndecatorHeader from "@/components/PaginationIndecatorHeader";
 import { useUserCoords } from "@/hooks/useUserCoords";
 import { useSignupStore } from "@/stores/signupStore";
@@ -12,6 +12,7 @@ import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import {
   Image,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
@@ -25,16 +26,45 @@ export default function RegionScreen() {
   const router = useRouter();
   const { loading, refresh } = useUserCoords();
 
-  const { locationName, setLocationName } = useSignupStore(
+  const {
+    googleIdToken,
+    phoneNumber,
+    nickname,
+    locationName,
+    setLocationName,
+    resetSignupStore,
+  } = useSignupStore(
     useShallow((state) => ({
+      googleIdToken: state.googleIdToken,
+      phoneNumber: state.phoneNumber,
+      nickname: state.nickname,
       locationName: state.locationName,
       setLocationName: state.setLocationName,
+      resetSignupStore: state.resetSignupStore,
     }))
   );
 
   const GetLocationNameMutation = useMutation({
     mutationFn: getLocationName,
     onSuccess: (data) => {},
+    onError: (error: AxiosError<ApiError>) => {
+      if (error.response?.data) {
+        const message = getErrorMessage(error.response.data);
+        alert(message);
+        console.error(message);
+      } else {
+        console.error("네트워크 연결을 확인해주세요.");
+      }
+    },
+  });
+
+  const SignupMutation = useMutation({
+    mutationFn: postSignupGoogle,
+    onSuccess: (data) => {
+      console.log("postSignupGoogle >>", data);
+      resetSignupStore();
+      router.replace("/(auth)/signup/complete");
+    },
     onError: (error: AxiosError<ApiError>) => {
       if (error.response?.data) {
         const message = getErrorMessage(error.response.data);
@@ -66,8 +96,13 @@ export default function RegionScreen() {
   };
 
   const handleClickNextButton = async () => {
-    // 회원가입 api 호출
-    router.replace("/(auth)/signup/complete");
+    SignupMutation.mutate({
+      idToken: googleIdToken,
+      phone: phoneNumber,
+      nickname: nickname,
+      location: locationName,
+      platform: Platform.OS.toUpperCase() as "ANDROID" | "IOS",
+    });
   };
 
   return (
