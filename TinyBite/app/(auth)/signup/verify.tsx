@@ -56,7 +56,6 @@ export default function VerifyScreen() {
   const smsCheckMutation = useMutation({
     mutationFn: postCheckSms,
     onSuccess: (data) => {
-      console.log("postCheckSms 성공", data);
       setVerified(true);
     },
     onError: (error: AxiosError<ApiError>) => {
