@@ -1,12 +1,72 @@
+import { postLoginGoogle } from "@/api/authApi";
+import { getCurrentUser, signIn, signOut } from "@/hooks/useGoogleAuth";
+import { useSignupStore } from "@/stores/signupStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { ApiError } from "@/types/api";
+import { getErrorMessage } from "@/utils/getErrorMessage ";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useShallow } from "zustand/shallow";
 
 export default function LoginScreen() {
   const router = useRouter();
+
+  const { setGoogleIdToken } = useSignupStore(
+    useShallow((state) => ({
+      setGoogleIdToken: state.setGoogleIdToken,
+    }))
+  );
+
+  const loginMutation = useMutation({
+    mutationFn: postLoginGoogle,
+    onSuccess: (data) => {
+      if (data.signup) {
+        router.push("/(tabs)");
+      } else {
+        router.push("/(auth)/signup/terms");
+      }
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      if (error.response?.data) {
+        const message = getErrorMessage(error.response.data);
+        console.error(message);
+      } else {
+        // 네트워크 에러 등
+        console.error("네트워크 연결을 확인해주세요.");
+      }
+    },
+  });
+
+  const handleGoogleLogin = async () => {
+    let idToken;
+
+    const user = await getCurrentUser();
+    if (user) {
+      idToken = user.idToken;
+    } else {
+      idToken = await signIn();
+    }
+
+    if (idToken) {
+      setGoogleIdToken(idToken);
+      await loginMutation.mutateAsync({
+        idToken: idToken,
+        platformType: Platform.OS.toUpperCase() as "ANDROID" | "IOS",
+      });
+    }
+  };
 
   const handleLoginPress = (provider: string) => {
     console.log("소셜 로그인:", provider);
@@ -33,6 +93,15 @@ export default function LoginScreen() {
 
       <View style={styles.buttons}>
         <TouchableOpacity
+          style={[styles.socialButton, styles.google]}
+          onPress={signOut}
+        >
+          <Text style={[styles.socialText, textStyles.title18_SB135]}>
+            임시 google 로그아웃 버튼
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
           style={[styles.socialButton, styles.kakao]}
           onPress={() => handleLoginPress("kakao")}
         >
@@ -44,7 +113,7 @@ export default function LoginScreen() {
 
         <TouchableOpacity
           style={[styles.socialButton, styles.google]}
-          onPress={() => handleLoginPress("google")}
+          onPress={handleGoogleLogin}
         >
           <Image source={require("@/assets/images/login/icon-google.png")} />
           <Text style={[styles.socialText, textStyles.title18_SB135]}>

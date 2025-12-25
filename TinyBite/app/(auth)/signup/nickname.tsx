@@ -1,6 +1,13 @@
+import { getCheckNickname } from "@/api/authApi";
 import PaginationIndecatorHeader from "@/components/PaginationIndecatorHeader";
+import { useSignupStore } from "@/stores/signupStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { ApiError } from "@/types/api";
+import { getErrorMessage } from "@/utils/getErrorMessage ";
+import { validateAndFilterNickname } from "@/utils/validateAndFilterText";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useState } from "react";
@@ -12,21 +19,73 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
+import { useShallow } from "zustand/shallow";
 
 export default function NicknameScreen() {
   const router = useRouter();
-  const [nickname, setNickname] = useState("");
+  const [text, setText] = useState("");
   const [verified, setVerified] = useState(false);
 
-  const handleTextChange = useCallback((text: string) => {
-    setNickname(text);
+  const { setNickname } = useSignupStore(
+    useShallow((state) => ({
+      setNickname: state.setNickname,
+    }))
+  );
 
-    if (text.length >= 2) {
-      setVerified(true);
-    } else {
-      setVerified(false);
-    }
-  }, []);
+  const CheckNicknameMutation = useMutation({
+    mutationFn: getCheckNickname,
+    onSuccess: (data) => {
+      setNickname(text);
+      router.push("/signup/region");
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      if (error.response?.data) {
+        if (error.response.data.code === "DUPLICATED_NICKNAME") {
+          Toast.show({
+            type: "basicToast",
+            props: { text: "올바른 URL 형식으로 입력해주세요." },
+            position: "bottom",
+            bottomOffset: 98,
+            visibilityTime: 2000,
+          });
+          return;
+        }
+        const message = getErrorMessage(error.response.data);
+        alert(message);
+        console.error(message);
+      } else {
+        console.error("네트워크 연결을 확인해주세요.");
+      }
+    },
+  });
+
+  const handleTextChange = useCallback(
+    (text: string) => {
+      if (text.length === 12) {
+        Toast.show({
+          type: "basicToast",
+          props: { text: "닉네임은 최대 12자까지 가능해요." },
+          position: "bottom",
+          bottomOffset: 98,
+          visibilityTime: 2000,
+        });
+      }
+      const validatedText = validateAndFilterNickname(text);
+      setText(validatedText);
+
+      if (validatedText.length >= 2) {
+        setVerified(true);
+      } else {
+        setVerified(false);
+      }
+    },
+    [setText]
+  );
+
+  const handleClickNextButton = () => {
+    CheckNicknameMutation.mutate(text);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -48,28 +107,22 @@ export default function NicknameScreen() {
             <TextInput
               style={[styles.input, textStyles.title18_SB135]}
               onChangeText={handleTextChange}
-              value={nickname}
+              value={text}
               placeholder="닉네임 (2~12자)"
               keyboardType="default"
               maxLength={12}
             />
             <Text style={[styles.count, textStyles.body12_M135]}>
-              ({nickname.length}/12)
+              ({text.length}/12)
             </Text>
           </View>
-        </View>
-
-        <View style={styles.row}>
-          <Text style={[styles.status, textStyles.body16_M135]}>
-            이미 사용 중인 닉네임입니다.
-          </Text>
         </View>
 
         {/* 다음 버튼 */}
         <TouchableOpacity
           style={[styles.nextBtn, !verified && styles.disabled]}
           disabled={!verified}
-          onPress={() => router.push("/signup/region")}
+          onPress={handleClickNextButton}
         >
           <Text style={[styles.nextText, textStyles.title18_SB135]}>다음</Text>
         </TouchableOpacity>

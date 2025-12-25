@@ -1,7 +1,9 @@
+import { useSignupStore } from "@/stores/signupStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
+import { useShallow } from "zustand/shallow";
 
 const MAX_LENGTH = 11; // 010 1234 5678
 
@@ -34,19 +36,14 @@ const formatPhoneNumber = (rawValue: string): string => {
   return formattedNumber;
 };
 
-interface PhoneNumberInputProps {
-  initialValue?: string;
-  onChangeText: (phoneNumber: string) => void;
-}
-
-const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({
-  initialValue = "",
-  onChangeText,
-}) => {
-  // 실제 TextInput에 표시되는 값 (하이픈 포함)
-  const [displayValue, setDisplayValue] = useState(
-    formatPhoneNumber(initialValue)
+const PhoneNumberInput = () => {
+  const { phoneNumber, setPhoneNumber } = useSignupStore(
+    useShallow((state) => ({
+      phoneNumber: state.phoneNumber,
+      setPhoneNumber: state.setPhoneNumber,
+    }))
   );
+
   const label = "휴대폰 번호";
 
   /**
@@ -62,12 +59,9 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({
       const formatted = formatPhoneNumber(rawNumber);
 
       // 3. 화면에 표시되는 값을 업데이트합니다.
-      setDisplayValue(formatted);
-
-      // 4. 숫자만 추출한 값을 부모 컴포넌트로 전달합니다.
-      onChangeText(rawNumber);
+      setPhoneNumber(formatted);
     },
-    [onChangeText]
+    [setPhoneNumber]
   );
 
   return (
@@ -79,7 +73,7 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({
       <TextInput
         style={[styles.input, textStyles.title18_SB135]}
         onChangeText={handleTextChange}
-        value={displayValue}
+        value={phoneNumber}
         placeholder="010 - 1234 - 5678"
         placeholderTextColor={colors.gray[1]}
         keyboardType="numeric"
