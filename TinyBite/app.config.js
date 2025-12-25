@@ -59,5 +59,6 @@ module.exports = {
       projectId: "9b29b0aa-7e69-4749-894f-40efacaa1eb8",
     },
     googleWebClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+    googleIosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
   },
 };

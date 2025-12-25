@@ -8,6 +8,7 @@ import Constants from "expo-constants";
 
 GoogleSignin.configure({
   webClientId: Constants.expoConfig?.extra?.googleWebClientId,
+  iosClientId: Constants.expoConfig?.extra?.googleIosClientId,
 });
 
 export const signIn = async () => {
