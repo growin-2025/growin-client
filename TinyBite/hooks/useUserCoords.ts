@@ -13,6 +13,21 @@ export const useUserCoords = () => {
     setError(null);
 
     try {
+      if (__DEV__) {
+        const defaultCoords = {
+          latitude: 37.5665,
+          longitude: 126.978,
+          altitude: 0,
+          accuracy: 0,
+          altitudeAccuracy: 0,
+          heading: 0,
+          speed: 0,
+        } as Location.LocationObjectCoords;
+        setCoords(defaultCoords);
+        console.log("개발 모드: 기본 위치(서울) 사용");
+        return defaultCoords;
+      }
+
       // 1. 위치 권한 요청
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== Location.PermissionStatus.GRANTED) {
@@ -42,30 +57,14 @@ export const useUserCoords = () => {
     } catch (e) {
       console.error("위치 가져오기 실패, Fallback 시도:", e);
 
-      // 4. 실패 시 처리 (기본 위치 정보)
-      if (__DEV__) {
-        const defaultCoords = {
-          latitude: 37.5665,
-          longitude: 126.978,
-          altitude: 0,
-          accuracy: 0,
-          altitudeAccuracy: 0,
-          heading: 0,
-          speed: 0,
-        } as Location.LocationObjectCoords;
-        setCoords(defaultCoords);
-        console.log("개발 모드: 기본 위치(서울) 사용");
-        return defaultCoords;
+      // 최근에 알려진 위치 시도
+      const lastLocation = await Location.getLastKnownPositionAsync();
+      if (lastLocation) {
+        setCoords(lastLocation.coords);
+        alert("최근 위치 정보를 사용합니다.");
+        return lastLocation.coords;
       } else {
-        // 최근에 알려진 위치 시도
-        const lastLocation = await Location.getLastKnownPositionAsync();
-        if (lastLocation) {
-          setCoords(lastLocation.coords);
-          alert("최근 위치 정보를 사용합니다.");
-          return lastLocation.coords;
-        } else {
-          setError("위치 정보를 가져올 수 없습니다.");
-        }
+        setError("위치 정보를 가져올 수 없습니다.");
       }
     } finally {
       setLoading(false);
