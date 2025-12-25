@@ -16,7 +16,10 @@ export const textStyles = {
     ...fontScale.title[20][135],
     fontFamily: "Pretendard-SemiBold",
   },
-
+  title18_B135: {
+    ...fontScale.title[18][135],
+    fontFamily: "Pretendard-Bold",
+  },
   title18_SB135: {
     ...fontScale.title[18][135],
     fontFamily: "Pretendard-SemiBold",
@@ -26,6 +29,11 @@ export const textStyles = {
   body16_B150: {
     ...fontScale.body[16][150],
     fontFamily: "Pretendard-Bold",
+  },
+
+  body16_SB150: {
+    ...fontScale.body[16][150],
+    fontFamily: "Pretendard-SemiBold",
   },
 
   body16_SB135: {
