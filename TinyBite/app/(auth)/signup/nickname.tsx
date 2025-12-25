@@ -62,6 +62,15 @@ export default function NicknameScreen() {
 
   const handleTextChange = useCallback(
     (text: string) => {
+      if (text.length === 12) {
+        Toast.show({
+          type: "basicToast",
+          props: { text: "닉네임은 최대 12자까지 가능해요." },
+          position: "bottom",
+          bottomOffset: 98,
+          visibilityTime: 2000,
+        });
+      }
       const validatedText = validateAndFilterNickname(text);
       setText(validatedText);
 
