@@ -1,4 +1,4 @@
-import { usecreatingPartyStore } from "@/stores/creatingPartyStore";
+import { useCreatingPartyStore } from "@/stores/creatingPartyStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -8,7 +8,7 @@ const MINUS_ICON = require("@/assets/images/minus-24-gray.png");
 const PLUS_ICON = require("@/assets/images/plus-24-gray.png");
 
 const NumberOfPeopleBox = () => {
-  const { numberOfPeople, setNumberOfPeople } = usecreatingPartyStore(
+  const { numberOfPeople, setNumberOfPeople } = useCreatingPartyStore(
     useShallow((state) => ({
       numberOfPeople: state.numberOfPeople,
       setNumberOfPeople: state.setNumberOfPeople,

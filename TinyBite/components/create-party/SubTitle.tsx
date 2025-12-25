@@ -1,4 +1,4 @@
-import { usecreatingPartyStore } from "@/stores/creatingPartyStore";
+import { useCreatingPartyStore } from "@/stores/creatingPartyStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { StyleSheet, Text, View } from "react-native";
@@ -11,7 +11,7 @@ interface SubTitleProps {
 }
 
 const SubTitle = ({ subTitle, caption, isPic }: SubTitleProps) => {
-  const { photos } = usecreatingPartyStore(
+  const { photos } = useCreatingPartyStore(
     useShallow((state) => ({
       photos: state.photos,
     }))

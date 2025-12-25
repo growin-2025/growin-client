@@ -1,4 +1,4 @@
-import { usecreatingPartyStore } from "@/stores/creatingPartyStore";
+import { useCreatingPartyStore } from "@/stores/creatingPartyStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -13,7 +13,7 @@ interface PhotoItemProps {
 
 const PhotoItem = ({ id, imageUri }: PhotoItemProps) => {
   const { deletePhoto, representativePhoto, setRepresentativePhoto } =
-    usecreatingPartyStore(
+    useCreatingPartyStore(
       useShallow((state) => ({
         deletePhoto: state.deletePhoto,
         representativePhoto: state.representativePhoto,
