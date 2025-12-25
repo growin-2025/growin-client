@@ -1,7 +1,7 @@
 import { getLocationName, postSignupGoogle } from "@/api/authApi";
 import PaginationIndecatorHeader from "@/components/PaginationIndecatorHeader";
 import { useUserCoords } from "@/hooks/useUserCoords";
-import { useSignupStore } from "@/stores/signupStore";
+import { TermCode, useSignupStore } from "@/stores/signupStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { ApiError } from "@/types/api";
@@ -29,6 +29,7 @@ export default function RegionScreen() {
   const {
     googleIdToken,
     phoneNumber,
+    terms,
     nickname,
     locationName,
     setLocationName,
@@ -37,6 +38,7 @@ export default function RegionScreen() {
     useShallow((state) => ({
       googleIdToken: state.googleIdToken,
       phoneNumber: state.phoneNumber,
+      terms: state.terms,
       nickname: state.nickname,
       locationName: state.locationName,
       setLocationName: state.setLocationName,
@@ -96,12 +98,17 @@ export default function RegionScreen() {
   };
 
   const handleClickNextButton = async () => {
+    const checkedTerms = (Object.keys(terms) as TermCode[]).filter(
+      (term) => terms[term]
+    );
+
     SignupMutation.mutate({
       idToken: googleIdToken,
       phone: phoneNumber,
       nickname: nickname,
       location: locationName,
       platform: Platform.OS.toUpperCase() as "ANDROID" | "IOS",
+      agreedTerms: checkedTerms,
     });
   };
 

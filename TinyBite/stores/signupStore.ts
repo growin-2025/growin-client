@@ -1,25 +1,25 @@
 import { create } from "zustand";
 
-export enum termTypes {
-  age = "age",
-  service = "service",
-  finance = "finance",
-  collectingPrivacy = "collectingPrivacy",
-  providingPrivacy = "providingPrivacy",
-  offer = "offer",
+export enum TermCode {
+  AGE_OVER_14 = "AGE_OVER_14",
+  SERVICE_USE = "SERVICE_USE",
+  ELECTRONIC_FINANCE = "ELECTRONIC_FINANCE",
+  PRIVACY_COLLECT = "PRIVACY_COLLECT",
+  PRIVACY_PROVIDE = "PRIVACY_PROVIDE",
+  MARKETING_RECEIVE = "MARKETING_RECEIVE",
 }
 
 export interface SignupStoreState {
   googleIdToken: string;
   phoneNumber: string;
   terms: {
-    [key in termTypes]: boolean;
+    [key in TermCode]: boolean;
   };
   nickname: string;
   locationName: string;
   setGoogleIdToken: (token: string) => void;
   setPhoneNumber: (number: string) => void;
-  toggleTerm: (term: string) => void;
+  toggleTerm: (term: TermCode) => void;
   checkAllEssentialsOnly: () => void;
   getIsCheckedAllEssentialsOnly: () => boolean;
   getIsNextButtonEnabled: () => boolean;
@@ -34,12 +34,12 @@ export const useSignupStore = create<SignupStoreState>((set, get) => ({
   nickname: "",
   locationName: "",
   terms: {
-    age: false,
-    service: false,
-    finance: false,
-    collectingPrivacy: false,
-    providingPrivacy: false,
-    offer: false,
+    AGE_OVER_14: false,
+    SERVICE_USE: false,
+    ELECTRONIC_FINANCE: false,
+    PRIVACY_COLLECT: false,
+    PRIVACY_PROVIDE: false,
+    MARKETING_RECEIVE: false,
   },
   setGoogleIdToken: (token: string) => {
     set(() => ({
@@ -51,18 +51,18 @@ export const useSignupStore = create<SignupStoreState>((set, get) => ({
       phoneNumber: number,
     }));
   },
-  toggleTerm: (term: string) => {
+  toggleTerm: (term: TermCode) => {
     set((state) => ({
       terms: {
         ...state.terms,
-        [term]: !state.terms[term as termTypes],
+        [term]: !state.terms[term as TermCode],
       },
     }));
   },
   checkAllEssentialsOnly: () => {
     set((state) => {
-      const essentialKeys = (Object.keys(state.terms) as termTypes[]).filter(
-        (key) => key !== termTypes.offer
+      const essentialKeys = (Object.keys(state.terms) as TermCode[]).filter(
+        (key) => key !== TermCode.MARKETING_RECEIVE
       );
 
       const newTerms = { ...state.terms };
@@ -83,11 +83,11 @@ export const useSignupStore = create<SignupStoreState>((set, get) => ({
   getIsCheckedAllEssentialsOnly: () => {
     const { terms } = get();
     return (
-      terms.age &&
-      terms.service &&
-      terms.finance &&
-      terms.collectingPrivacy &&
-      terms.providingPrivacy
+      terms.AGE_OVER_14 &&
+      terms.SERVICE_USE &&
+      terms.ELECTRONIC_FINANCE &&
+      terms.PRIVACY_COLLECT &&
+      terms.PRIVACY_PROVIDE
     );
   },
   getIsNextButtonEnabled: () => {
@@ -114,12 +114,12 @@ export const useSignupStore = create<SignupStoreState>((set, get) => ({
       nickname: "",
       locationName: "",
       terms: {
-        age: false,
-        service: false,
-        finance: false,
-        collectingPrivacy: false,
-        providingPrivacy: false,
-        offer: false,
+        AGE_OVER_14: false,
+        SERVICE_USE: false,
+        ELECTRONIC_FINANCE: false,
+        PRIVACY_COLLECT: false,
+        PRIVACY_PROVIDE: false,
+        MARKETING_RECEIVE: false,
       },
     }));
   },

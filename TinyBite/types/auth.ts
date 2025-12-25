@@ -4,6 +4,7 @@ export type SignupGoogle = {
   nickname: string;
   location: string;
   platform: "ANDROID" | "IOS";
+  agreedTerms: string[];
 };
 
 export type LoginGoogle = {

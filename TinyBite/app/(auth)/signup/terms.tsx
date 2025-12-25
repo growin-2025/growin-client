@@ -2,7 +2,7 @@ import { postSendSms } from "@/api/authApi";
 import PaginationIndecatorHeader from "@/components/PaginationIndecatorHeader";
 import PhoneNumberInput from "@/components/PhoneNumberInput";
 import { SignupTerms } from "@/constants/terms";
-import { termTypes, useSignupStore } from "@/stores/signupStore";
+import { TermCode, useSignupStore } from "@/stores/signupStore";
 import { useTimerStore } from "@/stores/timerStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
@@ -95,7 +95,7 @@ export default function TermsScreen() {
     required,
     content,
   }: {
-    checkKey: termTypes;
+    checkKey: TermCode;
     required: boolean;
     content: string;
   }) => {
@@ -154,7 +154,7 @@ export default function TermsScreen() {
           {SignupTerms.map((term) => (
             <CheckItem
               key={term.checkKey}
-              checkKey={term.checkKey as termTypes}
+              checkKey={term.checkKey as TermCode}
               required={term.required}
               content={term.content}
             />
