@@ -19,13 +19,13 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 import { useShallow } from "zustand/shallow";
 
 export default function NicknameScreen() {
   const router = useRouter();
   const [text, setText] = useState("");
   const [verified, setVerified] = useState(false);
-  const [showDuplicateMessage, setShowDuplicateMessage] = useState(false);
 
   const { setNickname } = useSignupStore(
     useShallow((state) => ({
@@ -37,13 +37,18 @@ export default function NicknameScreen() {
     mutationFn: getCheckNickname,
     onSuccess: (data) => {
       setNickname(text);
-      setShowDuplicateMessage(false);
       router.push("/signup/region");
     },
     onError: (error: AxiosError<ApiError>) => {
       if (error.response?.data) {
         if (error.response.data.code === "DUPLICATED_NICKNAME") {
-          setShowDuplicateMessage(true);
+          Toast.show({
+            type: "basicToast",
+            props: { text: "올바른 URL 형식으로 입력해주세요." },
+            position: "bottom",
+            bottomOffset: 98,
+            visibilityTime: 2000,
+          });
           return;
         }
         const message = getErrorMessage(error.response.data);
@@ -103,14 +108,6 @@ export default function NicknameScreen() {
             </Text>
           </View>
         </View>
-
-        {showDuplicateMessage && (
-          <View style={styles.row}>
-            <Text style={[styles.status, textStyles.body16_M135]}>
-              이미 사용 중인 닉네임입니다.
-            </Text>
-          </View>
-        )}
 
         {/* 다음 버튼 */}
         <TouchableOpacity
