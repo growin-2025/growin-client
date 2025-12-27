@@ -105,12 +105,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 20,
+    paddingTop: 14,
     paddingBottom: 12,
   },
   headerContent: {
     flexDirection: "row",
     alignItems: "center",
-    height: 58,
     gap: 8,
   },
   headerTitle: {
