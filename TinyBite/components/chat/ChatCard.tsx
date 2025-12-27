@@ -6,7 +6,7 @@ import {
   PartyStatusType,
 } from "@/types/Chat";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import ChatItemImage from "./ChatItemImage";
+import ChatCardImage from "./ChatCardImage";
 import OneOnOneChatStatusTag from "./OneOnOneChatStatusTag";
 import PartyStatusTag from "./PartyStatusTag";
 
@@ -29,7 +29,7 @@ const ChatItem = ({ item, onPress }: ChatItemProps) => {
     <TouchableOpacity style={styles.chatItem} onPress={onPress}>
       {/* 프로필 이미지 영역 */}
       <View style={styles.profileContainer}>
-        <ChatItemImage item={item} />
+        <ChatCardImage item={item} />
       </View>
 
       {/* 채팅 컨텐츠 영역 */}
