@@ -25,14 +25,6 @@ const ChatItem = ({ item, onPress }: ChatItemProps) => {
   // 채팅 타입 확인 (1:1 채팅인지 파티 채팅인지)
   const isOneOnOne = item.chatType === "oneOnOne";
 
-  // 메시지가 지정된 길이 초과면 "..."으로 표시
-  const truncateMessage = (message: string, maxLength: number) => {
-    if (message.length > maxLength) {
-      return message.substring(0, maxLength) + "...";
-    }
-    return message;
-  };
-
   return (
     <TouchableOpacity style={styles.chatItem} onPress={onPress}>
       {/* 프로필 이미지 영역 */}
@@ -44,13 +36,13 @@ const ChatItem = ({ item, onPress }: ChatItemProps) => {
       <View style={styles.chatContent}>
         {/* 헤더: 이름/파티 제목 + 시간 */}
         <View style={styles.chatHeader}>
-          <Text style={[styles.userName, textStyles.body16_SB135]}>
+          <Text
+            style={[styles.userName, textStyles.body16_SB135]}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
             {/* 1:1 채팅은 사용자 이름, 파티 채팅은 파티 제목 표시 */}
-            {isOneOnOne
-              ? item.name
-              : item.partyTitle
-              ? truncateMessage(item.partyTitle, 17)
-              : null}
+            {isOneOnOne ? item.name : item.partyTitle}
           </Text>
           <Text style={[styles.timestamp, textStyles.body12_M135]}>
             {item.timestamp}
@@ -59,8 +51,12 @@ const ChatItem = ({ item, onPress }: ChatItemProps) => {
 
         {/* 마지막 메시지 + 읽지 않은 메시지 수 배지 */}
         <View style={styles.lastMessageContainer}>
-          <Text style={[styles.lastMessage, textStyles.body12_M135]}>
-            {truncateMessage(item.lastMessage, 23)}
+          <Text
+            style={[styles.lastMessage, textStyles.body12_M135]}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {item.lastMessage}
           </Text>
           {/* 뱃지 컨테이너: 고정폭 영역으로 뱃지 위치 안정화 */}
           <View style={styles.badgeContainer}>
@@ -89,8 +85,12 @@ const ChatItem = ({ item, onPress }: ChatItemProps) => {
             ))}
           {/* 1:1 채팅일 때 파티 제목 표시 */}
           {isOneOnOne && item.partyTitle && (
-            <Text style={[styles.partyTitle, textStyles.body13_SB135]}>
-              {truncateMessage(item.partyTitle, 17)}
+            <Text
+              style={[styles.partyTitle, textStyles.body13_SB135]}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
+              {item.partyTitle}
             </Text>
           )}
           {/* 파티 채팅일 때 인원수 표시 */}
@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
   // 사용자 이름 / 파티 제목
   userName: {
     color: colors.black,
+    maxWidth: "80%",
   },
   // 타임스탬프
   timestamp: {
@@ -174,6 +175,7 @@ const styles = StyleSheet.create({
   // 파티 제목 (1:1 채팅용)
   partyTitle: {
     color: colors.main,
+    maxWidth: "75%",
   },
   // 인원수 컨테이너 (파티 채팅용)
   memberCountContainer: {
