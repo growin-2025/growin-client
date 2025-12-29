@@ -1,4 +1,4 @@
-import { ChatItemType } from "@/types/Chat";
+import { ChatItemType } from "@/types/chat";
 
 /**
  * 목업 채팅 데이터
