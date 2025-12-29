@@ -4,7 +4,7 @@ import {
   ChatItemType,
   OneOnOneChatStatusType,
   PartyStatusType,
-} from "@/types/Chat";
+} from "@/types/chat";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ChatCardImage from "./ChatCardImage";
 import OneOnOneChatStatusTag from "./OneOnOneChatStatusTag";
@@ -25,8 +25,8 @@ const ChatItem = ({ item, onPress }: ChatItemProps) => {
   // 채팅 타입 확인 (1:1 채팅인지 파티 채팅인지)
   const isOneOnOne = item.chatType === "oneOnOne";
 
-  // 마지막 메시지가 23자 초과면 "..."으로 표시
-  const truncateMessage = (message: string, maxLength: number = 23) => {
+  // 메시지가 지정된 길이 초과면 "..."으로 표시
+  const truncateMessage = (message: string, maxLength: number) => {
     if (message.length > maxLength) {
       return message.substring(0, maxLength) + "...";
     }
@@ -46,7 +46,11 @@ const ChatItem = ({ item, onPress }: ChatItemProps) => {
         <View style={styles.chatHeader}>
           <Text style={[styles.userName, textStyles.body16_SB135]}>
             {/* 1:1 채팅은 사용자 이름, 파티 채팅은 파티 제목 표시 */}
-            {isOneOnOne ? item.name : item.partyTitle}
+            {isOneOnOne
+              ? item.name
+              : item.partyTitle
+              ? truncateMessage(item.partyTitle, 17)
+              : null}
           </Text>
           <Text style={[styles.timestamp, textStyles.body12_M135]}>
             {item.timestamp}
@@ -56,7 +60,7 @@ const ChatItem = ({ item, onPress }: ChatItemProps) => {
         {/* 마지막 메시지 + 읽지 않은 메시지 수 배지 */}
         <View style={styles.lastMessageContainer}>
           <Text style={[styles.lastMessage, textStyles.body12_M135]}>
-            {truncateMessage(item.lastMessage)}
+            {truncateMessage(item.lastMessage, 23)}
           </Text>
           {/* 뱃지 컨테이너: 고정폭 영역으로 뱃지 위치 안정화 */}
           <View style={styles.badgeContainer}>
@@ -86,7 +90,7 @@ const ChatItem = ({ item, onPress }: ChatItemProps) => {
           {/* 1:1 채팅일 때 파티 제목 표시 */}
           {isOneOnOne && item.partyTitle && (
             <Text style={[styles.partyTitle, textStyles.body13_SB135]}>
-              {item.partyTitle}
+              {truncateMessage(item.partyTitle, 17)}
             </Text>
           )}
           {/* 파티 채팅일 때 인원수 표시 */}
