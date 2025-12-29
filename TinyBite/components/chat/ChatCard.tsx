@@ -55,7 +55,7 @@ const ChatItem = ({ item, onPress }: ChatItemProps) => {
             {item.unreadCount && item.unreadCount > 0 && (
               <View style={styles.unreadBadge}>
                 <Text style={[styles.unreadText, textStyles.body12_M135]}>
-                  {item.unreadCount}
+                  {item.unreadCount > 10 ? "10+" : item.unreadCount}
                 </Text>
               </View>
             )}
@@ -117,7 +117,6 @@ const styles = StyleSheet.create({
   // 채팅 컨텐츠 영역
   chatContent: {
     flex: 1,
-    gap: 4,
   },
   // 채팅 헤더 (이름 + 시간)
   chatHeader: {
@@ -138,14 +137,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    paddingTop: 4,
+    paddingBottom: 6,
   },
   // 마지막 메시지
   lastMessage: {
-    color: colors.gray[2],
+    color: colors.gray[1],
     flex: 1,
   },
   // 뱃지 컨테이너 (고정폭 영역)
   badgeContainer: {
+    height: 22,
     alignItems: "flex-end",
     justifyContent: "center",
   },

@@ -39,7 +39,7 @@ export const mockChatData: ChatItemType[] = [
     partyTitle: "후문에서 엽떡 나누실 분 구해요",
     timestamp: "1시간 전",
     memberCount: 3,
-    unreadCount: 2,
+    unreadCount: 11,
     category: "delivery",
   },
   {
