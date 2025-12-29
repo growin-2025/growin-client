@@ -1,6 +1,6 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { OneOnOneChatStatusType } from "@/types/Chat";
+import { OneOnOneChatStatusType } from "@/types/chat";
 import { StyleSheet, Text, View } from "react-native";
 
 export interface OneOnOneChatStatusTagProps {

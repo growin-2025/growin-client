@@ -1,5 +1,5 @@
 import { colors } from "@/styles/colors";
-import { ChatItemType, PartyCategoryType } from "@/types/Chat";
+import { ChatItemType, PartyCategoryType } from "@/types/chat";
 import { Image, StyleSheet, View } from "react-native";
 
 /**

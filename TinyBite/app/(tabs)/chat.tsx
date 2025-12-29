@@ -2,7 +2,7 @@ import ChatCard from "@/components/chat/ChatCard";
 import { mockChatData } from "@/mocks/chatData";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { ChatItemType } from "@/types/Chat";
+import { ChatItemType } from "@/types/chat";
 import { useState } from "react";
 import {
   FlatList,
