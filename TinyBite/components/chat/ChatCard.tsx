@@ -25,6 +25,14 @@ const ChatItem = ({ item, onPress }: ChatItemProps) => {
   // 채팅 타입 확인 (1:1 채팅인지 파티 채팅인지)
   const isOneOnOne = item.chatType === "oneOnOne";
 
+  // 마지막 메시지가 23자 초과면 "..."으로 표시
+  const truncateMessage = (message: string, maxLength: number = 23) => {
+    if (message.length > maxLength) {
+      return message.substring(0, maxLength) + "...";
+    }
+    return message;
+  };
+
   return (
     <TouchableOpacity style={styles.chatItem} onPress={onPress}>
       {/* 프로필 이미지 영역 */}
@@ -48,7 +56,7 @@ const ChatItem = ({ item, onPress }: ChatItemProps) => {
         {/* 마지막 메시지 + 읽지 않은 메시지 수 배지 */}
         <View style={styles.lastMessageContainer}>
           <Text style={[styles.lastMessage, textStyles.body12_M135]}>
-            {item.lastMessage}
+            {truncateMessage(item.lastMessage)}
           </Text>
           {/* 뱃지 컨테이너: 고정폭 영역으로 뱃지 위치 안정화 */}
           <View style={styles.badgeContainer}>
@@ -139,6 +147,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 4,
     paddingBottom: 6,
+    gap: 8,
   },
   // 마지막 메시지
   lastMessage: {

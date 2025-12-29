@@ -9,14 +9,15 @@ export const mockChatData: ChatItemType[] = [
   {
     id: "1",
     name: "츄비",
-    lastMessage: "안녕하세요! 참여 가능할까요?",
+    lastMessage:
+      "입금 부탁드려요! 확인하는 대로 바로 구매 진행할게요. 입금 완료하시면 한 번만 톡 남겨주세요! 🙏",
     chatType: "oneOnOne",
     status: "승인 대기",
     partyTitle: "후문에서 엽떡 나누실 분 구해요",
     timestamp: "방금전",
     myProfileImage: require("@/assets/images/mainlist/detail/default-host-profile.png"),
     opponentProfileImage: require("@/assets/images/mainlist/detail/default-host-profile.png"),
-    unreadCount: 1,
+    unreadCount: 11,
   },
   {
     id: "2",
@@ -39,7 +40,7 @@ export const mockChatData: ChatItemType[] = [
     partyTitle: "후문에서 엽떡 나누실 분 구해요",
     timestamp: "1시간 전",
     memberCount: 3,
-    unreadCount: 11,
+    unreadCount: 1,
     category: "delivery",
   },
   {
