@@ -25,16 +25,49 @@ const MainCard = ({ item, onPress, containerStyle }: MainCardProps) => {
   // 가격 포맷팅 (예: 5000 -> "5,000원")
   const formattedPrice = `${item.pricePerPerson.toLocaleString()}원`;
 
+  // 카테고리별 아이콘 매핑
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case "DELIVERY":
+        return require("@/assets/images/main/category/delivery.png");
+      case "GROCERY":
+        return require("@/assets/images/main/category/grocery.png");
+      case "HOUSEHOLD":
+        return require("@/assets/images/main/category/essentials.png");
+      default:
+        return null;
+    }
+  };
+
+  const hasImage = item.thumbnailImage && item.thumbnailImage.trim() !== "";
+  const categoryIcon = getCategoryIcon(item.category);
+
   return (
     <Pressable onPress={onPress} style={[styles.card, containerStyle]}>
       <View style={styles.thumbnailContainer}>
-        <Image
-          source={{ uri: item.thumbnailImage }}
-          style={styles.thumbnail}
-          resizeMode="cover"
-          blurRadius={item.isClosed ? 5 : 0}
-        />
-        {item.isClosed && <View style={styles.overlay} />}
+        {hasImage ? (
+          <>
+            <Image
+              source={{ uri: item.thumbnailImage }}
+              style={styles.thumbnail}
+              resizeMode="cover"
+              blurRadius={item.isClosed ? 2 : 0}
+            />
+            {item.isClosed && <View style={styles.overlay} />}
+          </>
+        ) : (
+          <View style={styles.thumbnailPlaceholder}>
+            {categoryIcon && (
+              <Image
+                source={categoryIcon}
+                style={styles.categoryIcon}
+                resizeMode="contain"
+                blurRadius={item.isClosed ? 2 : 0}
+              />
+            )}
+            {item.isClosed && <View style={styles.overlay} />}
+          </View>
+        )}
       </View>
       <View style={styles.cardBody}>
         <View>
@@ -94,11 +127,24 @@ const styles = StyleSheet.create({
     height: 90,
     borderRadius: 16,
     position: "relative",
+    overflow: "hidden",
   },
   thumbnail: {
-    width: 90,
-    height: 90,
+    width: "100%",
+    height: "100%",
     borderRadius: 16,
+  },
+  thumbnailPlaceholder: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 16,
+    backgroundColor: colors.sub,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  categoryIcon: {
+    width: 60,
+    height: 60,
   },
   overlay: {
     position: "absolute",
