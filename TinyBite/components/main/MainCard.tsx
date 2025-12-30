@@ -1,5 +1,6 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { PartyItem } from "@/types/party";
 import {
   Image,
   Pressable,
@@ -9,36 +10,54 @@ import {
   ViewStyle,
 } from "react-native";
 
-const MainCard = ({
-  onPress,
-  containerStyle,
-}: {
+interface MainCardProps {
+  item: PartyItem;
   onPress?: () => void;
   containerStyle?: ViewStyle;
-}) => (
-  <Pressable onPress={onPress} style={[styles.card, containerStyle]}>
-    <Image
-      source={require("@/assets/images/mainlist/food1.jpg")}
-      style={styles.thumbnail}
-    />
-    <View style={styles.cardBody}>
-      <View>
-        <Text style={[styles.title, textStyles.body16_B150]}>
-          후문 엽떡 나누실 분 ㅃㄹ
-        </Text>
-        <Text style={[styles.price, textStyles.body15_SB135]}>5,000원</Text>
-      </View>
-      <View style={styles.footerRow}>
-        <View style={styles.badge}>
-          <Text style={[styles.badgeText, textStyles.body13_SB135]}>1/4명</Text>
+}
+
+const MainCard = ({ item, onPress, containerStyle }: MainCardProps) => {
+  // item이 없으면 렌더링하지 않음
+  if (!item) {
+    return null;
+  }
+
+  // 가격 포맷팅 (예: 5000 -> "5,000원")
+  const formattedPrice = `${item.pricePerPerson.toLocaleString()}원`;
+
+  return (
+    <Pressable onPress={onPress} style={[styles.card, containerStyle]}>
+      <Image
+        source={{ uri: item.thumbnailImage }}
+        style={styles.thumbnail}
+        resizeMode="cover"
+      />
+      <View style={styles.cardBody}>
+        <View>
+          <Text
+            style={[styles.title, textStyles.body16_B150]}
+            numberOfLines={1}
+          >
+            {item.title}
+          </Text>
+          <Text style={[styles.price, textStyles.body15_SB135]}>
+            {formattedPrice}
+          </Text>
         </View>
-        <Text style={[styles.meta, textStyles.body13_SB135]}>
-          10KM 이내 | 10분 전
-        </Text>
+        <View style={styles.footerRow}>
+          <View style={styles.badge}>
+            <Text style={[styles.badgeText, textStyles.body13_SB135]}>
+              {item.participantStatus}
+            </Text>
+          </View>
+          <Text style={[styles.meta, textStyles.body13_SB135]}>
+            {item.distance} | {item.timeAgo}
+          </Text>
+        </View>
       </View>
-    </View>
-  </Pressable>
-);
+    </Pressable>
+  );
+};
 
 export default MainCard;
 
