@@ -28,7 +28,6 @@ export default function SettingScreen() {
     mutationFn: postLogout,
     onSuccess: () => {
       logout();
-      router.replace("/login/login");
     },
     onError: (error: AxiosError<ApiError>) => {
       if (error.response?.data) {
@@ -139,7 +138,6 @@ export default function SettingScreen() {
         confirmText="예"
         onClose={() => setShowLogoutModal(false)}
         onConfirm={() => {
-          // TODO: 로그아웃 로직 구현
           logoutMutation.mutateAsync();
         }}
       />
