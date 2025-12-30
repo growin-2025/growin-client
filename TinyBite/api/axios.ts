@@ -31,11 +31,20 @@ export const privateAxios = axios.create({
 });
 
 privateAxios.interceptors.request.use(
-  (config) => {
-    const accessToken = SecureStore.getItemAsync("accessToken");
+  async (config) => {
+    const accessToken = await SecureStore.getItemAsync("accessToken");
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
+
+    console.log(
+      "[API Request] >>",
+      config.baseURL,
+      config.method?.toUpperCase(),
+      config.headers,
+      config.url,
+      config.data
+    );
     return config;
   },
   (error) => Promise.reject(error)
