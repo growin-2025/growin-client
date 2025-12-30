@@ -32,6 +32,7 @@ const MainCard = ({ item, onPress, containerStyle }: MainCardProps) => {
           source={{ uri: item.thumbnailImage }}
           style={styles.thumbnail}
           resizeMode="cover"
+          blurRadius={item.isClosed ? 5 : 0}
         />
         {item.isClosed && <View style={styles.overlay} />}
       </View>
