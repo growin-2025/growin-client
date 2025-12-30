@@ -41,6 +41,11 @@ export default function LoginScreen() {
       }
     },
     onError: (error: AxiosError<ApiError>) => {
+      if (error.response?.data.code === "INVALID_TOKEN") {
+        SecureStore.deleteItemAsync("googleIdToken");
+        return;
+      }
+
       if (error.response?.data) {
         const message = getErrorMessage(error.response.data);
         console.error(message);
