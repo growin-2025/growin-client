@@ -27,11 +27,14 @@ const MainCard = ({ item, onPress, containerStyle }: MainCardProps) => {
 
   return (
     <Pressable onPress={onPress} style={[styles.card, containerStyle]}>
-      <Image
-        source={{ uri: item.thumbnailImage }}
-        style={styles.thumbnail}
-        resizeMode="cover"
-      />
+      <View style={styles.thumbnailContainer}>
+        <Image
+          source={{ uri: item.thumbnailImage }}
+          style={styles.thumbnail}
+          resizeMode="cover"
+        />
+        {item.isClosed && <View style={styles.overlay} />}
+      </View>
       <View style={styles.cardBody}>
         <View>
           <Text
@@ -45,9 +48,15 @@ const MainCard = ({ item, onPress, containerStyle }: MainCardProps) => {
           </Text>
         </View>
         <View style={styles.footerRow}>
-          <View style={styles.badge}>
-            <Text style={[styles.badgeText, textStyles.body13_SB135]}>
-              {item.participantStatus}
+          <View style={[styles.badge, item.isClosed && styles.badgeClosed]}>
+            <Text
+              style={[
+                styles.badgeText,
+                item.isClosed && styles.badgeTextClosed,
+                textStyles.body13_SB135,
+              ]}
+            >
+              {item.isClosed ? "마감" : item.participantStatus}
             </Text>
           </View>
           <Text style={[styles.meta, textStyles.body13_SB135]}>
@@ -79,9 +88,24 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 4,
   },
+  thumbnailContainer: {
+    width: 90,
+    height: 90,
+    borderRadius: 16,
+    position: "relative",
+  },
   thumbnail: {
     width: 90,
     height: 90,
+    borderRadius: 16,
+  },
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
     borderRadius: 16,
   },
   cardBody: {
@@ -103,16 +127,19 @@ const styles = StyleSheet.create({
   },
   badge: {
     backgroundColor: colors.main,
-    padding: 0.5,
-    width: 51,
-    height: 26,
     borderRadius: 100,
     paddingHorizontal: 10,
     paddingVertical: 4,
     justifyContent: "center",
     alignItems: "center",
   },
+  badgeClosed: {
+    backgroundColor: colors.gray[2],
+  },
   badgeText: {
+    color: colors.white,
+  },
+  badgeTextClosed: {
     color: colors.white,
   },
   meta: {
