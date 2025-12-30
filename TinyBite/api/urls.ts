@@ -8,6 +8,7 @@ export const ENDPOINT = {
     SMS_CHECK: "/api/v1/auth/sms/check",
   },
   AUTH: {
+    LOGOUT: "/api/v1/auth/logout",
     SIGNUP_GOOGLE: "/api/v1/auth/google/signup",
     LOGIN_GOOGLE: "/api/v1/auth/google/login",
     NICKNAME_CHECK: "/api/v1/auth/nickname/check",

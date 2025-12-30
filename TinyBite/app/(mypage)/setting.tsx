@@ -1,15 +1,45 @@
+import { postLogout } from "@/api/authApi";
 import ConfirmModal from "@/components/ConfirmModal";
+import { useAuthStore } from "@/stores/authStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { ApiError } from "@/types/api";
+import { getErrorMessage } from "@/utils/getErrorMessage ";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useShallow } from "zustand/shallow";
 
 export default function SettingScreen() {
   const router = useRouter();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  const { logout } = useAuthStore(
+    useShallow((state) => ({
+      logout: state.logout,
+    }))
+  );
+
+  const logoutMutation = useMutation({
+    mutationFn: postLogout,
+    onSuccess: () => {
+      logout();
+      router.replace("/login/login");
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      if (error.response?.data) {
+        const message = getErrorMessage(error.response.data);
+        console.error(message);
+      } else {
+        // 네트워크 에러 등
+        console.error("네트워크 연결을 확인해주세요.");
+      }
+    },
+  });
 
   return (
     <SafeAreaView style={styles.container}>
@@ -110,6 +140,7 @@ export default function SettingScreen() {
         onClose={() => setShowLogoutModal(false)}
         onConfirm={() => {
           // TODO: 로그아웃 로직 구현
+          logoutMutation.mutateAsync();
         }}
       />
     </SafeAreaView>

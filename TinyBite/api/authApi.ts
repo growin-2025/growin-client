@@ -1,4 +1,4 @@
-import { publicAxios } from "@/api/axios";
+import { privateAxios, publicAxios } from "@/api/axios";
 import { ENDPOINT } from "@/api/urls";
 import { CheckSms, LoginGoogle, SignupGoogle, UserCoords } from "@/types/auth";
 
@@ -36,4 +36,8 @@ export const getLocationName = async (coordsData: UserCoords) => {
     },
   });
   return res.data.data;
+};
+
+export const postLogout = async () => {
+  await privateAxios.post(ENDPOINT.AUTH.LOGOUT);
 };
