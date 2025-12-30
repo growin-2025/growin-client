@@ -107,6 +107,8 @@ const styles = StyleSheet.create({
   },
   chipInactive: {
     backgroundColor: INACTIVE_BG,
+    borderColor: "transparent", // 투명 보더로 크기 유지
+    borderWidth: 1, // 활성 상태와 동일한 보더 두께
   },
   text: {
     textAlign: "center",
