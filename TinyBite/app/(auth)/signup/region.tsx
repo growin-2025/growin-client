@@ -1,6 +1,7 @@
 import { getLocationName, postSignupGoogle } from "@/api/authApi";
 import PaginationIndecatorHeader from "@/components/PaginationIndecatorHeader";
 import { useUserCoords } from "@/hooks/useUserCoords";
+import { useAuthStore } from "@/stores/authStore";
 import { TermCode, useSignupStore } from "@/stores/signupStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
@@ -45,6 +46,12 @@ export default function RegionScreen() {
     }))
   );
 
+  const { login } = useAuthStore(
+    useShallow((state) => ({
+      login: state.login,
+    }))
+  );
+
   const GetLocationNameMutation = useMutation({
     mutationFn: getLocationName,
     onSuccess: (data) => {},
@@ -64,6 +71,7 @@ export default function RegionScreen() {
     onSuccess: (data) => {
       console.log("postSignupGoogle >>", data);
       resetSignupStore();
+      login(data);
       router.replace("/(auth)/signup/complete");
     },
     onError: (error: AxiosError<ApiError>) => {
@@ -102,7 +110,7 @@ export default function RegionScreen() {
     );
 
     const googleIdToken = await SecureStore.getItemAsync("googleIdToken");
-    
+
     if (googleIdToken) {
       SignupMutation.mutate({
         idToken: googleIdToken,

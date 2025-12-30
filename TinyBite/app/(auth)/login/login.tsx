@@ -1,5 +1,6 @@
 import { postLoginGoogle } from "@/api/authApi";
 import { getCurrentUser, signIn, signOut } from "@/hooks/useGoogleAuth";
+import { useAuthStore } from "@/stores/authStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { ApiError } from "@/types/api";
@@ -18,14 +19,22 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useShallow } from "zustand/shallow";
 
 export default function LoginScreen() {
   const router = useRouter();
+
+  const { login } = useAuthStore(
+    useShallow((state) => ({
+      login: state.login,
+    }))
+  );
 
   const loginMutation = useMutation({
     mutationFn: postLoginGoogle,
     onSuccess: (data) => {
       if (data.signup) {
+        login(data);
         router.push("/(tabs)");
       } else {
         router.push("/(auth)/signup/terms");
