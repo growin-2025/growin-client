@@ -1,5 +1,5 @@
 import { postLoginGoogle } from "@/api/authApi";
-import { getCurrentUser, signIn, signOut } from "@/hooks/useGoogleAuth";
+import { getCurrentUser, signIn } from "@/hooks/useGoogleAuth";
 import { useAuthStore } from "@/stores/authStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
@@ -99,15 +99,6 @@ export default function LoginScreen() {
       />
 
       <View style={styles.buttons}>
-        <TouchableOpacity
-          style={[styles.socialButton, styles.google]}
-          onPress={signOut}
-        >
-          <Text style={[styles.socialText, textStyles.title18_SB135]}>
-            임시 google 로그아웃 버튼
-          </Text>
-        </TouchableOpacity>
-
         <TouchableOpacity
           style={[styles.socialButton, styles.kakao]}
           onPress={() => handleLoginPress("kakao")}
