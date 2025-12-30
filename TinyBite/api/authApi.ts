@@ -1,6 +1,7 @@
 import { privateAxios, publicAxios } from "@/api/axios";
 import { ENDPOINT } from "@/api/urls";
 import { CheckSms, LoginGoogle, SignupGoogle, UserCoords } from "@/types/auth";
+import * as SecureStore from "expo-secure-store";
 
 export const postLoginGoogle = async (loginData: LoginGoogle) => {
   const res = await publicAxios.post(ENDPOINT.AUTH.LOGIN_GOOGLE, loginData);
@@ -40,4 +41,12 @@ export const getLocationName = async (coordsData: UserCoords) => {
 
 export const postLogout = async () => {
   await privateAxios.post(ENDPOINT.AUTH.LOGOUT);
+};
+
+export const postRefresh = async () => {
+  const refreshToken = await SecureStore.getItemAsync("refreshToken");
+  const res = await privateAxios.post(ENDPOINT.AUTH.REFRESH, {
+    refreshToken: refreshToken,
+  });
+  return res.data.data;
 };
