@@ -19,7 +19,7 @@ export default function HomeScreen() {
   const { coords, refresh: fetchCoords } = useUserCoords();
 
   // 파티 리스트 조회
-  const { data, isLoading, error, partyType, setPartyType } = usePartyList({
+  const { data, partyType, setPartyType } = usePartyList({
     latitude: coords?.latitude?.toString() || "",
     longitude: coords?.longitude?.toString() || "",
   });
@@ -30,29 +30,6 @@ export default function HomeScreen() {
       fetchCoords();
     }
   }, []);
-
-  // API 호출 확인용 콘솔 로그
-  useEffect(() => {
-    console.log("📍 현재 위치:", {
-      latitude: coords?.latitude,
-      longitude: coords?.longitude,
-    });
-
-    if (data) {
-      // 각 파티 아이템 상세 정보
-      if (data.activeParties.length > 0) {
-        console.log("✅ 활성 파티 상세:", data.activeParties);
-      }
-      if (data.closedParties.length > 0) {
-        console.log("✅ 종료된 파티 상세:", data.closedParties);
-      }
-    }
-
-    if (error) {
-      console.error("❌ API 에러:", error);
-      console.error("❌ 에러 상세:", JSON.stringify(error, null, 2));
-    }
-  }, [data, error, isLoading, coords]);
 
   return (
     <View style={styles.container}>
