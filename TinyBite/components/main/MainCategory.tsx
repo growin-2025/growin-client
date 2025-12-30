@@ -49,9 +49,11 @@ const MainCategory = ({
   >
     {items.map(({ label, value, icon }) => (
       <TouchableOpacity
+        activeOpacity={0.8}
         key={value}
         style={[
           styles.chip,
+
           selectedCategory === value ? styles.chipActive : styles.chipInactive,
         ]}
         onPress={() => onCategoryChange(value)}
