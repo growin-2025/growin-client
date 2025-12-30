@@ -60,7 +60,7 @@ const MainCard = ({ item, onPress, containerStyle }: MainCardProps) => {
               resizeMode="cover"
               blurRadius={item.isClosed ? 2 : 0}
               onError={() => {
-                //console.warn("이미지 로딩 실패:", item.thumbnailImage);
+                console.warn("이미지 로딩 실패:", item.thumbnailImage);
                 setImageError(true);
               }}
             />

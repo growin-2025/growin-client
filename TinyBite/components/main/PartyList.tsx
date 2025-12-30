@@ -6,6 +6,7 @@ import { FlatList, Image, StyleSheet, Text, View } from "react-native";
 
 interface PartyListProps {
   data: PartyListResponse | undefined;
+  isLoading?: boolean;
   onCardPress?: (partyId: number) => void;
 }
 
@@ -13,7 +14,7 @@ interface PartyListProps {
  * 파티 리스트 컴포넌트
  * - 활성 파티를 먼저 표시하고, 그 다음 종료된 파티를 표시
  */
-const PartyList = ({ data, onCardPress }: PartyListProps) => {
+const PartyList = ({ data, isLoading, onCardPress }: PartyListProps) => {
   const activeParties = data?.activeParties || [];
   const closedParties = data?.closedParties || [];
 
@@ -30,21 +31,28 @@ const PartyList = ({ data, onCardPress }: PartyListProps) => {
 
   const ItemSeparator = () => <View style={styles.separator} />;
 
-  const ListEmptyComponent = () => (
-    <View style={styles.emptyContainer}>
-      <Image
-        source={require("@/assets/images/main/notice-100.png")}
-        style={styles.emptyIcon}
-        resizeMode="contain"
-      />
-      <Text style={[styles.emptyText, textStyles.title18_SB135]}>
-        아직 우리 동네에 파티가 없어요.
-      </Text>
-      <Text style={[styles.emptyText, textStyles.title18_SB135]}>
-        첫 파티를 열어보세요!
-      </Text>
-    </View>
-  );
+  const ListEmptyComponent = () => {
+    // 로딩 중일 때는 빈 상태를 표시하지 않음
+    if (isLoading) {
+      return null;
+    }
+
+    return (
+      <View style={styles.emptyContainer}>
+        <Image
+          source={require("@/assets/images/main/notice-100.png")}
+          style={styles.emptyIcon}
+          resizeMode="contain"
+        />
+        <Text style={[styles.emptyText, textStyles.title18_SB135]}>
+          아직 우리 동네에 파티가 없어요.
+        </Text>
+        <Text style={[styles.emptyText, textStyles.title18_SB135]}>
+          첫 파티를 열어보세요!
+        </Text>
+      </View>
+    );
+  };
 
   return (
     <FlatList

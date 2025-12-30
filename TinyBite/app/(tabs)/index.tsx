@@ -19,7 +19,7 @@ export default function HomeScreen() {
   const { coords, refresh: fetchCoords } = useUserCoords();
 
   // 파티 리스트 조회
-  const { data, partyType, setPartyType } = usePartyList({
+  const { data, isLoading, partyType, setPartyType } = usePartyList({
     latitude: coords?.latitude?.toString() || "",
     longitude: coords?.longitude?.toString() || "",
   });
@@ -44,6 +44,7 @@ export default function HomeScreen() {
 
       <PartyList
         data={data}
+        isLoading={isLoading}
         onCardPress={() => router.push("/main-card-detail")}
       />
 
