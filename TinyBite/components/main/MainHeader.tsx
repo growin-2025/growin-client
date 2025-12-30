@@ -1,3 +1,4 @@
+import { useAuthStore } from "@/stores/authStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { useState } from "react";
@@ -42,6 +43,9 @@ const MainHeader = ({}: MainHeaderProps = {}) => {
   const [currentPage, setCurrentPage] = useState(0);
   // 현재 페이지에 해당하는 데이터 가져오기
   const currentData = carouselData[currentPage];
+  // 스토어에서 사용자 위치 정보 가져오기
+  const location = useAuthStore((state) => state.user?.location);
+  // 위치정보가 없을땐 기본값으로 뭘할지?
 
   return (
     <SafeAreaView
@@ -64,7 +68,9 @@ const MainHeader = ({}: MainHeaderProps = {}) => {
             style={styles.mainLogo}
             resizeMode="contain"
           />
-          <Text style={[styles.location, textStyles.title20_B135]}>역삼동</Text>
+          <Text style={[styles.location, textStyles.title20_B135]}>
+            {location}
+          </Text>
         </View>
 
         {/* 인사말과 캐릭터 이미지 캐러셀 (스와이프 가능) */}
