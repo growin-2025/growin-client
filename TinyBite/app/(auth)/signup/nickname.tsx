@@ -44,7 +44,7 @@ export default function NicknameScreen() {
         if (error.response.data.code === "DUPLICATED_NICKNAME") {
           Toast.show({
             type: "basicToast",
-            props: { text: "올바른 URL 형식으로 입력해주세요." },
+            props: { text: "이미 사용 중인 닉네임이에요." },
             position: "bottom",
             bottomOffset: 98,
             visibilityTime: 2000,

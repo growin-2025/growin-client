@@ -1,6 +1,7 @@
 import { getLocationName, postSignupGoogle } from "@/api/authApi";
 import PaginationIndecatorHeader from "@/components/PaginationIndecatorHeader";
 import { useUserCoords } from "@/hooks/useUserCoords";
+import { useAuthStore } from "@/stores/authStore";
 import { TermCode, useSignupStore } from "@/stores/signupStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
@@ -9,6 +10,7 @@ import { getErrorMessage } from "@/utils/getErrorMessage ";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "expo-router";
+import * as SecureStore from "expo-secure-store";
 import { StatusBar } from "expo-status-bar";
 import {
   Image,
@@ -27,7 +29,6 @@ export default function RegionScreen() {
   const { loading, refresh } = useUserCoords();
 
   const {
-    googleIdToken,
     phoneNumber,
     terms,
     nickname,
@@ -36,13 +37,18 @@ export default function RegionScreen() {
     resetSignupStore,
   } = useSignupStore(
     useShallow((state) => ({
-      googleIdToken: state.googleIdToken,
       phoneNumber: state.phoneNumber,
       terms: state.terms,
       nickname: state.nickname,
       locationName: state.locationName,
       setLocationName: state.setLocationName,
       resetSignupStore: state.resetSignupStore,
+    }))
+  );
+
+  const { login } = useAuthStore(
+    useShallow((state) => ({
+      login: state.login,
     }))
   );
 
@@ -65,6 +71,7 @@ export default function RegionScreen() {
     onSuccess: (data) => {
       console.log("postSignupGoogle >>", data);
       resetSignupStore();
+      login(data);
       router.replace("/(auth)/signup/complete");
     },
     onError: (error: AxiosError<ApiError>) => {
@@ -102,14 +109,20 @@ export default function RegionScreen() {
       (term) => terms[term]
     );
 
-    SignupMutation.mutate({
-      idToken: googleIdToken,
-      phone: phoneNumber,
-      nickname: nickname,
-      location: locationName,
-      platform: Platform.OS.toUpperCase() as "ANDROID" | "IOS",
-      agreedTerms: checkedTerms,
-    });
+    const googleIdToken = await SecureStore.getItemAsync("googleIdToken");
+
+    if (googleIdToken) {
+      SignupMutation.mutate({
+        idToken: googleIdToken,
+        phone: phoneNumber,
+        nickname: nickname,
+        location: locationName,
+        platform: Platform.OS.toUpperCase() as "ANDROID" | "IOS",
+        agreedTerms: checkedTerms,
+      });
+    } else {
+      alert("googleIdToken이 필요합니다. 로그아웃 후 다시 로그인해주세요.");
+    }
   };
 
   return (

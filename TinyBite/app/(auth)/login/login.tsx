@@ -1,6 +1,6 @@
 import { postLoginGoogle } from "@/api/authApi";
 import { getCurrentUser, signIn, signOut } from "@/hooks/useGoogleAuth";
-import { useSignupStore } from "@/stores/signupStore";
+import { useAuthStore } from "@/stores/authStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { ApiError } from "@/types/api";
@@ -8,6 +8,7 @@ import { getErrorMessage } from "@/utils/getErrorMessage ";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "expo-router";
+import * as SecureStore from "expo-secure-store";
 import { StatusBar } from "expo-status-bar";
 import {
   Image,
@@ -23,9 +24,9 @@ import { useShallow } from "zustand/shallow";
 export default function LoginScreen() {
   const router = useRouter();
 
-  const { setGoogleIdToken } = useSignupStore(
+  const { login } = useAuthStore(
     useShallow((state) => ({
-      setGoogleIdToken: state.setGoogleIdToken,
+      login: state.login,
     }))
   );
 
@@ -33,12 +34,18 @@ export default function LoginScreen() {
     mutationFn: postLoginGoogle,
     onSuccess: (data) => {
       if (data.signup) {
+        login(data);
         router.push("/(tabs)");
       } else {
         router.push("/(auth)/signup/terms");
       }
     },
     onError: (error: AxiosError<ApiError>) => {
+      if (error.response?.data.code === "INVALID_TOKEN") {
+        SecureStore.deleteItemAsync("googleIdToken");
+        return;
+      }
+
       if (error.response?.data) {
         const message = getErrorMessage(error.response.data);
         console.error(message);
@@ -60,7 +67,7 @@ export default function LoginScreen() {
     }
 
     if (idToken) {
-      setGoogleIdToken(idToken);
+      await SecureStore.setItemAsync("googleIdToken", idToken);
       await loginMutation.mutateAsync({
         idToken: idToken,
         platformType: Platform.OS.toUpperCase() as "ANDROID" | "IOS",
