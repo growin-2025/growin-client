@@ -18,6 +18,6 @@ export const ENDPOINT = {
     FIND_LOCATION: "/api/v1/auth/location",
   },
   PARTY: {
-    LIST: "/api/v1/party",
+    GET_PARTIES: "/api/parties",
   },
 };
