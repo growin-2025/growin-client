@@ -22,10 +22,10 @@ export const mockChatData: ChatItemType[] = [
   {
     id: "2",
     name: "닉네임",
-    lastMessage: "참여가능할까요?? 같이 나눠요!",
+    lastMessage: "참여가능할까요?? 같이 나눠요! 참여가능할까요?? 같이 나눠요!",
     chatType: "oneOnOne",
     status: "승인 거절",
-    partyTitle: "휴지 30롤 절반 나누실 분 구해요",
+    partyTitle: "코스트코 베이글, 크림치즈 나누실 분 구해요",
     timestamp: "2025.11.11",
     myProfileImage: require("@/assets/images/mainlist/detail/default-host-profile.png"),
     opponentProfileImage: require("@/assets/images/mainlist/detail/default-host-profile.png"),
