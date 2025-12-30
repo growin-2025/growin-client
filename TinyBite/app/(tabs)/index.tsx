@@ -1,17 +1,59 @@
 import FloatingMenuButton from "@/components/main/FloatingMenuButton";
 import FloatingMenuOverlay from "@/components/main/FloatingMenuOverlay";
-import MainCard from "@/components/main/MainCard";
 import MainCategory from "@/components/main/MainCategory";
 import MainHeader from "@/components/main/MainHeader";
+import PartyList from "@/components/main/PartyList";
+import { usePartyList } from "@/hooks/usePartyList";
+import { useUserCoords } from "@/hooks/useUserCoords";
 import { colors } from "@/styles/colors";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { ScrollView, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 export default function HomeScreen() {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // 위치 정보 가져오기
+  const { coords, refresh: fetchCoords } = useUserCoords();
+
+  // 파티 리스트 조회
+  const { data, isLoading, error } = usePartyList({
+    category: "ALL",
+    latitude: coords?.latitude?.toString() || "",
+    longitude: coords?.longitude?.toString() || "",
+  });
+
+  // 컴포넌트 마운트 시 위치 정보 가져오기
+  useEffect(() => {
+    if (!coords) {
+      fetchCoords();
+    }
+  }, []);
+
+  // API 호출 확인용 콘솔 로그
+  useEffect(() => {
+    console.log("📍 현재 위치:", {
+      latitude: coords?.latitude,
+      longitude: coords?.longitude,
+    });
+
+    if (data) {
+      // 각 파티 아이템 상세 정보
+      if (data.activeParties.length > 0) {
+        console.log("✅ 활성 파티 상세:", data.activeParties);
+      }
+      if (data.closedParties.length > 0) {
+        console.log("✅ 종료된 파티 상세:", data.closedParties);
+      }
+    }
+
+    if (error) {
+      console.error("❌ API 에러:", error);
+      console.error("❌ 에러 상세:", JSON.stringify(error, null, 2));
+    }
+  }, [data, error, isLoading, coords]);
 
   return (
     <View style={styles.container}>
@@ -21,19 +63,10 @@ export default function HomeScreen() {
         <MainCategory />
       </View>
 
-      <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.listWrapper}
-      >
-        <View style={styles.cardWrapper}>
-          <MainCard onPress={() => router.push("/main-card-detail")} />
-          <MainCard />
-          <MainCard />
-          <MainCard />
-          <MainCard />
-          <MainCard />
-        </View>
-      </ScrollView>
+      <PartyList
+        data={data}
+        onCardPress={() => router.push("/main-card-detail")}
+      />
 
       {/* 플로팅 버튼 - 항상 표시 */}
       <View style={styles.floatingButtonContainer}>
@@ -53,19 +86,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
-  },
-  scroll: {
-    backgroundColor: colors.background,
-  },
-  listWrapper: {
-    alignItems: "center",
-    marginTop: 5,
-    marginLeft: 20,
-    marginRight: 20,
-  },
-  cardWrapper: {
-    gap: 16,
-    marginBottom: 16,
   },
   categoryWrapper: {
     marginTop: 15, //카테고리 마진 5 뺀 15
