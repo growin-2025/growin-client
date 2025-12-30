@@ -1,6 +1,7 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { PartyItem } from "@/types/party";
+import { useState } from "react";
 import {
   Image,
   Pressable,
@@ -22,12 +23,17 @@ const MainCard = ({ item, onPress, containerStyle }: MainCardProps) => {
     return null;
   }
 
+  // 이미지 로딩 에러 상태 관리
+  const [imageError, setImageError] = useState(false);
+
   // 가격 포맷팅 (예: 5000 -> "5,000원")
   const formattedPrice = `${item.pricePerPerson.toLocaleString()}원`;
 
   // 카테고리별 아이콘 매핑
   const getCategoryIcon = (category: string) => {
     switch (category) {
+      case "ALL":
+        return require("@/assets/images/main/notice-100.png");
       case "DELIVERY":
         return require("@/assets/images/main/category/delivery.png");
       case "GROCERY":
@@ -39,7 +45,8 @@ const MainCard = ({ item, onPress, containerStyle }: MainCardProps) => {
     }
   };
 
-  const hasImage = item.thumbnailImage && item.thumbnailImage.trim() !== "";
+  const hasImage =
+    item.thumbnailImage && item.thumbnailImage.trim() !== "" && !imageError;
   const categoryIcon = getCategoryIcon(item.category);
 
   return (
@@ -52,6 +59,10 @@ const MainCard = ({ item, onPress, containerStyle }: MainCardProps) => {
               style={styles.thumbnail}
               resizeMode="cover"
               blurRadius={item.isClosed ? 2 : 0}
+              onError={() => {
+                console.warn("이미지 로딩 실패:", item.thumbnailImage);
+                setImageError(true);
+              }}
             />
             {item.isClosed && <View style={styles.overlay} />}
           </>
