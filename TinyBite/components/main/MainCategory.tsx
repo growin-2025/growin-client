@@ -1,41 +1,60 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { PartyCategory } from "@/types/party";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 
 const PRIMARY_COLOR = colors.main;
 const ACTIVE_BG = colors.sub;
 const INACTIVE_BG = colors.white;
 const GRAY_TEXT = colors.gray[1];
 
-const items = [
-  { label: "전체", icon: null, active: true },
+interface MainCategoryProps {
+  selectedCategory: PartyCategory;
+  onCategoryChange: (category: PartyCategory) => void;
+}
+
+const items: { label: string; value: PartyCategory; icon: any }[] = [
+  { label: "전체", value: "ALL", icon: null },
   {
     label: "배달",
+    value: "DELIVERY",
     icon: require("@/assets/images/main/category/delivery.png"),
-    active: false,
   },
   {
     label: "장보기",
+    value: "GROCERY",
     icon: require("@/assets/images/main/category/grocery.png"),
-    active: false,
   },
   {
     label: "생필품",
+    value: "HOUSEHOLD",
     icon: require("@/assets/images/main/category/essentials.png"),
-    active: false,
   },
 ];
 
-const MainCategory = () => (
+const MainCategory = ({
+  selectedCategory,
+  onCategoryChange,
+}: MainCategoryProps) => (
   <ScrollView
     horizontal
     showsHorizontalScrollIndicator={false}
     contentContainerStyle={styles.container}
   >
-    {items.map(({ label, icon, active }) => (
-      <View
-        key={label}
-        style={[styles.chip, active ? styles.chipActive : styles.chipInactive]}
+    {items.map(({ label, value, icon }) => (
+      <TouchableOpacity
+        key={value}
+        style={[
+          styles.chip,
+          selectedCategory === value ? styles.chipActive : styles.chipInactive,
+        ]}
+        onPress={() => onCategoryChange(value)}
       >
         {icon ? (
           <Image source={icon} style={styles.iconImage} resizeMode="contain" />
@@ -44,12 +63,14 @@ const MainCategory = () => (
           style={[
             styles.text,
             textStyles.body16_SB135,
-            active ? styles.textActive : styles.textInactive,
+            selectedCategory === value
+              ? styles.textActive
+              : styles.textInactive,
           ]}
         >
           {label}
         </Text>
-      </View>
+      </TouchableOpacity>
     ))}
   </ScrollView>
 );
