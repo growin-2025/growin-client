@@ -10,14 +10,12 @@ export enum TermCode {
 }
 
 export interface SignupStoreState {
-  googleIdToken: string;
   phoneNumber: string;
   terms: {
     [key in TermCode]: boolean;
   };
   nickname: string;
   locationName: string;
-  setGoogleIdToken: (token: string) => void;
   setPhoneNumber: (number: string) => void;
   toggleTerm: (term: TermCode) => void;
   checkAllEssentialsOnly: () => void;
@@ -29,7 +27,6 @@ export interface SignupStoreState {
 }
 
 export const useSignupStore = create<SignupStoreState>((set, get) => ({
-  googleIdToken: "",
   phoneNumber: "",
   nickname: "",
   locationName: "",
@@ -40,11 +37,6 @@ export const useSignupStore = create<SignupStoreState>((set, get) => ({
     PRIVACY_COLLECT: false,
     PRIVACY_PROVIDE: false,
     MARKETING_RECEIVE: false,
-  },
-  setGoogleIdToken: (token: string) => {
-    set(() => ({
-      googleIdToken: token,
-    }));
   },
   setPhoneNumber: (number: string) => {
     set(() => ({
@@ -110,7 +102,6 @@ export const useSignupStore = create<SignupStoreState>((set, get) => ({
   },
   resetSignupStore: () => {
     set(() => ({
-      googleIdToken: "",
       phoneNumber: "",
       nickname: "",
       locationName: "",

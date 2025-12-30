@@ -9,6 +9,7 @@ import { getErrorMessage } from "@/utils/getErrorMessage ";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "expo-router";
+import * as SecureStore from "expo-secure-store";
 import { StatusBar } from "expo-status-bar";
 import {
   Image,
@@ -27,7 +28,6 @@ export default function RegionScreen() {
   const { loading, refresh } = useUserCoords();
 
   const {
-    googleIdToken,
     phoneNumber,
     terms,
     nickname,
@@ -36,7 +36,6 @@ export default function RegionScreen() {
     resetSignupStore,
   } = useSignupStore(
     useShallow((state) => ({
-      googleIdToken: state.googleIdToken,
       phoneNumber: state.phoneNumber,
       terms: state.terms,
       nickname: state.nickname,
@@ -102,14 +101,20 @@ export default function RegionScreen() {
       (term) => terms[term]
     );
 
-    SignupMutation.mutate({
-      idToken: googleIdToken,
-      phone: phoneNumber,
-      nickname: nickname,
-      location: locationName,
-      platform: Platform.OS.toUpperCase() as "ANDROID" | "IOS",
-      agreedTerms: checkedTerms,
-    });
+    const googleIdToken = await SecureStore.getItemAsync("googleIdToken");
+    
+    if (googleIdToken) {
+      SignupMutation.mutate({
+        idToken: googleIdToken,
+        phone: phoneNumber,
+        nickname: nickname,
+        location: locationName,
+        platform: Platform.OS.toUpperCase() as "ANDROID" | "IOS",
+        agreedTerms: checkedTerms,
+      });
+    } else {
+      alert("googleIdToken이 필요합니다. 로그아웃 후 다시 로그인해주세요.");
+    }
   };
 
   return (

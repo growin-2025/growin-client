@@ -1,6 +1,5 @@
 import { postLoginGoogle } from "@/api/authApi";
 import { getCurrentUser, signIn, signOut } from "@/hooks/useGoogleAuth";
-import { useSignupStore } from "@/stores/signupStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { ApiError } from "@/types/api";
@@ -8,6 +7,7 @@ import { getErrorMessage } from "@/utils/getErrorMessage ";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "expo-router";
+import * as SecureStore from "expo-secure-store";
 import { StatusBar } from "expo-status-bar";
 import {
   Image,
@@ -18,16 +18,9 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useShallow } from "zustand/shallow";
 
 export default function LoginScreen() {
   const router = useRouter();
-
-  const { setGoogleIdToken } = useSignupStore(
-    useShallow((state) => ({
-      setGoogleIdToken: state.setGoogleIdToken,
-    }))
-  );
 
   const loginMutation = useMutation({
     mutationFn: postLoginGoogle,
@@ -60,7 +53,7 @@ export default function LoginScreen() {
     }
 
     if (idToken) {
-      setGoogleIdToken(idToken);
+      await SecureStore.setItemAsync("googleIdToken", idToken);
       await loginMutation.mutateAsync({
         idToken: idToken,
         platformType: Platform.OS.toUpperCase() as "ANDROID" | "IOS",
