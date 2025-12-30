@@ -19,8 +19,7 @@ export default function HomeScreen() {
   const { coords, refresh: fetchCoords } = useUserCoords();
 
   // 파티 리스트 조회
-  const { data, isLoading, error } = usePartyList({
-    category: "ALL",
+  const { data, isLoading, error, partyType, setPartyType } = usePartyList({
     latitude: coords?.latitude?.toString() || "",
     longitude: coords?.longitude?.toString() || "",
   });
@@ -60,7 +59,10 @@ export default function HomeScreen() {
       <MainHeader />
 
       <View style={styles.categoryWrapper}>
-        <MainCategory />
+        <MainCategory
+          selectedCategory={partyType}
+          onCategoryChange={setPartyType}
+        />
       </View>
 
       <PartyList
