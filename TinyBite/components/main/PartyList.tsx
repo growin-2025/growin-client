@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginLeft: 20,
     marginRight: 20,
-    paddingBottom: 100, // 플로팅 버튼 공간 확보
+    paddingBottom: 70, // 플로팅 버튼 공간 확보
     flexGrow: 1, // 빈 상태일 때 전체 화면 사용
   },
   cardItem: {
