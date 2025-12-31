@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 module.exports = {
   name: "한입만",
   slug: "TinyBite",
