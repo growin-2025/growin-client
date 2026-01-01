@@ -1,3 +1,4 @@
+import { usePartyStore } from "@/stores/partyStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { PartyCategory } from "@/types/party";
@@ -13,11 +14,6 @@ const PRIMARY_COLOR = colors.main;
 const ACTIVE_BG = colors.sub;
 const INACTIVE_BG = colors.white;
 const GRAY_TEXT = colors.gray[1];
-
-interface MainCategoryProps {
-  selectedCategory: PartyCategory;
-  onCategoryChange: (category: PartyCategory) => void;
-}
 
 const items: { label: string; value: PartyCategory; icon: any }[] = [
   { label: "전체", value: "ALL", icon: null },
@@ -38,44 +34,48 @@ const items: { label: string; value: PartyCategory; icon: any }[] = [
   },
 ];
 
-const MainCategory = ({
-  selectedCategory,
-  onCategoryChange,
-}: MainCategoryProps) => (
-  <ScrollView
-    horizontal
-    showsHorizontalScrollIndicator={false}
-    contentContainerStyle={styles.container}
-  >
-    {items.map(({ label, value, icon }) => (
-      <TouchableOpacity
-        activeOpacity={0.8}
-        key={value}
-        style={[
-          styles.chip,
+const MainCategory = () => {
+  const partyType = usePartyStore((state) => state.partyType);
+  const setPartyType = usePartyStore((state) => state.setPartyType);
 
-          selectedCategory === value ? styles.chipActive : styles.chipInactive,
-        ]}
-        onPress={() => onCategoryChange(value)}
-      >
-        {icon ? (
-          <Image source={icon} style={styles.iconImage} resizeMode="contain" />
-        ) : null}
-        <Text
+  return (
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={styles.container}
+    >
+      {items.map(({ label, value, icon }) => (
+        <TouchableOpacity
+          activeOpacity={0.8}
+          key={value}
           style={[
-            styles.text,
-            textStyles.body16_SB135,
-            selectedCategory === value
-              ? styles.textActive
-              : styles.textInactive,
+            styles.chip,
+
+            partyType === value ? styles.chipActive : styles.chipInactive,
           ]}
+          onPress={() => setPartyType(value)}
         >
-          {label}
-        </Text>
-      </TouchableOpacity>
-    ))}
-  </ScrollView>
-);
+          {icon ? (
+            <Image
+              source={icon}
+              style={styles.iconImage}
+              resizeMode="contain"
+            />
+          ) : null}
+          <Text
+            style={[
+              styles.text,
+              textStyles.body16_SB135,
+              partyType === value ? styles.textActive : styles.textInactive,
+            ]}
+          >
+            {label}
+          </Text>
+        </TouchableOpacity>
+      ))}
+    </ScrollView>
+  );
+};
 
 export default MainCategory;
 

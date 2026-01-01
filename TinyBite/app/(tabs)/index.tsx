@@ -3,50 +3,23 @@ import FloatingMenuOverlay from "@/components/main/FloatingMenuOverlay";
 import MainCategory from "@/components/main/MainCategory";
 import MainHeader from "@/components/main/MainHeader";
 import PartyList from "@/components/main/PartyList";
-import { usePartyList } from "@/hooks/usePartyList";
-import { useUserCoords } from "@/hooks/useUserCoords";
 import { colors } from "@/styles/colors";
-import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { StyleSheet, View } from "react-native";
 
 export default function HomeScreen() {
-  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  // 위치 정보 가져오기
-  const { coords, refresh: fetchCoords } = useUserCoords();
-
-  // 파티 리스트 조회
-  const { data, isLoading, partyType, setPartyType } = usePartyList({
-    latitude: coords?.latitude?.toString() || "",
-    longitude: coords?.longitude?.toString() || "",
-  });
-
-  // 컴포넌트 마운트 시 위치 정보 가져오기
-  useEffect(() => {
-    if (!coords) {
-      fetchCoords();
-    }
-  }, []);
 
   return (
     <View style={styles.container}>
       <MainHeader />
 
       <View style={styles.categoryWrapper}>
-        <MainCategory
-          selectedCategory={partyType}
-          onCategoryChange={setPartyType}
-        />
+        <MainCategory />
       </View>
 
-      <PartyList
-        data={data}
-        isLoading={isLoading}
-        onCardPress={() => router.push("/main-card-detail")}
-      />
+      <PartyList />
 
       {/* 플로팅 버튼 - 항상 표시 */}
       <View style={styles.floatingButtonContainer}>

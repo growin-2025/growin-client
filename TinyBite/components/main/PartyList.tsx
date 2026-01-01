@@ -1,20 +1,37 @@
 import MainCard from "@/components/main/MainCard";
+import { usePartyList } from "@/hooks/usePartyList";
+import { useUserCoords } from "@/hooks/useUserCoords";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { PartyItem, PartyListResponse } from "@/types/party";
+import { PartyItem } from "@/types/party";
+import { useRouter } from "expo-router";
+import { useEffect } from "react";
 import { FlatList, Image, StyleSheet, Text, View } from "react-native";
-
-interface PartyListProps {
-  data: PartyListResponse | undefined;
-  isLoading?: boolean;
-  onCardPress?: (partyId: number) => void;
-}
 
 /**
  * 파티 리스트 컴포넌트
+ * - 내부에서 위치 정보와 파티 리스트 데이터를 직접 조회
  * - 활성 파티를 먼저 표시하고, 그 다음 종료된 파티를 표시
+ * - 카드 클릭 시 상세 페이지로 이동
  */
-const PartyList = ({ data, isLoading, onCardPress }: PartyListProps) => {
+const PartyList = () => {
+  const router = useRouter();
+  // 위치 정보 가져오기
+  const { coords, refresh: fetchCoords } = useUserCoords();
+
+  // 컴포넌트 마운트 시 위치 정보 가져오기
+  useEffect(() => {
+    if (!coords) {
+      fetchCoords();
+    }
+  }, []);
+
+  // 파티 리스트 조회 (내부에서 직접 호출)
+  const { data, isLoading } = usePartyList({
+    latitude: coords?.latitude?.toString() || "",
+    longitude: coords?.longitude?.toString() || "",
+  });
+
   const activeParties = data?.activeParties || [];
   const closedParties = data?.closedParties || [];
 
@@ -24,7 +41,8 @@ const PartyList = ({ data, isLoading, onCardPress }: PartyListProps) => {
   const renderItem = ({ item }: { item: PartyItem }) => (
     <MainCard
       item={item}
-      onPress={() => onCardPress?.(item.partyId)}
+      onPress={() => router.push("/main-card-detail")}
+      //TODO: 상세 페이지로 이동 시 파티 ID 전달
       containerStyle={styles.cardItem}
     />
   );
