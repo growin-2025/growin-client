@@ -10,6 +10,12 @@ module.exports = {
   scheme: "tinybite",
   userInterfaceStyle: "automatic",
   newArchEnabled: true,
+  updates: {
+    url: "https://u.expo.dev/9b29b0aa-7e69-4749-894f-40efacaa1eb8",
+  },
+  runtimeVersion: {
+    policy: "appVersion",
+  },
   ios: {
     supportsTablet: true,
     bundleIdentifier: "com.tinybite2025.TinyBite",
