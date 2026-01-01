@@ -67,12 +67,6 @@ export default function PartyDetailScreen() {
   const [headerBackgroundOpacity, setHeaderBackgroundOpacity] = useState(0); // 헤더 배경 투명도 (0: 투명, 1: 불투명)
   const scrollY = useSharedValue(0); // 스크롤 위치 (react-native-reanimated용)
 
-  // 이미지 슬라이더용 이미지 배열
-  const images =
-    partyDetail?.images && partyDetail.images.length > 0
-      ? partyDetail.images.map((imageUrl) => ({ uri: imageUrl }))
-      : [require("@/assets/images/mainlist/food1.jpg")];
-
   // 스크롤 핸들러
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
@@ -159,7 +153,8 @@ export default function PartyDetailScreen() {
         >
           {/* 이미지 캐러셀 */}
           <PartyDetailImageCarousel
-            images={images}
+            images={partyDetail?.images}
+            category={partyDetail?.category}
             scrollY={scrollY}
             screenWidth={SCREEN_WIDTH}
           />

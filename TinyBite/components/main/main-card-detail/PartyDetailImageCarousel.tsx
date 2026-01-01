@@ -1,14 +1,8 @@
 import { textStyles } from "@/styles/typography/textStyles";
+import { PartyCategory } from "@/types/party";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useMemo, useState } from "react";
-import {
-  Image,
-  ImageSourcePropType,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ImageViewing from "react-native-image-viewing";
 import Animated, {
   SharedValue,
@@ -22,10 +16,25 @@ const CAROUSEL_HEIGHT = 300;
 const ZOOM_CENTER_Y = 150;
 
 interface PartyDetailImageCarouselProps {
-  images: ImageSourcePropType[]; // 이미지 배열
+  images?: string[]; // 이미지 URL 배열
+  category?: PartyCategory; // 카테고리
   scrollY: SharedValue<number>; // 스크롤 위치 (react-native-reanimated용)
   screenWidth: number; // 화면 너비
 }
+
+// 카테고리별 기본 이미지 가져오기
+const getDefaultImageByCategory = (category?: PartyCategory) => {
+  switch (category) {
+    case "DELIVERY":
+      return require("@/assets/images/mainlist/detail/default-delivery.png");
+    case "GROCERY":
+      return require("@/assets/images/mainlist/detail/default-grocery.png");
+    case "HOUSEHOLD":
+      return require("@/assets/images/mainlist/detail/default-essential.png");
+    default:
+      return require("@/assets/images/mainlist/detail/default-delivery.png");
+  }
+};
 
 /**
  * 파티 상세 화면의 이미지 캐러셀 컴포넌트
@@ -35,12 +44,24 @@ interface PartyDetailImageCarouselProps {
  */
 const PartyDetailImageCarousel = ({
   images,
+  category,
   scrollY,
   screenWidth,
 }: PartyDetailImageCarouselProps) => {
   const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 인덱스
   const [imageViewerVisible, setImageViewerVisible] = useState(false); // 이미지 뷰어 표시 여부
   const [imageViewerIndex, setImageViewerIndex] = useState(0); // 이미지 뷰어에서 보여줄 이미지 인덱스
+
+  // 이미지 배열 (기본 이미지 포함)
+  const imageSources = useMemo(() => {
+    if (images && images.length > 0) {
+      return images;
+    }
+    // 기본 이미지를 URI로 변환
+    const defaultImage = getDefaultImageByCategory(category);
+    const resolved = Image.resolveAssetSource(defaultImage);
+    return resolved.uri ? [resolved.uri] : [];
+  }, [images, category]);
 
   /**
    * 이미지 확대 애니메이션 스타일
@@ -62,24 +83,10 @@ const PartyDetailImageCarousel = ({
     };
   });
 
-  // ImageViewing용 이미지 데이터 변환 (images가 변경될 때만 재계산)
-  // 유효하지 않은 이미지는 필터링하여 제외
+  // ImageViewing용 이미지 데이터 변환
   const viewerImages = useMemo(
-    () =>
-      images
-        .map((img) => {
-          if (typeof img === "number") {
-            // require()로 가져온 이미지
-            const resolved = Image.resolveAssetSource(img);
-            return resolved.uri ? { uri: resolved.uri } : null;
-          } else if (typeof img === "object" && "uri" in img && img.uri) {
-            // ImageURISource (uri가 유효한 경우만)
-            return { uri: img.uri };
-          }
-          return null; // 유효하지 않은 이미지
-        })
-        .filter((item): item is { uri: string } => item !== null), // null 제거 및 타입 가드
-    [images]
+    () => imageSources.map((uri) => ({ uri })),
+    [imageSources]
   );
 
   return (
@@ -90,9 +97,9 @@ const PartyDetailImageCarousel = ({
         <Carousel
           width={screenWidth}
           height={CAROUSEL_HEIGHT}
-          data={images}
+          data={imageSources}
           scrollAnimationDuration={600}
-          enabled={images.length > 1} // 이미지가 2개 이상일 때만 슬라이드 활성화
+          enabled={imageSources.length > 1} // 이미지가 2개 이상일 때만 슬라이드 활성화
           onSnapToItem={(index) => setCurrentPage(index)} // 페이지 변경 시 인덱스 업데이트
           renderItem={({ item, index }) => (
             <TouchableOpacity
@@ -106,7 +113,7 @@ const PartyDetailImageCarousel = ({
             >
               <Image
                 style={styles.heroImage}
-                source={item}
+                source={{ uri: item }}
                 resizeMode="cover"
               />
             </TouchableOpacity>
@@ -121,10 +128,10 @@ const PartyDetailImageCarousel = ({
       </Animated.View>
       {/* 페이지네이션 텍스트 (오른쪽 아래) - 이미지가 2개 이상일 때만 표시 */}
       {/* Animated.View 밖에 배치하여 확대되지 않도록 */}
-      {images.length > 1 && (
+      {imageSources.length > 1 && (
         <View style={styles.paginationContainer}>
           <Text style={[styles.paginationText, textStyles.body13_SB135]}>
-            {currentPage + 1} / {images.length}
+            {currentPage + 1} / {imageSources.length}
           </Text>
         </View>
       )}
@@ -193,4 +200,3 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
   },
 });
-
