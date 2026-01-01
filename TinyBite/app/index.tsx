@@ -21,5 +21,5 @@ export default function Index() {
     }
   }, [loaded, error]);
 
-  return;
+  return null;
 }
