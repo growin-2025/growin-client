@@ -3,23 +3,23 @@ import { textStyles } from "@/styles/typography/textStyles";
 import { Image, StyleSheet, Text, View } from "react-native";
 
 interface PartyDetailHostProps {
-  avatar: any;
-  //url: string;
+  profileImage?: string;
   name: string;
   location: string;
 }
 
 const PartyDetailHost = ({
-  avatar,
+  profileImage,
   name,
   location,
 }: PartyDetailHostProps) => {
+  const defaultAvatar = require("@/assets/images/mainlist/detail/default-host-profile.png");
+
   return (
     <View style={styles.rowBetween}>
       <View style={styles.hostRow}>
         <Image
-          //source={{ uri: url }}
-          source={require("@/assets/images/mainlist/detail/default-host-profile.png")}
+          source={profileImage ? { uri: profileImage } : defaultAvatar}
           style={styles.hostAvatarImage}
           resizeMode="cover"
         />
@@ -75,4 +75,3 @@ const styles = StyleSheet.create({
     color: colors.gray[1],
   },
 });
-
