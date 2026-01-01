@@ -14,20 +14,25 @@ module.exports = {
     infoPlist: {
       ITSAppUsesNonExemptEncryption: false,
     },
+    splash: {
+      backgroundColor: "#FE870F",
+      image: "./assets/images/splash-icon-ios.png",
+      resizeMode: "contain",
+    },
   },
   android: {
     edgeToEdgeEnabled: true,
     predictiveBackGestureEnabled: false,
     package: "com.tinybite2025.TinyBite",
+    splash: {
+      backgroundColor: "#FE870F",
+      image: "./assets/images/splash-icon.png",
+      resizeMode: "contain",
+    },
   },
   web: {
     output: "static",
     favicon: "./assets/images/favicon.png",
-  },
-  splash: {
-    backgroundColor: "#FE870F",
-    image: "./assets/images/splash-icon.png",
-    resizeMode: "contain",
   },
   plugins: [
     "expo-router",
