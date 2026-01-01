@@ -1,8 +1,10 @@
+require("dotenv").config();
+
 module.exports = {
   name: "한입만",
   slug: "TinyBite",
   owner: "tinybite-2025",
-  version: "1.0.0",
+  version: "0.1.0",
   orientation: "portrait",
   icon: "./assets/images/icon.png",
   scheme: "tinybite",
