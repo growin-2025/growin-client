@@ -1,4 +1,8 @@
-import { PartyListParams, PartyListResponse } from "@/types/party";
+import {
+  CreatingPartyBody,
+  PartyListParams,
+  PartyListResponse,
+} from "@/types/party";
 import { privateAxios } from "./axios";
 import { ENDPOINT } from "./urls";
 
@@ -38,4 +42,9 @@ export const getPartyList = async (
       totalCount: 0,
     };
   }
+};
+
+export const postCreateParty = async (newParty: CreatingPartyBody) => {
+  const res = await privateAxios.post(ENDPOINT.PARTY.CREATE_PARTIES, newParty);
+  console.log("postRefresh >>", res.data);
 };

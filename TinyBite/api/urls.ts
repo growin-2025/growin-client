@@ -19,5 +19,6 @@ export const ENDPOINT = {
   },
   PARTY: {
     GET_PARTIES: "/api/parties",
+    CREATE_PARTIES: "/api/parties",
   },
 };
