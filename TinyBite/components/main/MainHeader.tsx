@@ -1,3 +1,4 @@
+import { useAuthStore } from "@/stores/authStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { useState } from "react";
@@ -10,36 +11,38 @@ const PRIMARY_COLOR = colors.main;
 interface MainHeaderProps {}
 
 /**
- * 메인 헤더에 표시될 캐러셀 데이터
- * 각 아이템은 닉네임, 인사말, 캐릭터 이미지, 배경색 등을 포함합니다.
- */
-const carouselData: CarouselItem[] = [
-  {
-    greeting1: "가짜대학생",
-    greeting2: "님,\n오늘은 무엇을 나눌까요 ?",
-    character: require("@/assets/images/main/character.png"),
-    backgroundColor: PRIMARY_COLOR,
-    greeting1Style: textStyles.title20_B135,
-    greeting2Style: textStyles.title18_B135,
-  },
-  {
-    greeting1: "저희 앱 어때요?\n의견이 필요해요",
-    greeting2: "\n츄비 눌러서 의견 주기   >",
-    character: require("@/assets/images/main/character-opinion.png"),
-    backgroundColor: PRIMARY_COLOR,
-    greeting1Style: textStyles.title24_SB135,
-    greeting2Style: [textStyles.title18_SB135, { marginTop: -20 }],
-  },
-];
-
-/**
  * 메인 화면 상단 헤더 컴포넌트
  * - 로고와 현재 위치 정보를 표시
  * - 캐러셀을 통해 여러 인사말과 캐릭터 이미지를 순환 표시
  */
 const MainHeader = ({}: MainHeaderProps = {}) => {
+  // 스토어에서 사용자 정보 가져오기
+  const nickname = useAuthStore((state) => state.user?.nickname || "한입만");
+  const location = useAuthStore((state) => state.user?.location || "위치 없음");
+
   // 현재 캐러셀 페이지 인덱스 상태 관리
   const [currentPage, setCurrentPage] = useState(0);
+
+  // 메인 헤더에 표시될 캐러셀 데이터 (닉네임을 동적으로 설정)
+  const carouselData: CarouselItem[] = [
+    {
+      greeting1: nickname,
+      greeting2: "님,\n오늘은 무엇을 나눌까요 ?",
+      character: require("@/assets/images/main/character.png"),
+      backgroundColor: PRIMARY_COLOR,
+      greeting1Style: textStyles.title20_B135,
+      greeting2Style: textStyles.title18_B135,
+    },
+    {
+      greeting1: "저희 앱 어때요?\n의견이 필요해요",
+      greeting2: "\n츄비 눌러서 의견 주기   >",
+      character: require("@/assets/images/main/character-opinion.png"),
+      backgroundColor: PRIMARY_COLOR,
+      greeting1Style: textStyles.title24_SB135,
+      greeting2Style: [textStyles.title18_SB135, { marginTop: -20 }],
+    },
+  ];
+
   // 현재 페이지에 해당하는 데이터 가져오기
   const currentData = carouselData[currentPage];
 
@@ -64,7 +67,9 @@ const MainHeader = ({}: MainHeaderProps = {}) => {
             style={styles.mainLogo}
             resizeMode="contain"
           />
-          <Text style={[styles.location, textStyles.title20_B135]}>역삼동</Text>
+          <Text style={[styles.location, textStyles.title20_B135]}>
+            {location}
+          </Text>
         </View>
 
         {/* 인사말과 캐릭터 이미지 캐러셀 (스와이프 가능) */}

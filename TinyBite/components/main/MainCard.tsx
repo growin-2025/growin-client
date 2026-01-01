@@ -1,5 +1,7 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { PartyItem } from "@/types/party";
+import { useState } from "react";
 import {
   Image,
   Pressable,
@@ -9,36 +11,107 @@ import {
   ViewStyle,
 } from "react-native";
 
-const MainCard = ({
-  onPress,
-  containerStyle,
-}: {
+interface MainCardProps {
+  item: PartyItem;
   onPress?: () => void;
   containerStyle?: ViewStyle;
-}) => (
-  <Pressable onPress={onPress} style={[styles.card, containerStyle]}>
-    <Image
-      source={require("@/assets/images/mainlist/food1.jpg")}
-      style={styles.thumbnail}
-    />
-    <View style={styles.cardBody}>
-      <View>
-        <Text style={[styles.title, textStyles.body16_B150]}>
-          후문 엽떡 나누실 분 ㅃㄹ
-        </Text>
-        <Text style={[styles.price, textStyles.body15_SB135]}>5,000원</Text>
+}
+
+const MainCard = ({ item, onPress, containerStyle }: MainCardProps) => {
+  // item이 없으면 렌더링하지 않음
+  if (!item) {
+    return null;
+  }
+
+  // 이미지 로딩 에러 상태 관리
+  const [imageError, setImageError] = useState(false);
+
+  // 가격 포맷팅 (예: 5000 -> "5,000원")
+  const formattedPrice = `${item.pricePerPerson.toLocaleString()}원`;
+
+  // 카테고리별 아이콘 매핑
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case "ALL":
+        return require("@/assets/images/main/notice-100.png");
+      case "DELIVERY":
+        return require("@/assets/images/main/category/delivery.png");
+      case "GROCERY":
+        return require("@/assets/images/main/category/grocery.png");
+      case "HOUSEHOLD":
+        return require("@/assets/images/main/category/essentials.png");
+      default:
+        return null;
+    }
+  };
+
+  const hasImage =
+    item.thumbnailImage && item.thumbnailImage.trim() !== "" && !imageError;
+  const categoryIcon = getCategoryIcon(item.category);
+
+  return (
+    <Pressable onPress={onPress} style={[styles.card, containerStyle]}>
+      <View style={styles.thumbnailContainer}>
+        {hasImage ? (
+          <>
+            <Image
+              source={{ uri: item.thumbnailImage }}
+              style={styles.thumbnail}
+              resizeMode="cover"
+              blurRadius={item.isClosed ? 2 : 0}
+              onError={() => {
+                console.warn("이미지 로딩 실패:", item.thumbnailImage);
+                setImageError(true);
+              }}
+            />
+            {item.isClosed && <View style={styles.overlay} />}
+          </>
+        ) : (
+          <View style={styles.thumbnailPlaceholder}>
+            {categoryIcon && (
+              <Image
+                source={categoryIcon}
+                style={styles.categoryIcon}
+                resizeMode="contain"
+                blurRadius={item.isClosed ? 2 : 0}
+              />
+            )}
+            {item.isClosed && <View style={styles.overlay} />}
+          </View>
+        )}
       </View>
-      <View style={styles.footerRow}>
-        <View style={styles.badge}>
-          <Text style={[styles.badgeText, textStyles.body13_SB135]}>1/4명</Text>
+      <View style={styles.cardBody}>
+        <View>
+          <Text
+            style={[styles.title, textStyles.body16_B150]}
+            numberOfLines={1}
+          >
+            {item.title}
+          </Text>
+          <Text style={[styles.price, textStyles.body15_SB135]}>
+            {formattedPrice}
+          </Text>
         </View>
-        <Text style={[styles.meta, textStyles.body13_SB135]}>
-          10KM 이내 | 10분 전
-        </Text>
+        <View style={styles.footerRow}>
+          <View style={[styles.badge, item.isClosed && styles.badgeClosed]}>
+            <Text
+              style={[
+                styles.badgeText,
+                item.isClosed && styles.badgeTextClosed,
+                textStyles.body13_SB135,
+              ]}
+            >
+              {item.isClosed ? "마감" : item.participantStatus}
+            </Text>
+          </View>
+          <Text style={[styles.meta, textStyles.body13_SB135]}>
+            {item.distance} | {item.timeAgo}
+          </Text>
+        </View>
       </View>
-    </View>
-  </Pressable>
-);
+    </Pressable>
+  );
+};
 
 export default MainCard;
 
@@ -60,9 +133,37 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 4,
   },
-  thumbnail: {
+  thumbnailContainer: {
     width: 90,
     height: 90,
+    borderRadius: 16,
+    position: "relative",
+    overflow: "hidden",
+  },
+  thumbnail: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 16,
+  },
+  thumbnailPlaceholder: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 16,
+    backgroundColor: colors.sub,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  categoryIcon: {
+    width: 60,
+    height: 60,
+  },
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
     borderRadius: 16,
   },
   cardBody: {
@@ -84,16 +185,19 @@ const styles = StyleSheet.create({
   },
   badge: {
     backgroundColor: colors.main,
-    padding: 0.5,
-    width: 51,
-    height: 26,
     borderRadius: 100,
     paddingHorizontal: 10,
     paddingVertical: 4,
     justifyContent: "center",
     alignItems: "center",
   },
+  badgeClosed: {
+    backgroundColor: colors.gray[2],
+  },
   badgeText: {
+    color: colors.white,
+  },
+  badgeTextClosed: {
     color: colors.white,
   },
   meta: {

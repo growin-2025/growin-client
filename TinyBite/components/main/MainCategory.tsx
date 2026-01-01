@@ -1,58 +1,81 @@
+import { usePartyStore } from "@/stores/partyStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { PartyCategory } from "@/types/party";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 
 const PRIMARY_COLOR = colors.main;
 const ACTIVE_BG = colors.sub;
 const INACTIVE_BG = colors.white;
 const GRAY_TEXT = colors.gray[1];
 
-const items = [
-  { label: "전체", icon: null, active: true },
+const items: { label: string; value: PartyCategory; icon: any }[] = [
+  { label: "전체", value: "ALL", icon: null },
   {
     label: "배달",
+    value: "DELIVERY",
     icon: require("@/assets/images/main/category/delivery.png"),
-    active: false,
   },
   {
     label: "장보기",
+    value: "GROCERY",
     icon: require("@/assets/images/main/category/grocery.png"),
-    active: false,
   },
   {
     label: "생필품",
+    value: "HOUSEHOLD",
     icon: require("@/assets/images/main/category/essentials.png"),
-    active: false,
   },
 ];
 
-const MainCategory = () => (
-  <ScrollView
-    horizontal
-    showsHorizontalScrollIndicator={false}
-    contentContainerStyle={styles.container}
-  >
-    {items.map(({ label, icon, active }) => (
-      <View
-        key={label}
-        style={[styles.chip, active ? styles.chipActive : styles.chipInactive]}
-      >
-        {icon ? (
-          <Image source={icon} style={styles.iconImage} resizeMode="contain" />
-        ) : null}
-        <Text
+const MainCategory = () => {
+  const partyType = usePartyStore((state) => state.partyType);
+  const setPartyType = usePartyStore((state) => state.setPartyType);
+
+  return (
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={styles.container}
+    >
+      {items.map(({ label, value, icon }) => (
+        <TouchableOpacity
+          activeOpacity={0.8}
+          key={value}
           style={[
-            styles.text,
-            textStyles.body16_SB135,
-            active ? styles.textActive : styles.textInactive,
+            styles.chip,
+
+            partyType === value ? styles.chipActive : styles.chipInactive,
           ]}
+          onPress={() => setPartyType(value)}
         >
-          {label}
-        </Text>
-      </View>
-    ))}
-  </ScrollView>
-);
+          {icon ? (
+            <Image
+              source={icon}
+              style={styles.iconImage}
+              resizeMode="contain"
+            />
+          ) : null}
+          <Text
+            style={[
+              styles.text,
+              textStyles.body16_SB135,
+              partyType === value ? styles.textActive : styles.textInactive,
+            ]}
+          >
+            {label}
+          </Text>
+        </TouchableOpacity>
+      ))}
+    </ScrollView>
+  );
+};
 
 export default MainCategory;
 
@@ -86,6 +109,8 @@ const styles = StyleSheet.create({
   },
   chipInactive: {
     backgroundColor: INACTIVE_BG,
+    borderColor: "transparent", // 투명 보더로 크기 유지
+    borderWidth: 1, // 활성 상태와 동일한 보더 두께
   },
   text: {
     textAlign: "center",
