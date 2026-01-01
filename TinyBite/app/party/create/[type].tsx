@@ -15,21 +15,21 @@ import Toast from "react-native-toast-message";
 import { useShallow } from "zustand/shallow";
 
 const PARTY_TITLES = {
-  delivery: "배달 파티 생성",
-  shopping: "장보기 파티 생성",
-  necessities: "생필품 파티 생성",
+  DELIVERY: "배달 파티 생성",
+  GROCERY: "장보기 파티 생성",
+  HOUSEHOLD: "생필품 파티 생성",
 } as const;
 
 const PARTY_CONFIG = {
-  delivery: {
+  DELIVERY: {
     showProductLink: false,
     titlePlaceholder: "예) 엽떡 매운맛 같이 드실 분",
   },
-  shopping: {
+  GROCERY: {
     showProductLink: true,
     titlePlaceholder: "예) 코스트코 베이글 나누실 분",
   },
-  necessities: {
+  HOUSEHOLD: {
     showProductLink: true,
     titlePlaceholder: "예) 코스트코 베이글 나누실 분",
   },
@@ -37,7 +37,7 @@ const PARTY_CONFIG = {
 
 export default function PartyCreateScreen() {
   const { type } = useLocalSearchParams<{
-    type: "delivery" | "shopping" | "necessities";
+    type: "DELIVERY" | "GROCERY" | "HOUSEHOLD";
   }>();
 
   const title = PARTY_TITLES[type];
