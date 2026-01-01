@@ -39,6 +39,9 @@ export type PartyListResponse = {
   totalCount: number;
 };
 
+/**
+ * 파티 파티 생성 body 타입
+ */
 export type CreatingPartyBody = {
   title: string;
   category: PartyCategory;
