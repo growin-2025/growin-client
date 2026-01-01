@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 module.exports = {
   name: "한입만",
   slug: "TinyBite",
@@ -29,7 +27,6 @@ module.exports = {
   splash: {
     backgroundColor: "#FE870F",
     image: "./assets/images/splash-icon.png",
-    imageWidth: 200,
     resizeMode: "contain",
   },
   plugins: [
