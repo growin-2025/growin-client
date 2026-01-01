@@ -180,15 +180,7 @@ export default function PartyDetailScreen() {
             {/* 구분선 */}
             <View style={styles.divider} />
             {/* 상세 정보 (위치, 인원, 금액) */}
-            <PartyDetailInfo
-              place={partyDetail?.pickupLocation.place}
-              distance={partyDetail?.distance}
-              currentParticipants={partyDetail?.currentParticipants}
-              maxParticipants={partyDetail?.maxParticipants}
-              remainingSlots={partyDetail?.remainingSlots}
-              pricePerPerson={partyDetail?.pricePerPerson}
-              totalPrice={partyDetail?.totalPrice}
-            />
+            <PartyDetailInfo partyDetail={partyDetail} />
             {/* 상품 링크 */}
             {partyDetail?.productLink && (
               <PartyDetailProductLink

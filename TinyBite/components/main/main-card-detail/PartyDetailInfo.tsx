@@ -1,5 +1,6 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { PartyDetail } from "@/types/party";
 import { Image, StyleSheet, Text, View } from "react-native";
 
 type InfoType = "location" | "group" | "money";
@@ -11,13 +12,16 @@ interface InfoItem {
 }
 
 interface PartyDetailInfoProps {
-  place?: string;
-  distance?: string;
-  currentParticipants?: number;
-  maxParticipants?: number;
-  remainingSlots?: number;
-  pricePerPerson?: number;
-  totalPrice?: number;
+  partyDetail?: Pick<
+    PartyDetail,
+    | "pickupLocation"
+    | "distance"
+    | "currentParticipants"
+    | "maxParticipants"
+    | "remainingSlots"
+    | "pricePerPerson"
+    | "totalPrice"
+  >;
 }
 
 const getIconByType = (type: InfoType) => {
@@ -33,41 +37,38 @@ const getIconByType = (type: InfoType) => {
   }
 };
 
-const PartyDetailInfo = ({
-  place,
-  distance,
-  currentParticipants,
-  maxParticipants,
-  remainingSlots,
-  pricePerPerson,
-  totalPrice,
-}: PartyDetailInfoProps) => {
+const PartyDetailInfo = ({ partyDetail }: PartyDetailInfoProps) => {
   // 정보 아이템 생성
   const items: InfoItem[] = [
     {
       type: "location",
-      title: place || "로딩 중...",
-      meta: distance ? `내 위치에서 ${distance}` : "로딩 중...",
+      title: partyDetail?.pickupLocation.place || "로딩 중...",
+      meta: partyDetail?.distance
+        ? `내 위치에서 ${partyDetail.distance}`
+        : "로딩 중...",
     },
     {
       type: "group",
       title:
-        currentParticipants !== undefined && maxParticipants !== undefined
-          ? `${currentParticipants}/${maxParticipants}명 모집 중`
+        partyDetail?.currentParticipants !== undefined &&
+        partyDetail?.maxParticipants !== undefined
+          ? `${partyDetail.currentParticipants}/${partyDetail.maxParticipants}명 모집 중`
           : "로딩 중...",
       meta:
-        remainingSlots !== undefined
-          ? remainingSlots > 0
-            ? `${remainingSlots}명 남았어요!`
+        partyDetail?.remainingSlots !== undefined
+          ? partyDetail.remainingSlots > 0
+            ? `${partyDetail.remainingSlots}명 남았어요!`
             : "모집 완료"
           : "로딩 중...",
     },
     {
       type: "money",
-      title: pricePerPerson
-        ? `1인당 ${pricePerPerson.toLocaleString()}원`
+      title: partyDetail?.pricePerPerson
+        ? `1인당 ${partyDetail.pricePerPerson.toLocaleString()}원`
         : "로딩 중...",
-      meta: totalPrice ? `총 ${totalPrice.toLocaleString()}원` : "로딩 중...",
+      meta: partyDetail?.totalPrice
+        ? `총 ${partyDetail.totalPrice.toLocaleString()}원`
+        : "로딩 중...",
     },
   ];
 
