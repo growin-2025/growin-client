@@ -11,7 +11,13 @@ interface InfoItem {
 }
 
 interface PartyDetailInfoProps {
-  items: InfoItem[];
+  place?: string;
+  distance?: string;
+  currentParticipants?: number;
+  maxParticipants?: number;
+  remainingSlots?: number;
+  pricePerPerson?: number;
+  totalPrice?: number;
 }
 
 const getIconByType = (type: InfoType) => {
@@ -27,7 +33,44 @@ const getIconByType = (type: InfoType) => {
   }
 };
 
-const PartyDetailInfo = ({ items }: PartyDetailInfoProps) => {
+const PartyDetailInfo = ({
+  place,
+  distance,
+  currentParticipants,
+  maxParticipants,
+  remainingSlots,
+  pricePerPerson,
+  totalPrice,
+}: PartyDetailInfoProps) => {
+  // 정보 아이템 생성
+  const items: InfoItem[] = [
+    {
+      type: "location",
+      title: place || "로딩 중...",
+      meta: distance ? `내 위치에서 ${distance}` : "로딩 중...",
+    },
+    {
+      type: "group",
+      title:
+        currentParticipants !== undefined && maxParticipants !== undefined
+          ? `${currentParticipants}/${maxParticipants}명 모집 중`
+          : "로딩 중...",
+      meta:
+        remainingSlots !== undefined
+          ? remainingSlots > 0
+            ? `${remainingSlots}명 남았어요!`
+            : "모집 완료"
+          : "로딩 중...",
+    },
+    {
+      type: "money",
+      title: pricePerPerson
+        ? `1인당 ${pricePerPerson.toLocaleString()}원`
+        : "로딩 중...",
+      meta: totalPrice ? `총 ${totalPrice.toLocaleString()}원` : "로딩 중...",
+    },
+  ];
+
   return (
     <>
       <View style={styles.infoRowWrapper}>
@@ -90,4 +133,3 @@ const styles = StyleSheet.create({
     color: colors.gray[1],
   },
 });
-
