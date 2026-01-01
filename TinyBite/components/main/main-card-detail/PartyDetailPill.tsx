@@ -1,8 +1,9 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { PartyCategory } from "@/types/party";
 import { Image, StyleSheet, Text, View } from "react-native";
 
-type PillType = "delivery" | "grocery" | "essentials" | "time";
+type PillType = PartyCategory | "time";
 
 interface PartyDetailPillProps {
   type: PillType;
@@ -11,11 +12,11 @@ interface PartyDetailPillProps {
 
 const getIconByType = (type: PillType) => {
   switch (type) {
-    case "delivery":
+    case "DELIVERY":
       return require("@/assets/images/main/category/delivery.png");
-    case "grocery":
+    case "GROCERY":
       return require("@/assets/images/main/category/grocery.png");
-    case "essentials":
+    case "HOUSEHOLD":
       return require("@/assets/images/main/category/essentials.png");
     case "time":
       return null;
@@ -26,11 +27,11 @@ const getIconByType = (type: PillType) => {
 
 const getLabelByType = (type: PillType): string => {
   switch (type) {
-    case "delivery":
+    case "DELIVERY":
       return "배달";
-    case "grocery":
+    case "GROCERY":
       return "장보기";
-    case "essentials":
+    case "HOUSEHOLD":
       return "생필품";
     case "time":
       return ""; // label prop 사용
@@ -75,4 +76,3 @@ const styles = StyleSheet.create({
     height: 24,
   },
 });
-
