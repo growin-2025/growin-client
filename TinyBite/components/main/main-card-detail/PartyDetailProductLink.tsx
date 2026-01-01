@@ -5,12 +5,17 @@ import { Image, StyleSheet, Text, View } from "react-native";
 interface PartyDetailProductLinkProps {
   productTitle: string;
   productUrl: string;
+  thumbnailImage?: string;
 }
 
 const PartyDetailProductLink = ({
   productTitle,
   productUrl,
+  thumbnailImage,
 }: PartyDetailProductLinkProps) => {
+  //임시 디폴트 이미지
+  const defaultThumbnail = require("@/assets/images/mainlist/detail/link-photo.png");
+
   return (
     <View style={styles.linkSection}>
       <View style={styles.linkHeader}>
@@ -25,7 +30,7 @@ const PartyDetailProductLink = ({
       </View>
       <View style={styles.linkContent}>
         <Image
-          source={require("@/assets/images/mainlist/detail/link-photo.png")}
+          source={thumbnailImage ? { uri: thumbnailImage } : defaultThumbnail}
           style={styles.linkPhoto}
           resizeMode="cover"
         />
@@ -94,4 +99,3 @@ const styles = StyleSheet.create({
     color: colors.gray[1],
   },
 });
-
