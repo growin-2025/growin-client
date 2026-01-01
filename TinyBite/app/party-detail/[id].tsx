@@ -214,9 +214,15 @@ export default function PartyDetailScreen() {
             style={[styles.cta, partyDetail?.isClosed && styles.ctaDisabled]}
             disabled={partyDetail?.isClosed}
           >
-            <Text style={[styles.ctaText, textStyles.title18_SB135]}>
+            <Text
+              style={[
+                styles.ctaText,
+                partyDetail?.isClosed && styles.ctaDisabledText,
+                textStyles.title18_SB135,
+              ]}
+            >
               {partyDetail?.isClosed
-                ? "마감된 파티입니다"
+                ? "마감된 파티예요"
                 : partyDetail
                 ? `${partyDetail.pricePerPerson.toLocaleString()}원으로 참여하기`
                 : "로딩 중..."}
@@ -326,7 +332,10 @@ const styles = StyleSheet.create({
     color: colors.white,
   },
   ctaDisabled: {
-    backgroundColor: colors.gray[3],
+    backgroundColor: colors.gray[2],
+  },
+  ctaDisabledText: {
+    color: colors.white,
   },
   loadingContainer: {
     flex: 1,
