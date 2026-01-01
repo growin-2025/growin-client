@@ -11,29 +11,29 @@ import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import {
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  useWindowDimensions,
-  View,
+    Image,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    useWindowDimensions,
+    View,
 } from "react-native";
 import Animated, {
-  runOnJS,
-  useAnimatedScrollHandler,
-  useSharedValue,
+    runOnJS,
+    useAnimatedScrollHandler,
+    useSharedValue,
 } from "react-native-reanimated";
 import {
-  SafeAreaView,
-  useSafeAreaInsets,
+    SafeAreaView,
+    useSafeAreaInsets,
 } from "react-native-safe-area-context";
 
 /**
- * 메인 카드 상세 화면
+ * 파티 상세 화면
  * - 이미지 캐러셀과 스크롤 가능한 콘텐츠를 동시에 지원
  * - 스크롤 시 헤더 배경이 나타나고 이미지가 확대되는 효과
  */
-export default function MainCardDetailScreen() {
+export default function PartyDetailScreen() {
   const router = useRouter();
   const { width: SCREEN_WIDTH } = useWindowDimensions(); // 창 크기 변경 시 자동 업데이트
   const insets = useSafeAreaInsets(); // SafeArea insets - 이미지를 스크롤뷰에 넣게 되어 부득이하게 추가 후 백버튼 높이 조절
