@@ -218,6 +218,8 @@ export default function PartyDetailScreen() {
             >
               {partyDetail?.isClosed
                 ? "마감된 파티예요"
+                : partyDetail?.isParticipating
+                ? "채팅방으로 이동"
                 : partyDetail
                 ? `${partyDetail.pricePerPerson.toLocaleString()}원으로 참여하기`
                 : "로딩 중..."}
