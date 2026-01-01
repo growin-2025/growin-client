@@ -24,6 +24,12 @@ module.exports = {
     output: "static",
     favicon: "./assets/images/favicon.png",
   },
+  splash: {
+    backgroundColor: "#FE870F",
+    image: "./assets/images/splash-icon.png",
+    imageWidth: 200,
+    resizeMode: "contain",
+  },
   plugins: [
     "expo-router",
     "expo-font",

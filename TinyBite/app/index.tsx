@@ -1,19 +1,8 @@
-import { colors } from "@/styles/colors";
 import { useFonts } from "expo-font";
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
-import { Image, StyleSheet } from "react-native";
-import Animated, {
-  Easing,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated";
+import { useEffect } from "react";
 
 export default function Index() {
-  const [show, setShow] = useState(true);
-  const opacity = useSharedValue(1);
-
   const [loaded, error] = useFonts({
     "Pretendard-Black": require("@/assets/fonts/Pretendard-Black.otf"),
     "Pretendard-Bold": require("@/assets/fonts/Pretendard-Bold.otf"),
@@ -28,53 +17,9 @@ export default function Index() {
 
   useEffect(() => {
     if (loaded && !error) {
-      let innerTimeout: NodeJS.Timeout | number | undefined;
-      const t = setTimeout(() => {
-        opacity.value = withTiming(0, {
-          duration: 600,
-          easing: Easing.out(Easing.cubic),
-        });
-
-        innerTimeout = setTimeout(() => {
-          setShow(false);
-          router.replace("./(auth)/login/login");
-        }, 600);
-      }, 3000);
-
-      return () => {
-        clearTimeout(t);
-        if (innerTimeout !== undefined) {
-          clearTimeout(innerTimeout);
-        }
-      };
+      router.replace("./(auth)/login/login");
     }
-  }, [loaded, error, opacity]);
+  }, [loaded, error]);
 
-  const aStyle = useAnimatedStyle(() => ({
-    opacity: opacity.value,
-  }));
-
-  if (!show) return null;
-
-  return (
-    <Animated.View style={[styles.container, aStyle]}>
-      <Image
-        source={require("@/assets/images/splash.png")}
-        style={styles.image}
-        resizeMode="contain"
-      />
-    </Animated.View>
-  );
+  return;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.main,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  image: {
-    width: "100%",
-  },
-});
