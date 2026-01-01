@@ -47,9 +47,7 @@ export type CreatingPartyBody = {
   pickupLocation: {
     place: string;
   };
-  latitude: number;
-  longitude: number;
-  images: string[];
+  images: string[] | null;
   productLink: string | null;
-  description: string;
+  description: string | null;
 };
