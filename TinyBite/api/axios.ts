@@ -16,7 +16,8 @@ publicAxios.interceptors.request.use(
       config.baseURL,
       config.method?.toUpperCase(),
       config.url,
-      config.data
+      config.data,
+      config.params
     );
     return config;
   },
@@ -44,7 +45,8 @@ privateAxios.interceptors.request.use(
       config.method?.toUpperCase(),
       config.headers,
       config.url,
-      config.data
+      config.data,
+      config.params
     );
     return config;
   },
