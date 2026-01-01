@@ -1,4 +1,9 @@
-import { PartyListParams, PartyListResponse } from "@/types/party";
+import {
+  PartyDetail,
+  PartyDetailParams,
+  PartyListParams,
+  PartyListResponse,
+} from "@/types/party";
 import { privateAxios } from "./axios";
 import { ENDPOINT } from "./urls";
 
@@ -37,5 +42,31 @@ export const getPartyList = async (
       hasNext: false,
       totalCount: 0,
     };
+  }
+};
+
+/**
+ * 파티 상세 조회 API
+ * @param params 파티 상세 조회 파라미터 (partyId, latitude, longitude)
+ * @returns 파티 상세 정보
+ */
+export const getPartyDetail = async (
+  params: PartyDetailParams
+): Promise<PartyDetail> => {
+  try {
+    const res = await privateAxios.get(
+      ENDPOINT.PARTY.GET_PARTY_DETAIL(params.partyId),
+      {
+        params: {
+          latitude: params.latitude,
+          longitude: params.longitude,
+        },
+      }
+    );
+
+    return res.data;
+  } catch (error) {
+    console.error("파티 상세 조회 실패:", error);
+    throw error;
   }
 };
