@@ -4,7 +4,7 @@ import { Image, StyleSheet, Text, View } from "react-native";
 
 type PillType = "delivery" | "grocery" | "essentials" | "time";
 
-interface MainCardDetailPillProps {
+interface PartyDetailPillProps {
   type: PillType;
   label?: string; // time 타입일 때만 사용
 }
@@ -39,7 +39,7 @@ const getLabelByType = (type: PillType): string => {
   }
 };
 
-const MainCardDetailPill = ({ type, label }: MainCardDetailPillProps) => {
+const PartyDetailPill = ({ type, label }: PartyDetailPillProps) => {
   const icon = getIconByType(type);
   const displayLabel = type === "time" ? label : getLabelByType(type);
 
@@ -55,7 +55,7 @@ const MainCardDetailPill = ({ type, label }: MainCardDetailPillProps) => {
   );
 };
 
-export default MainCardDetailPill;
+export default PartyDetailPill;
 
 const styles = StyleSheet.create({
   pill: {
@@ -75,3 +75,4 @@ const styles = StyleSheet.create({
     height: 24,
   },
 });
+

@@ -2,11 +2,11 @@ import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { Image, StyleSheet, Text, View } from "react-native";
 
-interface MainCardDetailHostNoteProps {
+interface PartyDetailHostNoteProps {
   body: string;
 }
 
-const MainCardDetailHostNote = ({ body }: MainCardDetailHostNoteProps) => {
+const PartyDetailHostNote = ({ body }: PartyDetailHostNoteProps) => {
   return (
     <View style={styles.noteBox}>
       <View style={styles.noteHeader}>
@@ -24,7 +24,7 @@ const MainCardDetailHostNote = ({ body }: MainCardDetailHostNoteProps) => {
   );
 };
 
-export default MainCardDetailHostNote;
+export default PartyDetailHostNote;
 
 const styles = StyleSheet.create({
   noteBox: {
@@ -56,3 +56,4 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
 });
+

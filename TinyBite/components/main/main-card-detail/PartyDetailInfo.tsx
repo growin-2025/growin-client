@@ -10,7 +10,7 @@ interface InfoItem {
   meta: string;
 }
 
-interface MainCardDetailInfoProps {
+interface PartyDetailInfoProps {
   items: InfoItem[];
 }
 
@@ -27,7 +27,7 @@ const getIconByType = (type: InfoType) => {
   }
 };
 
-const MainCardDetailInfo = ({ items }: MainCardDetailInfoProps) => {
+const PartyDetailInfo = ({ items }: PartyDetailInfoProps) => {
   return (
     <>
       <View style={styles.infoRowWrapper}>
@@ -55,7 +55,7 @@ const MainCardDetailInfo = ({ items }: MainCardDetailInfoProps) => {
   );
 };
 
-export default MainCardDetailInfo;
+export default PartyDetailInfo;
 
 const styles = StyleSheet.create({
   infoRowWrapper: {
@@ -90,3 +90,4 @@ const styles = StyleSheet.create({
     color: colors.gray[1],
   },
 });
+

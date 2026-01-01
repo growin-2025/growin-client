@@ -21,23 +21,23 @@ const CAROUSEL_HEIGHT = 300;
 // 이미지 확대 기준점 Y 좌표 (상단에서부터의 거리)
 const ZOOM_CENTER_Y = 150;
 
-interface MainCardDetailImageCarouselProps {
+interface PartyDetailImageCarouselProps {
   images: ImageSourcePropType[]; // 이미지 배열
   scrollY: SharedValue<number>; // 스크롤 위치 (react-native-reanimated용)
   screenWidth: number; // 화면 너비
 }
 
 /**
- * 메인 카드 상세 화면의 이미지 캐러셀 컴포넌트
+ * 파티 상세 화면의 이미지 캐러셀 컴포넌트
  * - 이미지 캐러셀과 확대 애니메이션 기능 제공
  * - 스크롤을 위로 당길 때(bounce) 이미지가 확대되는 효과
  * - 페이지네이션 표시
  */
-const MainCardDetailImageCarousel = ({
+const PartyDetailImageCarousel = ({
   images,
   scrollY,
   screenWidth,
-}: MainCardDetailImageCarouselProps) => {
+}: PartyDetailImageCarouselProps) => {
   const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 인덱스
   const [imageViewerVisible, setImageViewerVisible] = useState(false); // 이미지 뷰어 표시 여부
   const [imageViewerIndex, setImageViewerIndex] = useState(0); // 이미지 뷰어에서 보여줄 이미지 인덱스
@@ -141,7 +141,7 @@ const MainCardDetailImageCarousel = ({
   );
 };
 
-export default MainCardDetailImageCarousel;
+export default PartyDetailImageCarousel;
 
 const styles = StyleSheet.create({
   // 이미지 영역 스타일
@@ -193,3 +193,4 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
   },
 });
+

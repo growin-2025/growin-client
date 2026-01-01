@@ -2,15 +2,15 @@ import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { Image, StyleSheet, Text, View } from "react-native";
 
-interface MainCardDetailProductLinkProps {
+interface PartyDetailProductLinkProps {
   productTitle: string;
   productUrl: string;
 }
 
-const MainCardDetailProductLink = ({
+const PartyDetailProductLink = ({
   productTitle,
   productUrl,
-}: MainCardDetailProductLinkProps) => {
+}: PartyDetailProductLinkProps) => {
   return (
     <View style={styles.linkSection}>
       <View style={styles.linkHeader}>
@@ -42,7 +42,7 @@ const MainCardDetailProductLink = ({
   );
 };
 
-export default MainCardDetailProductLink;
+export default PartyDetailProductLink;
 
 const styles = StyleSheet.create({
   linkSection: {
@@ -94,3 +94,4 @@ const styles = StyleSheet.create({
     color: colors.gray[1],
   },
 });
+

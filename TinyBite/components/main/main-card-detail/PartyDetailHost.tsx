@@ -2,18 +2,18 @@ import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { Image, StyleSheet, Text, View } from "react-native";
 
-interface MainCardDetailHostProps {
+interface PartyDetailHostProps {
   avatar: any;
   //url: string;
   name: string;
   location: string;
 }
 
-const MainCardDetailHost = ({
+const PartyDetailHost = ({
   avatar,
   name,
   location,
-}: MainCardDetailHostProps) => {
+}: PartyDetailHostProps) => {
   return (
     <View style={styles.rowBetween}>
       <View style={styles.hostRow}>
@@ -41,7 +41,7 @@ const MainCardDetailHost = ({
   );
 };
 
-export default MainCardDetailHost;
+export default PartyDetailHost;
 
 const styles = StyleSheet.create({
   rowBetween: {
@@ -75,3 +75,4 @@ const styles = StyleSheet.create({
     color: colors.gray[1],
   },
 });
+

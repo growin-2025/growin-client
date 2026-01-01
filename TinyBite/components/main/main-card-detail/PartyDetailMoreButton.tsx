@@ -5,22 +5,22 @@ import React, { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-interface MainCardDetailMoreButtonProps {
+interface PartyDetailMoreButtonProps {
   marginTop: number; // SafeArea insets에 따른 marginTop
   onEdit?: () => void; // 수정 버튼 클릭 시 호출
   onDelete?: () => Promise<boolean> | boolean | void; // 삭제 버튼 클릭 시 호출 (성공 시 true, 실패 시 false 반환)
 }
 
 /**
- * 메인 카드 상세 화면의 더보기 버튼 컴포넌트
+ * 파티 상세 화면의 더보기 버튼 컴포넌트
  * - 더보기 버튼과 바텀 시트 메뉴를 포함
  * - 수정/삭제 옵션 제공
  */
-const MainCardDetailMoreButton = ({
+const PartyDetailMoreButton = ({
   marginTop,
   onEdit,
   onDelete,
-}: MainCardDetailMoreButtonProps) => {
+}: PartyDetailMoreButtonProps) => {
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false); // 바텀 시트 표시 여부
   const [deleteModalVisible, setDeleteModalVisible] = useState(false); // 삭제 확인 모달 표시 여부
   const [deleteFailedModalVisible, setDeleteFailedModalVisible] =
@@ -120,7 +120,7 @@ const MainCardDetailMoreButton = ({
   );
 };
 
-export default MainCardDetailMoreButton;
+export default PartyDetailMoreButton;
 
 const styles = StyleSheet.create({
   // 더보기 버튼 컨테이너 (오른쪽)
@@ -196,3 +196,4 @@ const styles = StyleSheet.create({
     color: colors.red[1],
   },
 });
+

@@ -1,31 +1,31 @@
-import MainCardDetailHost from "@/components/main/main-card-detail/MainCardDetailHost";
-import MainCardDetailHostNote from "@/components/main/main-card-detail/MainCardDetailHostNote";
-import MainCardDetailImageCarousel from "@/components/main/main-card-detail/MainCardDetailImageCarousel";
-import MainCardDetailInfo from "@/components/main/main-card-detail/MainCardDetailInfo";
-import MainCardDetailMoreButton from "@/components/main/main-card-detail/MainCardDetailMoreButton";
-import MainCardDetailPill from "@/components/main/main-card-detail/MainCardDetailPill";
-import MainCardDetailProductLink from "@/components/main/main-card-detail/MainCardDetailProductLink";
+import PartyDetailHost from "@/components/main/main-card-detail/PartyDetailHost";
+import PartyDetailHostNote from "@/components/main/main-card-detail/PartyDetailHostNote";
+import PartyDetailImageCarousel from "@/components/main/main-card-detail/PartyDetailImageCarousel";
+import PartyDetailInfo from "@/components/main/main-card-detail/PartyDetailInfo";
+import PartyDetailMoreButton from "@/components/main/main-card-detail/PartyDetailMoreButton";
+import PartyDetailPill from "@/components/main/main-card-detail/PartyDetailPill";
+import PartyDetailProductLink from "@/components/main/main-card-detail/PartyDetailProductLink";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import {
-    Image,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    useWindowDimensions,
-    View,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
 } from "react-native";
 import Animated, {
-    runOnJS,
-    useAnimatedScrollHandler,
-    useSharedValue,
+  runOnJS,
+  useAnimatedScrollHandler,
+  useSharedValue,
 } from "react-native-reanimated";
 import {
-    SafeAreaView,
-    useSafeAreaInsets,
+  SafeAreaView,
+  useSafeAreaInsets,
 } from "react-native-safe-area-context";
 
 /**
@@ -76,7 +76,7 @@ export default function PartyDetailScreen() {
           />
         </TouchableOpacity>
         {/* 더보기 버튼 (오른쪽) - 헤더 위에 고정 */}
-        <MainCardDetailMoreButton
+        <PartyDetailMoreButton
           marginTop={insets.top + 2}
           onEdit={() => {
             // 수정 기능 구현
@@ -103,7 +103,7 @@ export default function PartyDetailScreen() {
           scrollEventThrottle={16} // 60fps를 위한 스크롤 이벤트 제한
         >
           {/* 이미지 캐러셀 */}
-          <MainCardDetailImageCarousel
+          <PartyDetailImageCarousel
             images={images}
             scrollY={scrollY}
             screenWidth={SCREEN_WIDTH}
@@ -115,11 +115,11 @@ export default function PartyDetailScreen() {
             </Text>
             {/* 배달/시간 정보 Pill */}
             <View style={styles.pillsRow}>
-              <MainCardDetailPill type="delivery" />
-              <MainCardDetailPill type="time" label="10분전" />
+              <PartyDetailPill type="delivery" />
+              <PartyDetailPill type="time" label="10분전" />
             </View>
             {/* 호스트 정보 */}
-            <MainCardDetailHost
+            <PartyDetailHost
               avatar={require("@/assets/images/mainlist/detail/default-host-profile.png")}
               name="엽떡조아"
               location="서울시 강남구 역삼동"
@@ -127,7 +127,7 @@ export default function PartyDetailScreen() {
             {/* 구분선 */}
             <View style={styles.divider} />
             {/* 상세 정보 (위치, 인원, 금액) */}
-            <MainCardDetailInfo
+            <PartyDetailInfo
               items={[
                 {
                   type: "location",
@@ -147,12 +147,12 @@ export default function PartyDetailScreen() {
               ]}
             />
             {/* 상품 링크 */}
-            <MainCardDetailProductLink
+            <PartyDetailProductLink
               productTitle="코스트코 베이글 & 크림치즈"
               productUrl="https://www.costco.co.kr/"
             />
             {/* 호스트 메모 */}
-            <MainCardDetailHostNote body="배달 팁 나누실 분 구해요! 엽떡 매운맛 시킬 예정입니다. 쿨피스는 제가 쏠게요." />
+            <PartyDetailHostNote body="배달 팁 나누실 분 구해요! 엽떡 매운맛 시킬 예정입니다. 쿨피스는 제가 쏠게요." />
           </View>
         </Animated.ScrollView>
         {/* 하단 고정 CTA 버튼 (SafeArea 포함) */}
