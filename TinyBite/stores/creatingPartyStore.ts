@@ -3,6 +3,8 @@ import { create } from "zustand";
 export type Photo = {
   id: number;
   imageUri: string;
+  mimeType: string;
+  fileName: string;
 };
 
 export interface CreatingPartyState {
@@ -15,7 +17,7 @@ export interface CreatingPartyState {
   pickUpLocation: string;
   detailedDescription: string;
   productLink: string;
-  addPhoto: (uri: string) => void;
+  addPhoto: (uri: string, mimeType: string, fileName: string) => void;
   deletePhoto: (id: number) => void;
   setRepresentativePhoto: (id: number) => void;
   setPartyTitle: (title: string) => void;
@@ -37,12 +39,14 @@ export const useCreatingPartyStore = create<CreatingPartyState>((set, get) => ({
   pickUpLocation: "",
   detailedDescription: "",
   productLink: "",
-  addPhoto: (uri: string) => {
+  addPhoto: (uri: string, mimeType: string, fileName: string) => {
     set((state) => {
       const nextSeq = state.seq + 1;
       const newPhoto: Photo = {
         id: nextSeq,
         imageUri: uri,
+        mimeType: mimeType,
+        fileName: fileName,
       };
       const newRepresentativePhoto =
         state.photos.length === 0 ? newPhoto.id : state.representativePhoto;

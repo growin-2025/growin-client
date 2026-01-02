@@ -1,4 +1,10 @@
-import { PartyListParams, PartyListResponse } from "@/types/party";
+import { Photo } from "@/stores/creatingPartyStore";
+import {
+  CreatingPartyBody,
+  PartyListParams,
+  PartyListResponse,
+} from "@/types/party";
+import { Platform } from "react-native";
 import { privateAxios } from "./axios";
 import { ENDPOINT } from "./urls";
 
@@ -38,4 +44,42 @@ export const getPartyList = async (
       totalCount: 0,
     };
   }
+};
+
+/**
+ * 파티 생성 API
+ * @param newParty 파티를 생성하는데 필요한 값
+ */
+export const postCreateParty = async (newParty: CreatingPartyBody) => {
+  await privateAxios.post(ENDPOINT.PARTY.CREATE_PARTIES, newParty);
+};
+
+/**
+ * 이미지 업로드 API
+ * @param photoList 기기에서 선택된 이미지 경로 리스트
+ * @returns 업로드 된 이미지 url 리스트
+ */
+export const postFile = async (photoList: Photo[]) => {
+  const uploadPromises = photoList.map(async (image) => {
+    const formData = new FormData();
+    formData.append("file", {
+      name: image.fileName,
+      type: image.mimeType,
+      uri:
+        Platform.OS === "ios"
+          ? image.imageUri.replace("file://", "")
+          : image.imageUri,
+    } as any);
+
+    const res = await privateAxios.post(ENDPOINT.FILE.UPLOAD_FILE, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    return res.data.data;
+  });
+
+  const results = await Promise.all(uploadPromises);
+  return results;
 };

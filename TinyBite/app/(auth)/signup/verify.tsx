@@ -6,7 +6,7 @@ import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { ApiError } from "@/types/api";
 import { formatSeconds } from "@/utils/formatSeconds";
-import { getErrorMessage } from "@/utils/getErrorMessage ";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "expo-router";

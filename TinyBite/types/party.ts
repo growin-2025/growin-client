@@ -38,3 +38,19 @@ export type PartyListResponse = {
   hasNext: boolean;
   totalCount: number;
 };
+
+/**
+ * 파티 생성 body 타입
+ */
+export type CreatingPartyBody = {
+  title: string;
+  category: PartyCategory;
+  totalPrice: number;
+  maxParticipants: number;
+  pickupLocation: {
+    place: string;
+  };
+  images?: string[];
+  productLink?: string;
+  description?: string;
+};

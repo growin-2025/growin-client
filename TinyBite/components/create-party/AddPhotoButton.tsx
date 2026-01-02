@@ -36,7 +36,12 @@ const AddPhotoButton = () => {
     });
 
     if (!result.canceled) {
-      addPhoto(result.assets[0].uri);
+      const asset = result.assets[0];
+      addPhoto(
+        asset.uri,
+        asset.mimeType || "image/jpeg",
+        asset.fileName || "photo"
+      );
     }
   };
 
