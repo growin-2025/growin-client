@@ -35,3 +35,15 @@ export const updateLocation = async (coords: {
   });
   console.log("updateLocation API 응답:", res.data);
 };
+
+/**
+ * 회원 탈퇴 API
+ */
+export const deleteUserMe = async (): Promise<void> => {
+  console.log("deleteUserMe API 호출:", {
+    url: ENDPOINT.USER.ME,
+    method: "DELETE",
+  });
+  const res = await privateAxios.delete(ENDPOINT.USER.ME);
+  console.log("deleteUserMe API 응답:", res.data);
+};
