@@ -2,15 +2,17 @@ import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { Image, StyleSheet, Text, View } from "react-native";
 
-interface MainCardDetailProductLinkProps {
-  productTitle: string;
+interface PartyDetailProductLinkProps {
+  productTitle?: string | null;
   productUrl: string;
+  thumbnailImage?: string | null;
 }
 
-const MainCardDetailProductLink = ({
+const PartyDetailProductLink = ({
   productTitle,
   productUrl,
-}: MainCardDetailProductLinkProps) => {
+  thumbnailImage,
+}: PartyDetailProductLinkProps) => {
   return (
     <View style={styles.linkSection}>
       <View style={styles.linkHeader}>
@@ -24,15 +26,19 @@ const MainCardDetailProductLink = ({
         </Text>
       </View>
       <View style={styles.linkContent}>
-        <Image
-          source={require("@/assets/images/mainlist/detail/link-photo.png")}
-          style={styles.linkPhoto}
-          resizeMode="cover"
-        />
+        {thumbnailImage && (
+          <Image
+            source={{ uri: thumbnailImage }}
+            style={styles.linkPhoto}
+            resizeMode="cover"
+          />
+        )}
         <View style={styles.linkTexts}>
-          <Text style={[styles.linkTitle, textStyles.body13_SB150]}>
-            {productTitle}
-          </Text>
+          {productTitle?.trim() && (
+            <Text style={[styles.linkTitle, textStyles.body13_SB150]}>
+              {productTitle}
+            </Text>
+          )}
           <Text style={[styles.linkUrl, textStyles.body13_M135]}>
             {productUrl}
           </Text>
@@ -42,14 +48,13 @@ const MainCardDetailProductLink = ({
   );
 };
 
-export default MainCardDetailProductLink;
+export default PartyDetailProductLink;
 
 const styles = StyleSheet.create({
   linkSection: {
     marginTop: 16,
     alignSelf: "center",
     width: "100%",
-    height: 110,
     backgroundColor: colors.background,
     borderRadius: 16,
     padding: 12,
@@ -73,9 +78,10 @@ const styles = StyleSheet.create({
   linkIcon: {
     width: 20,
     height: 20,
+    tintColor: colors.gray[2],
   },
   linkLabel: {
-    color: colors.black,
+    color: colors.gray[1],
   },
   linkPhoto: {
     width: 60,
@@ -91,6 +97,6 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
   linkUrl: {
-    color: colors.gray[1],
+    color: colors.black,
   },
 });

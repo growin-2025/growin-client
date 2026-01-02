@@ -2,11 +2,13 @@ import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { Image, StyleSheet, Text, View } from "react-native";
 
-interface MainCardDetailHostNoteProps {
-  body: string;
+interface PartyDetailHostNoteProps {
+  body?: string | null;
 }
 
-const MainCardDetailHostNote = ({ body }: MainCardDetailHostNoteProps) => {
+const PartyDetailHostNote = ({ body }: PartyDetailHostNoteProps) => {
+  const displayText = body?.trim() || "호스트의 한마디가 없어요";
+
   return (
     <View style={styles.noteBox}>
       <View style={styles.noteHeader}>
@@ -19,12 +21,14 @@ const MainCardDetailHostNote = ({ body }: MainCardDetailHostNoteProps) => {
           호스트의 한마디
         </Text>
       </View>
-      <Text style={[styles.noteBody, textStyles.body13_SB150]}>{body}</Text>
+      <Text style={[styles.noteBody, textStyles.body13_SB150]}>
+        {displayText}
+      </Text>
     </View>
   );
 };
 
-export default MainCardDetailHostNote;
+export default PartyDetailHostNote;
 
 const styles = StyleSheet.create({
   noteBox: {

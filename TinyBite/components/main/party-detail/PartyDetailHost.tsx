@@ -2,24 +2,24 @@ import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { Image, StyleSheet, Text, View } from "react-native";
 
-interface MainCardDetailHostProps {
-  avatar: any;
-  //url: string;
+interface PartyDetailHostProps {
+  profileImage?: string;
   name: string;
   location: string;
 }
 
-const MainCardDetailHost = ({
-  avatar,
+const PartyDetailHost = ({
+  profileImage,
   name,
   location,
-}: MainCardDetailHostProps) => {
+}: PartyDetailHostProps) => {
+  const defaultAvatar = require("@/assets/images/mainlist/detail/default-host-profile.png");
+
   return (
     <View style={styles.rowBetween}>
       <View style={styles.hostRow}>
         <Image
-          //source={{ uri: url }}
-          source={require("@/assets/images/mainlist/detail/default-host-profile.png")}
+          source={profileImage ? { uri: profileImage } : defaultAvatar}
           style={styles.hostAvatarImage}
           resizeMode="cover"
         />
@@ -41,7 +41,7 @@ const MainCardDetailHost = ({
   );
 };
 
-export default MainCardDetailHost;
+export default PartyDetailHost;
 
 const styles = StyleSheet.create({
   rowBetween: {

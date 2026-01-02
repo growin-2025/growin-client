@@ -1,6 +1,8 @@
 import { Photo } from "@/stores/creatingPartyStore";
 import {
   CreatingPartyBody,
+  PartyDetail,
+  PartyDetailParams,
   PartyListParams,
   PartyListResponse,
 } from "@/types/party";
@@ -82,4 +84,44 @@ export const postFile = async (photoList: Photo[]) => {
 
   const results = await Promise.all(uploadPromises);
   return results;
+};
+
+/**
+ * 파티 상세 조회 API
+ * @param params 파티 상세 조회 파라미터 (partyId, latitude, longitude)
+ * @returns 파티 상세 정보
+ */
+export const getPartyDetail = async (
+  params: PartyDetailParams
+): Promise<PartyDetail> => {
+  try {
+    const res = await privateAxios.get(ENDPOINT.PARTY.DETAIL(params.partyId), {
+      params: {
+        latitude: params.latitude,
+        longitude: params.longitude,
+      },
+    });
+
+    return res.data;
+  } catch (error) {
+    console.error("파티 상세 조회 실패:", error);
+    throw error;
+  }
+};
+
+/**
+ * 파티 삭제 API
+ * @param partyId 삭제할 파티 ID
+ * @returns 삭제 성공 여부
+ */
+export const deleteParty = async (partyId: number): Promise<void> => {
+  try {
+    await privateAxios.delete(ENDPOINT.PARTY.DETAIL(partyId));
+  } catch (error: any) {
+    // 400(이미 참여자가 있음 / 권한 없음) 상태 코드인 경우 에러 로그 출력하지 않음
+    if (error?.response?.status !== 400) {
+      console.error("파티 삭제 실패:", error);
+    }
+    throw error;
+  }
 };

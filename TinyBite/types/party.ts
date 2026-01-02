@@ -54,3 +54,62 @@ export type CreatingPartyBody = {
   productLink?: string;
   description?: string;
 };
+
+/**
+ * 호스트 정보 타입
+ */
+export type HostInfo = {
+  userId: number;
+  nickname: string;
+  profileImage: string;
+};
+
+/**
+ * 픽업 위치 정보 타입
+ */
+export type PickupLocation = {
+  place: string;
+  pickupLatitude: number;
+  pickupLongitude: number;
+};
+
+/**
+ * 상품 링크 정보 타입
+ */
+export type ProductLink = {
+  thumbnailImage: string;
+  productName: string;
+  url: string;
+};
+
+/**
+ * 파티 상세 조회 요청 파라미터 타입
+ */
+export type PartyDetailParams = {
+  partyId: number;
+  latitude: string;
+  longitude: string;
+};
+
+/**
+ * 파티 상세 정보 타입
+ */
+export type PartyDetail = {
+  partyId: number;
+  title: string;
+  category: PartyCategory;
+  timeAgo: string;
+  host: HostInfo;
+  pickupLocation: PickupLocation;
+  distance: string;
+  currentParticipants: number;
+  maxParticipants: number;
+  remainingSlots: number;
+  pricePerPerson: number;
+  totalPrice: number;
+  productLink: ProductLink | null;
+  description: string | null;
+  images: string[];
+  isClosed: boolean;
+  isParticipating: boolean;
+};

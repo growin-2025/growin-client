@@ -41,8 +41,12 @@ const PartyList = () => {
   const renderItem = ({ item }: { item: PartyItem }) => (
     <MainCard
       item={item}
-      onPress={() => router.push("/main-card-detail")}
-      //TODO: 상세 페이지로 이동 시 파티 ID 전달
+      onPress={() =>
+        router.push({
+          pathname: "/party-detail/[id]" as any,
+          params: { id: item.partyId.toString() },
+        })
+      }
       containerStyle={styles.cardItem}
     />
   );

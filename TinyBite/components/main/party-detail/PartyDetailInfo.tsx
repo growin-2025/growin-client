@@ -1,5 +1,6 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { PartyDetail } from "@/types/party";
 import { Image, StyleSheet, Text, View } from "react-native";
 
 type InfoType = "location" | "group" | "money";
@@ -10,8 +11,17 @@ interface InfoItem {
   meta: string;
 }
 
-interface MainCardDetailInfoProps {
-  items: InfoItem[];
+interface PartyDetailInfoProps {
+  partyDetail?: Pick<
+    PartyDetail,
+    | "pickupLocation"
+    | "distance"
+    | "currentParticipants"
+    | "maxParticipants"
+    | "remainingSlots"
+    | "pricePerPerson"
+    | "totalPrice"
+  >;
 }
 
 const getIconByType = (type: InfoType) => {
@@ -27,7 +37,41 @@ const getIconByType = (type: InfoType) => {
   }
 };
 
-const MainCardDetailInfo = ({ items }: MainCardDetailInfoProps) => {
+const PartyDetailInfo = ({ partyDetail }: PartyDetailInfoProps) => {
+  // 정보 아이템 생성
+  const items: InfoItem[] = [
+    {
+      type: "location",
+      title: partyDetail?.pickupLocation.place || "로딩 중...",
+      meta: partyDetail?.distance
+        ? `내 위치에서 ${partyDetail.distance}`
+        : "여기에서 픽업해요!",
+    },
+    {
+      type: "group",
+      title:
+        partyDetail?.currentParticipants !== undefined &&
+        partyDetail?.maxParticipants !== undefined
+          ? `${partyDetail.currentParticipants}/${partyDetail.maxParticipants}명 모집 중`
+          : "로딩 중...",
+      meta:
+        partyDetail?.remainingSlots !== undefined
+          ? partyDetail.remainingSlots > 0
+            ? `${partyDetail.remainingSlots}명 남았어요!`
+            : "모집 완료"
+          : "로딩 중...",
+    },
+    {
+      type: "money",
+      title: partyDetail?.pricePerPerson
+        ? `1인당 ${partyDetail.pricePerPerson.toLocaleString()}원`
+        : "로딩 중...",
+      meta: partyDetail?.totalPrice
+        ? `총 ${partyDetail.totalPrice.toLocaleString()}원`
+        : "로딩 중...",
+    },
+  ];
+
   return (
     <>
       <View style={styles.infoRowWrapper}>
@@ -55,7 +99,7 @@ const MainCardDetailInfo = ({ items }: MainCardDetailInfoProps) => {
   );
 };
 
-export default MainCardDetailInfo;
+export default PartyDetailInfo;
 
 const styles = StyleSheet.create({
   infoRowWrapper: {
