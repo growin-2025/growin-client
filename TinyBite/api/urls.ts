@@ -19,6 +19,6 @@ export const ENDPOINT = {
   },
   PARTY: {
     GET_PARTIES: "/api/parties",
-    GET_PARTY_DETAIL: (partyId: number) => `/api/parties/${partyId}`,
+    DETAIL: (partyId: number) => `/api/parties/${partyId}`,
   },
 };
