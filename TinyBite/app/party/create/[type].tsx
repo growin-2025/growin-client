@@ -10,7 +10,7 @@ import { Photo, useCreatingPartyStore } from "@/stores/creatingPartyStore";
 import { colors } from "@/styles/colors";
 import { ApiError } from "@/types/api";
 import { CreatingPartyBody } from "@/types/party";
-import { getErrorMessage } from "@/utils/getErrorMessage ";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { router, useLocalSearchParams } from "expo-router";
