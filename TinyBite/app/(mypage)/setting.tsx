@@ -5,7 +5,7 @@ import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { ApiError } from "@/types/api";
 import { getErrorMessage } from "@/utils/getErrorMessage ";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -14,6 +14,7 @@ import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useShallow } from "zustand/shallow";
 
+import { getUserMe } from "@/api/userApi";
 export default function SettingScreen() {
   const router = useRouter();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -23,6 +24,11 @@ export default function SettingScreen() {
       logout: state.logout,
     }))
   );
+
+  const { data: userMe } = useQuery({
+    queryKey: ["getUserMe"],
+    queryFn: getUserMe,
+  });
 
   const logoutMutation = useMutation({
     mutationFn: postLogout,
@@ -96,7 +102,7 @@ export default function SettingScreen() {
           </View>
           <View style={styles.settingItemRight}>
             <Text style={[styles.neighborhoodText, textStyles.body16_SB135]}>
-              역삼동
+              {userMe?.location || "로딩 중..."}
             </Text>
             <Image
               source={require("@/assets/images/chevron/chevron-right-24.png")}

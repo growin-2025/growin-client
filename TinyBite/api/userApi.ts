@@ -8,5 +8,30 @@ import { UserMeResponse } from "@/types/user";
  */
 export const getUserMe = async (): Promise<UserMeResponse> => {
   const res = await privateAxios.get(ENDPOINT.USER.ME);
+  console.log("getUserMe API 응답:", res.data.data);
   return res.data.data;
+};
+
+/**
+ * 사용자 위치 업데이트 API
+ * @param coords 좌표 정보
+ */
+export const updateLocation = async (coords: {
+  latitude: string;
+  longitude: string;
+}): Promise<void> => {
+  console.log("updateLocation API 호출:", {
+    url: ENDPOINT.USER.LOCATION,
+    params: {
+      latitude: coords.latitude,
+      longitude: coords.longitude,
+    },
+  });
+  const res = await privateAxios.patch(ENDPOINT.USER.LOCATION, null, {
+    params: {
+      latitude: coords.latitude,
+      longitude: coords.longitude,
+    },
+  });
+  console.log("updateLocation API 응답:", res.data);
 };
