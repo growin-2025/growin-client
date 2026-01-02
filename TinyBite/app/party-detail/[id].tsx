@@ -1,10 +1,10 @@
-import PartyDetailHost from "@/components/main/main-card-detail/PartyDetailHost";
-import PartyDetailHostNote from "@/components/main/main-card-detail/PartyDetailHostNote";
-import PartyDetailImageCarousel from "@/components/main/main-card-detail/PartyDetailImageCarousel";
-import PartyDetailInfo from "@/components/main/main-card-detail/PartyDetailInfo";
-import PartyDetailMoreButton from "@/components/main/main-card-detail/PartyDetailMoreButton";
-import PartyDetailPill from "@/components/main/main-card-detail/PartyDetailPill";
-import PartyDetailProductLink from "@/components/main/main-card-detail/PartyDetailProductLink";
+import PartyDetailHost from "@/components/main/party-detail/PartyDetailHost";
+import PartyDetailHostNote from "@/components/main/party-detail/PartyDetailHostNote";
+import PartyDetailImageCarousel from "@/components/main/party-detail/PartyDetailImageCarousel";
+import PartyDetailInfo from "@/components/main/party-detail/PartyDetailInfo";
+import PartyDetailMoreButton from "@/components/main/party-detail/PartyDetailMoreButton";
+import PartyDetailPill from "@/components/main/party-detail/PartyDetailPill";
+import PartyDetailProductLink from "@/components/main/party-detail/PartyDetailProductLink";
 import { usePartyDetail } from "@/hooks/usePartyDetail";
 import { useUserCoords } from "@/hooks/useUserCoords";
 import { colors } from "@/styles/colors";
