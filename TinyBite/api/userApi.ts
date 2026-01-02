@@ -37,6 +37,28 @@ export const updateLocation = async (coords: {
 };
 
 /**
+ * 닉네임 수정 API
+ * @param nickname 새로운 닉네임
+ */
+export const updateNickname = async (nickname: string): Promise<any> => {
+  const requestData = { nickname: nickname };
+  const res = await privateAxios.patch(ENDPOINT.USER.ME, requestData);
+  return res.data;
+};
+
+/**
+ * 닉네임 중복 체크 API
+ * @param nickname 체크할 닉네임
+ */
+export const checkNickname = async (nickname: string): Promise<void> => {
+  await privateAxios.get(ENDPOINT.USER.NICKNAME_CHECK, {
+    params: {
+      nickname: nickname,
+    },
+  });
+};
+
+/**
  * 회원 탈퇴 API
  */
 export const deleteUserMe = async (): Promise<void> => {
