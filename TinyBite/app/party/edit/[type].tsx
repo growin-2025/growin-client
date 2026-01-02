@@ -1,4 +1,4 @@
-import { patchParty } from "@/api/partyApi";
+import { patchParty, postFile } from "@/api/partyApi";
 import AddPhotoButton from "@/components/create-party/AddPhotoButton";
 import NumberOfPeopleBox from "@/components/create-party/NumberOfPeopleBox";
 import PhotoItem from "@/components/create-party/PhotoItem";
@@ -10,6 +10,7 @@ import { Photo } from "@/stores/creatingPartyStore";
 import { PhotoUrl, useEditPartyStore } from "@/stores/editPartyStore";
 import { colors } from "@/styles/colors";
 import { ApiError } from "@/types/api";
+import { EditedPartyInfo } from "@/types/party";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -17,6 +18,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { FlatList, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 import { useShallow } from "zustand/shallow";
 
 const PARTY_CONFIG = {
@@ -50,7 +52,10 @@ export default function PartyCreateScreen() {
     photos,
     title,
     totalPrice,
+    maxParticipants,
     pickupLocation,
+    latitude,
+    longitude,
     description,
     productLink,
     setPartyTitle,
@@ -65,7 +70,10 @@ export default function PartyCreateScreen() {
       photos: state.photos,
       title: state.title,
       totalPrice: state.totalPrice,
+      maxParticipants: state.maxParticipants,
       pickupLocation: state.pickupLocation,
+      latitude: state.latitude,
+      longitude: state.longitude,
       description: state.description,
       productLink: state.productLink,
       setPartyTitle: state.setPartyTitle,
@@ -76,6 +84,22 @@ export default function PartyCreateScreen() {
       resetEditParty: state.resetEditParty,
     }))
   );
+
+  const UploadFileMutation = useMutation({
+    mutationFn: postFile,
+    onSuccess: (data) => {
+      return data;
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      if (error.response?.data) {
+        const message = getErrorMessage(error.response.data);
+        alert(message);
+        console.error(message);
+      } else {
+        console.error("네트워크 연결을 확인해주세요.");
+      }
+    },
+  });
 
   const EditPartyMutation = useMutation({
     mutationFn: patchParty,
@@ -98,8 +122,85 @@ export default function PartyCreateScreen() {
     return <PhotoItem id={item.id} imageUri={item.imageUri} />;
   };
 
+  const isValidLink = (str: string): boolean => {
+    const trimmed = str.trim();
+    try {
+      const url = new URL(trimmed);
+      return (
+        (url.protocol === "http:" || url.protocol === "https:") &&
+        !!url.hostname
+      );
+    } catch {
+      return false;
+    }
+  };
+
   const onClickEditParty = async () => {
-    // TODO: 파티 수정 로직 구현
+    if (productLink.isEdited && !isValidLink(productLink.value)) {
+      Toast.show({
+        type: "basicToast",
+        props: { text: "올바른 URL 형식으로 입력해주세요." },
+        position: "bottom",
+        bottomOffset: 133,
+        visibilityTime: 2000,
+      });
+      return;
+    }
+
+    try {
+      // 1. 새로 추가된 사진들만 필터링
+      const newPhotos = photos.filter(
+        (photo): photo is Photo => "mimeType" in photo
+      );
+
+      // 2. 새 사진들 업로드
+      let uploadedImageUrls: string[] = [];
+      if (newPhotos.length > 0) {
+        const uploadResults = await UploadFileMutation.mutateAsync(newPhotos);
+        uploadedImageUrls = uploadResults;
+      }
+
+      // 3. 전체 이미지 URL 배열 생성 (순서 유지)
+      let uploadIndex = 0;
+      const allImageUrls = photos.map((photo) => {
+        if ("mimeType" in photo) {
+          // Photo 타입 -> 업로드된 URL 사용
+          return uploadedImageUrls[uploadIndex++];
+        } else {
+          // PhotoUrl 타입 -> 기존 imageUri 사용
+          return photo.imageUri;
+        }
+      });
+
+      const body: EditedPartyInfo = {
+        // 필수 필드
+        images: allImageUrls,
+        description: description,
+        pickupLocation: pickupLocation.value,
+        latitude: latitude.value,
+        longitude: longitude.value,
+      };
+
+      if (title.isEdited) {
+        body.title = title.value;
+      }
+      if (totalPrice.isEdited) {
+        body.totalPrice = Number(totalPrice.value);
+      }
+      if (maxParticipants.isEdited) {
+        body.maxParticipants = maxParticipants.value;
+      }
+      if (productLink.isEdited) {
+        body.productLink = productLink.value;
+      }
+
+      await EditPartyMutation.mutateAsync({
+        partyId: partyId,
+        body: body,
+      });
+    } catch (error) {
+      console.error("파티 수정 중 오류:", error);
+    }
   };
 
   return (
