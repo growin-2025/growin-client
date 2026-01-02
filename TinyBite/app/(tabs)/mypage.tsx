@@ -1,10 +1,21 @@
+import { getActiveParties } from "@/api/partyApi";
 import { getUserMe } from "@/api/userApi";
+import MainCard from "@/components/main/MainCard";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { PartyItem } from "@/types/party";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MyPageScreen() {
@@ -12,6 +23,12 @@ export default function MyPageScreen() {
   const { data: userMe } = useQuery({
     queryKey: ["getUserMe"],
     queryFn: getUserMe,
+  });
+
+  // 참여중인 파티 리스트 조회
+  const { data: activeParties = [], isLoading } = useQuery<PartyItem[]>({
+    queryKey: ["getActiveParties"],
+    queryFn: getActiveParties,
   });
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
@@ -80,16 +97,39 @@ export default function MyPageScreen() {
         </Text>
       </View>
       {/* Content */}
-      <View style={styles.contentWrapper}>
-        {/* 
-        <MainCard containerStyle={styles.mypageCard} />
-        <MainCard containerStyle={styles.mypageCard} />
-        <MainCard containerStyle={styles.mypageCard} />
-        <MainCard containerStyle={styles.mypageCard} />
-        <MainCard containerStyle={styles.mypageCard} />
-        <MainCard containerStyle={styles.mypageCard} />
-      */}
-      </View>
+      <ScrollView style={styles.contentWrapper}>
+        {isLoading ? (
+          <View style={styles.emptyContainer}>
+            <Text style={[styles.emptyText, textStyles.body16_SB135]}>
+              로딩 중...
+            </Text>
+          </View>
+        ) : activeParties.length === 0 ? (
+          <View style={styles.emptyContainer}>
+            <Text style={[styles.emptyText, textStyles.body16_SB135]}>
+              참여 중인 파티가 없습니다.
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            data={activeParties}
+            renderItem={({ item }) => (
+              <MainCard
+                item={item}
+                containerStyle={styles.mypageCard}
+                onPress={() =>
+                  router.push({
+                    pathname: "/party-detail/[id]" as any,
+                    params: { id: item.partyId.toString() },
+                  })
+                }
+              />
+            )}
+            keyExtractor={(item) => item.partyId.toString()}
+            showsVerticalScrollIndicator={false}
+          />
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -169,5 +209,14 @@ const styles = StyleSheet.create({
     elevation: 0,
     borderBottomWidth: 1,
     borderBottomColor: colors.gray[4],
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 40,
+  },
+  emptyText: {
+    color: colors.gray[1],
   },
 });
