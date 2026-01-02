@@ -13,6 +13,7 @@ import { useUserCoords } from "@/hooks/useUserCoords";
 import { useAuthStore } from "@/stores/authStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
@@ -37,6 +38,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
  */
 export default function PartyDetailScreen() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { id } = useLocalSearchParams<{ id: string }>();
   const partyId = id ? parseInt(id, 10) : 0;
 
@@ -129,6 +131,8 @@ export default function PartyDetailScreen() {
             onDelete={async () => {
               try {
                 await deleteParty(partyId);
+                // 파티 리스트 쿼리 무효화하여 자동으로 새로고침
+                queryClient.invalidateQueries({ queryKey: ["getParties"] });
                 router.back();
                 return true;
               } catch (error) {
