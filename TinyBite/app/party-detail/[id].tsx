@@ -182,17 +182,17 @@ export default function PartyDetailScreen() {
             {/* 상세 정보 (위치, 인원, 금액) */}
             <PartyDetailInfo partyDetail={partyDetail} />
             {/* 상품 링크 */}
-            {partyDetail?.productLink && (
-              <PartyDetailProductLink
-                productTitle={partyDetail.productLink.productName}
-                productUrl={partyDetail.productLink.url}
-                thumbnailImage={partyDetail.productLink.thumbnailImage}
-              />
-            )}
+            {partyDetail?.productLink &&
+              partyDetail.productLink.productName?.trim() &&
+              partyDetail.productLink.url?.trim() && (
+                <PartyDetailProductLink
+                  productTitle={partyDetail.productLink.productName}
+                  productUrl={partyDetail.productLink.url}
+                  thumbnailImage={partyDetail.productLink.thumbnailImage}
+                />
+              )}
             {/* 호스트 메모 */}
-            {partyDetail?.description && (
-              <PartyDetailHostNote body={partyDetail.description} />
-            )}
+            <PartyDetailHostNote body={partyDetail?.description} />
           </View>
         </Animated.ScrollView>
         {/* 하단 고정 CTA 버튼 (SafeArea 포함) */}

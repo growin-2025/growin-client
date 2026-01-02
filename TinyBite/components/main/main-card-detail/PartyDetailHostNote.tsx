@@ -3,10 +3,12 @@ import { textStyles } from "@/styles/typography/textStyles";
 import { Image, StyleSheet, Text, View } from "react-native";
 
 interface PartyDetailHostNoteProps {
-  body: string;
+  body?: string | null;
 }
 
 const PartyDetailHostNote = ({ body }: PartyDetailHostNoteProps) => {
+  const displayText = body?.trim() || "호스트의 한마디가 없어요";
+
   return (
     <View style={styles.noteBox}>
       <View style={styles.noteHeader}>
@@ -19,7 +21,9 @@ const PartyDetailHostNote = ({ body }: PartyDetailHostNoteProps) => {
           호스트의 한마디
         </Text>
       </View>
-      <Text style={[styles.noteBody, textStyles.body13_SB150]}>{body}</Text>
+      <Text style={[styles.noteBody, textStyles.body13_SB150]}>
+        {displayText}
+      </Text>
     </View>
   );
 };
@@ -56,4 +60,3 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
 });
-

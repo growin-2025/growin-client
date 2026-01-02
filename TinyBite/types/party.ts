@@ -91,8 +91,8 @@ export type PartyDetail = {
   remainingSlots: number;
   pricePerPerson: number;
   totalPrice: number;
-  productLink: ProductLink;
-  description: string;
+  productLink: ProductLink | null;
+  description: string | null;
   images: string[];
   isClosed: boolean;
   isParticipating: boolean;
