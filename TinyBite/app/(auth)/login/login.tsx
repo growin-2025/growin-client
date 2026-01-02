@@ -4,7 +4,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { ApiError } from "@/types/api";
-import { getErrorMessage } from "@/utils/getErrorMessage ";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "expo-router";
@@ -75,19 +75,19 @@ export default function LoginScreen() {
     }
   };
 
-  const handleLoginPress = (provider: string) => {
-    console.log("소셜 로그인:", provider);
+  // const handleLoginPress = (provider: string) => {
+  //   console.log("소셜 로그인:", provider);
 
-    // TODO: 소셜 로그인 로직 추가
-    // 임시 로직: 기존 회원 여부 판단
-    const isExistingUser = false; // 백엔드 응답 기준으로 변경
+  //   // TODO: 소셜 로그인 로직 추가
+  //   // 임시 로직: 기존 회원 여부 판단
+  //   const isExistingUser = false; // 백엔드 응답 기준으로 변경
 
-    if (isExistingUser) {
-      router.replace("/(tabs)");
-    } else {
-      router.push("/signup/terms");
-    }
-  };
+  //   if (isExistingUser) {
+  //     router.replace("/(tabs)");
+  //   } else {
+  //     router.push("/signup/terms");
+  //   }
+  // };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -99,7 +99,7 @@ export default function LoginScreen() {
       />
 
       <View style={styles.buttons}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={[styles.socialButton, styles.kakao]}
           onPress={() => handleLoginPress("kakao")}
         >
@@ -107,7 +107,7 @@ export default function LoginScreen() {
           <Text style={[styles.socialText, textStyles.title18_SB135]}>
             카카오로 시작하기
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <TouchableOpacity
           style={[styles.socialButton, styles.google]}
@@ -119,7 +119,7 @@ export default function LoginScreen() {
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={[styles.socialButton, styles.apple]}
           onPress={() => handleLoginPress("apple")}
         >
@@ -127,7 +127,7 @@ export default function LoginScreen() {
           <Text style={[styles.socialText, textStyles.title18_SB135]}>
             Apple로 시작하기
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </SafeAreaView>
   );

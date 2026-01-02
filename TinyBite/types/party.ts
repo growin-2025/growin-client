@@ -40,6 +40,22 @@ export type PartyListResponse = {
 };
 
 /**
+ * 파티 생성 body 타입
+ */
+export type CreatingPartyBody = {
+  title: string;
+  category: PartyCategory;
+  totalPrice: number;
+  maxParticipants: number;
+  pickupLocation: {
+    place: string;
+  };
+  images?: string[];
+  productLink?: string;
+  description?: string;
+};
+
+/**
  * 호스트 정보 타입
  */
 export type HostInfo = {

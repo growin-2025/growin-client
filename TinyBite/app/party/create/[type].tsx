@@ -1,3 +1,4 @@
+import { postCreateParty, postFile } from "@/api/partyApi";
 import AddPhotoButton from "@/components/create-party/AddPhotoButton";
 import NumberOfPeopleBox from "@/components/create-party/NumberOfPeopleBox";
 import PhotoItem from "@/components/create-party/PhotoItem";
@@ -7,7 +8,12 @@ import CreatePartyPageHeader from "@/components/CreatePartyPageHeader";
 import GlobalButton from "@/components/GlobalButton";
 import { Photo, useCreatingPartyStore } from "@/stores/creatingPartyStore";
 import { colors } from "@/styles/colors";
-import { useLocalSearchParams } from "expo-router";
+import { ApiError } from "@/types/api";
+import { CreatingPartyBody } from "@/types/party";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { FlatList, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -15,21 +21,21 @@ import Toast from "react-native-toast-message";
 import { useShallow } from "zustand/shallow";
 
 const PARTY_TITLES = {
-  delivery: "배달 파티 생성",
-  shopping: "장보기 파티 생성",
-  necessities: "생필품 파티 생성",
+  DELIVERY: "배달 파티 생성",
+  GROCERY: "장보기 파티 생성",
+  HOUSEHOLD: "생필품 파티 생성",
 } as const;
 
 const PARTY_CONFIG = {
-  delivery: {
+  DELIVERY: {
     showProductLink: false,
     titlePlaceholder: "예) 엽떡 매운맛 같이 드실 분",
   },
-  shopping: {
+  GROCERY: {
     showProductLink: true,
     titlePlaceholder: "예) 코스트코 베이글 나누실 분",
   },
-  necessities: {
+  HOUSEHOLD: {
     showProductLink: true,
     titlePlaceholder: "예) 코스트코 베이글 나누실 분",
   },
@@ -37,7 +43,7 @@ const PARTY_CONFIG = {
 
 export default function PartyCreateScreen() {
   const { type } = useLocalSearchParams<{
-    type: "delivery" | "shopping" | "necessities";
+    type: "DELIVERY" | "GROCERY" | "HOUSEHOLD";
   }>();
 
   const title = PARTY_TITLES[type];
@@ -75,6 +81,39 @@ export default function PartyCreateScreen() {
     }))
   );
 
+  const UploadFileMutation = useMutation({
+    mutationFn: postFile,
+    onSuccess: (data) => {
+      return data;
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      if (error.response?.data) {
+        const message = getErrorMessage(error.response.data);
+        alert(message);
+        console.error(message);
+      } else {
+        console.error("네트워크 연결을 확인해주세요.");
+      }
+    },
+  });
+
+  const CreatePartyMutation = useMutation({
+    mutationFn: postCreateParty,
+    onSuccess: (data) => {
+      resetCreateParty();
+      router.replace("/(tabs)");
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      if (error.response?.data) {
+        const message = getErrorMessage(error.response.data);
+        alert(message);
+        console.error(message);
+      } else {
+        console.error("네트워크 연결을 확인해주세요.");
+      }
+    },
+  });
+
   const renderItem = ({ item }: { item: Photo }) => {
     return <PhotoItem id={item.id} imageUri={item.imageUri} />;
   };
@@ -109,13 +148,43 @@ export default function PartyCreateScreen() {
     });
   };
 
-  const onClickCreateParty = () => {
+  const onClickCreateParty = async () => {
     if (productLink && !isValidLink(productLink)) {
       showCorrectLinkToast();
       return;
     }
 
-    resetCreateParty();
+    let photoStringList: string[] | undefined;
+
+    if (photos.length) {
+      try {
+        photoStringList = await UploadFileMutation.mutateAsync(photos);
+      } catch (error) {
+        Toast.show({
+          type: "basicToast",
+          props: { text: "사진 업로드에 실패했습니다. 다시 시도해주세요." },
+          position: "bottom",
+          bottomOffset: 133,
+          visibilityTime: 2000,
+        });
+        return;
+      }
+    }
+
+    const newPartyValue: CreatingPartyBody = {
+      title: partyTitle,
+      category: type,
+      totalPrice: Number(totalAmount),
+      maxParticipants: numberOfPeople,
+      pickupLocation: {
+        place: pickUpLocation,
+      },
+      ...(photoStringList && { images: photoStringList }),
+      ...(productLink && { productLink }),
+      ...(detailedDescription && { description: detailedDescription }),
+    };
+
+    CreatePartyMutation.mutate(newPartyValue);
   };
 
   return (

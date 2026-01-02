@@ -20,5 +20,9 @@ export const ENDPOINT = {
   PARTY: {
     GET_PARTIES: "/api/parties",
     DETAIL: (partyId: number) => `/api/parties/${partyId}`,
+    CREATE_PARTIES: "/api/parties",
+  },
+  FILE: {
+    UPLOAD_FILE: "api/v1/file/upload",
   },
 };
