@@ -76,8 +76,11 @@ export const getPartyDetail = async (
 export const deleteParty = async (partyId: number): Promise<void> => {
   try {
     await privateAxios.delete(ENDPOINT.PARTY.DETAIL(partyId));
-  } catch (error) {
-    console.error("파티 삭제 실패:", error);
+  } catch (error: any) {
+    // 400(이미 참여자가 있음 / 권한 없음) 상태 코드인 경우 에러 로그 출력하지 않음
+    if (error?.response?.status !== 400) {
+      console.error("파티 삭제 실패:", error);
+    }
     throw error;
   }
 };
