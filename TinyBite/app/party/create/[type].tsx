@@ -1,4 +1,4 @@
-import { postFile } from "@/api/partyApi";
+import { postCreateParty, postFile } from "@/api/partyApi";
 import AddPhotoButton from "@/components/create-party/AddPhotoButton";
 import NumberOfPeopleBox from "@/components/create-party/NumberOfPeopleBox";
 import PhotoItem from "@/components/create-party/PhotoItem";
@@ -9,10 +9,11 @@ import GlobalButton from "@/components/GlobalButton";
 import { Photo, useCreatingPartyStore } from "@/stores/creatingPartyStore";
 import { colors } from "@/styles/colors";
 import { ApiError } from "@/types/api";
+import { CreatingPartyBody } from "@/types/party";
 import { getErrorMessage } from "@/utils/getErrorMessage ";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { FlatList, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -96,6 +97,23 @@ export default function PartyCreateScreen() {
     },
   });
 
+  const CreatePartyMutation = useMutation({
+    mutationFn: postCreateParty,
+    onSuccess: (data) => {
+      resetCreateParty();
+      router.replace("/(tabs)");
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      if (error.response?.data) {
+        const message = getErrorMessage(error.response.data);
+        alert(message);
+        console.error(message);
+      } else {
+        console.error("네트워크 연결을 확인해주세요.");
+      }
+    },
+  });
+
   const renderItem = ({ item }: { item: Photo }) => {
     return <PhotoItem id={item.id} imageUri={item.imageUri} />;
   };
@@ -130,13 +148,32 @@ export default function PartyCreateScreen() {
     });
   };
 
-  const onClickCreateParty = () => {
+  const onClickCreateParty = async () => {
     if (productLink && !isValidLink(productLink)) {
       showCorrectLinkToast();
       return;
     }
 
-    resetCreateParty();
+    let photoStringList: string[] | undefined;
+
+    if (photos.length) {
+      photoStringList = await UploadFileMutation.mutateAsync(photos);
+    }
+
+    const newPartyValue: CreatingPartyBody = {
+      title: partyTitle,
+      category: type,
+      totalPrice: Number(totalAmount),
+      maxParticipants: numberOfPeople,
+      pickupLocation: {
+        place: pickUpLocation,
+      },
+      ...(photoStringList && { images: photoStringList }),
+      ...(productLink && { productLink }),
+      ...(detailedDescription && { productLink: detailedDescription }),
+    };
+
+    CreatePartyMutation.mutate(newPartyValue);
   };
 
   return (
