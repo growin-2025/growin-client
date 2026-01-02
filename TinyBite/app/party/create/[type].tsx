@@ -1,3 +1,4 @@
+import { postFile } from "@/api/partyApi";
 import AddPhotoButton from "@/components/create-party/AddPhotoButton";
 import NumberOfPeopleBox from "@/components/create-party/NumberOfPeopleBox";
 import PhotoItem from "@/components/create-party/PhotoItem";
@@ -7,6 +8,10 @@ import CreatePartyPageHeader from "@/components/CreatePartyPageHeader";
 import GlobalButton from "@/components/GlobalButton";
 import { Photo, useCreatingPartyStore } from "@/stores/creatingPartyStore";
 import { colors } from "@/styles/colors";
+import { ApiError } from "@/types/api";
+import { getErrorMessage } from "@/utils/getErrorMessage ";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { FlatList, ScrollView, StyleSheet, View } from "react-native";
@@ -74,6 +79,22 @@ export default function PartyCreateScreen() {
       resetCreateParty: state.resetCreateParty,
     }))
   );
+
+  const UploadFileMutation = useMutation({
+    mutationFn: postFile,
+    onSuccess: (data) => {
+      return data;
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      if (error.response?.data) {
+        const message = getErrorMessage(error.response.data);
+        alert(message);
+        console.error(message);
+      } else {
+        console.error("네트워크 연결을 확인해주세요.");
+      }
+    },
+  });
 
   const renderItem = ({ item }: { item: Photo }) => {
     return <PhotoItem id={item.id} imageUri={item.imageUri} />;
