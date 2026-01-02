@@ -49,6 +49,8 @@ export type CreatingPartyBody = {
   maxParticipants: number;
   pickupLocation: {
     place: string;
+    pickupLatitude: number;
+    pickupLongitude: number;
   };
   images?: string[];
   productLink?: string;

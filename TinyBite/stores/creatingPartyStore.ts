@@ -14,7 +14,11 @@ export interface CreatingPartyState {
   partyTitle: string;
   totalAmount: string;
   numberOfPeople: number;
-  pickUpLocation: string;
+  pickUpLocation: {
+    place: string;
+    pickupLatitude: number;
+    pickupLongitude: number;
+  };
   detailedDescription: string;
   productLink: string;
   addPhoto: (uri: string, mimeType: string, fileName: string) => void;
@@ -36,7 +40,11 @@ export const useCreatingPartyStore = create<CreatingPartyState>((set, get) => ({
   partyTitle: "",
   totalAmount: "",
   numberOfPeople: 2,
-  pickUpLocation: "",
+  pickUpLocation: {
+    place: "중구 명동",
+    pickupLatitude: 37.569,
+    pickupLongitude: 126.991,
+  },
   detailedDescription: "",
   productLink: "",
   addPhoto: (uri: string, mimeType: string, fileName: string) => {
@@ -95,7 +103,11 @@ export const useCreatingPartyStore = create<CreatingPartyState>((set, get) => ({
   },
   setPickUpLocation: (location: string) => {
     set(() => ({
-      pickUpLocation: location,
+      pickUpLocation: {
+        place: "중구 명동",
+        pickupLatitude: 37.569,
+        pickupLongitude: 126.991,
+      },
     }));
   },
   setDetailedDescription: (description: string) => {
@@ -116,7 +128,11 @@ export const useCreatingPartyStore = create<CreatingPartyState>((set, get) => ({
       partyTitle: "",
       totalAmount: "",
       numberOfPeople: 2,
-      pickUpLocation: "",
+      pickUpLocation: {
+        place: "중구 명동",
+        pickupLatitude: 37.569,
+        pickupLongitude: 126.991,
+      },
       detailedDescription: "",
       productLink: "",
     }));

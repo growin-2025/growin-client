@@ -177,7 +177,9 @@ export default function PartyCreateScreen() {
       totalPrice: Number(totalAmount),
       maxParticipants: numberOfPeople,
       pickupLocation: {
-        place: pickUpLocation,
+        place: pickUpLocation.place,
+        pickupLatitude: pickUpLocation.pickupLatitude,
+        pickupLongitude: pickUpLocation.pickupLongitude,
       },
       ...(photoStringList && { images: photoStringList }),
       ...(productLink && { productLink }),
@@ -242,7 +244,7 @@ export default function PartyCreateScreen() {
                 placeholder="예) 역삼역 1번 출구"
                 maxLength={30}
                 onChangeText={setPickUpLocation}
-                value={pickUpLocation}
+                value={pickUpLocation.place}
               />
             </View>
 
