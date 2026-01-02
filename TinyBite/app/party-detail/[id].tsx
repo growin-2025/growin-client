@@ -12,6 +12,7 @@ import PartyDetailProductLink from "@/components/main/party-detail/PartyDetailPr
 import { usePartyDetail } from "@/hooks/usePartyDetail";
 import { useUserCoords } from "@/hooks/useUserCoords";
 import { useAuthStore } from "@/stores/authStore";
+import { useEditPartyStore } from "@/stores/editPartyStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { useQueryClient } from "@tanstack/react-query";
@@ -45,6 +46,9 @@ export default function PartyDetailScreen() {
 
   // 현재 로그인한 사용자 정보
   const user = useAuthStore((state) => state.user);
+  const setInitialPartyInfo = useEditPartyStore(
+    (state) => state.setInitialPartyInfo
+  );
 
   // 위치 정보 가져오기
   const { coords, refresh: fetchCoords } = useUserCoords();
@@ -61,6 +65,7 @@ export default function PartyDetailScreen() {
     data: partyDetail,
     isLoading,
     error,
+    isSuccess,
   } = usePartyDetail({
     partyId,
     latitude: coords?.latitude?.toString() || "",
@@ -106,6 +111,11 @@ export default function PartyDetailScreen() {
     );
   }
 
+  // 데이터를 성공적으로 받아왔을 시
+  if (isSuccess) {
+    setInitialPartyInfo(partyDetail);
+  }
+
   return (
     <>
       {/* 상태바 스타일: 헤더가 나타나면 dark, 아니면 light */}
@@ -131,6 +141,7 @@ export default function PartyDetailScreen() {
                 pathname: "/party/edit/[type]",
                 params: {
                   type: "GROCERY",
+                  mode: "edit",
                   allEditable: (
                     partyDetail.currentParticipants === 0
                   ).toString(),

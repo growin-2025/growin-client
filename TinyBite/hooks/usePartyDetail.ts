@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
  * @returns React Query 결과 (data, isLoading, error 등)
  */
 export const usePartyDetail = (params: PartyDetailParams) => {
-  const { data, isLoading, error } = useQuery<PartyDetail>({
+  const { data, isLoading, error, isSuccess } = useQuery<PartyDetail>({
     queryKey: [
       "getPartyDetail",
       params.partyId,
@@ -19,5 +19,5 @@ export const usePartyDetail = (params: PartyDetailParams) => {
     enabled: !!params.partyId && !!params.latitude && !!params.longitude, // partyId, latitude, longitude가 모두 있을 때만 실행
   });
 
-  return { data, isLoading, error };
+  return { data, isLoading, error, isSuccess };
 };
