@@ -52,6 +52,7 @@ export interface editPartyState {
   setDetailedDescription: (description: string) => void;
   setProductLink: (link: string) => void;
   setMaxParticipants: (number: number) => void;
+  resetEditParty: () => void;
 }
 
 export const useEditPartyStore = create<editPartyState>((set) => ({
@@ -212,4 +213,40 @@ export const useEditPartyStore = create<editPartyState>((set) => ({
       },
     }));
   },
+  resetEditParty: () =>
+    set({
+      seq: 0,
+      partyId: 0,
+      photos: [],
+      representativePhoto: 0,
+      title: {
+        isEdited: false,
+        value: "",
+      },
+      totalPrice: {
+        isEdited: false,
+        value: "",
+      },
+      maxParticipants: {
+        isEdited: false,
+        value: 2,
+      },
+      pickupLocation: {
+        isEdited: false,
+        value: "",
+      },
+      latitude: {
+        isEdited: false,
+        value: 37.569,
+      },
+      longitude: {
+        isEdited: false,
+        value: 126.991,
+      },
+      description: "",
+      productLink: {
+        isEdited: false,
+        value: "",
+      },
+    }),
 }));
