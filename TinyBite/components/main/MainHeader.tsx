@@ -1,6 +1,7 @@
-import { useAuthStore } from "@/stores/authStore";
+import { getUserMe } from "@/api/userApi";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -16,9 +17,15 @@ interface MainHeaderProps {}
  * - 캐러셀을 통해 여러 인사말과 캐릭터 이미지를 순환 표시
  */
 const MainHeader = ({}: MainHeaderProps = {}) => {
-  // 스토어에서 사용자 정보 가져오기
-  const nickname = useAuthStore((state) => state.user?.nickname || "한입만");
-  const location = useAuthStore((state) => state.user?.location || "위치 없음");
+  // 유저 정보 조회
+  const { data: userMe } = useQuery({
+    queryKey: ["getUserMe"],
+    queryFn: getUserMe,
+  });
+
+  // 유저 정보에서 닉네임과 위치 가져오기
+  const nickname = userMe?.name || "한입만";
+  const location = userMe?.location || "위치 없음";
 
   // 현재 캐러셀 페이지 인덱스 상태 관리
   const [currentPage, setCurrentPage] = useState(0);

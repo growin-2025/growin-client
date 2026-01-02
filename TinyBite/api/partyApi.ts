@@ -3,6 +3,7 @@ import {
   CreatingPartyBody,
   PartyDetail,
   PartyDetailParams,
+  PartyItem,
   PartyListParams,
   PartyListResponse,
 } from "@/types/party";
@@ -123,5 +124,19 @@ export const deleteParty = async (partyId: number): Promise<void> => {
       console.error("파티 삭제 실패:", error);
     }
     throw error;
+  }
+};
+
+/**
+ * 참여중인 파티 리스트 조회 API
+ * @returns 참여중인 파티 리스트
+ */
+export const getActiveParties = async (): Promise<PartyItem[]> => {
+  try {
+    const res = await privateAxios.get(ENDPOINT.USER.ACTIVE_PARTIES);
+    return res.data || [];
+  } catch (error) {
+    console.error("참여중인 파티 리스트 로딩 실패:", error);
+    return [];
   }
 };
