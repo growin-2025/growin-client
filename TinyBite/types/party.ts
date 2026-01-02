@@ -50,7 +50,7 @@ export type CreatingPartyBody = {
   pickupLocation: {
     place: string;
   };
-  images: string[] | null;
-  productLink: string | null;
-  description: string | null;
+  images?: string[];
+  productLink?: string;
+  description?: string;
 };
