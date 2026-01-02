@@ -1,3 +1,4 @@
+import { deleteParty } from "@/api/partyApi";
 import PartyDetailBackButton from "@/components/main/party-detail/PartyDetailBackButton";
 import PartyDetailCTA from "@/components/main/party-detail/PartyDetailCTA";
 import PartyDetailHost from "@/components/main/party-detail/PartyDetailHost";
@@ -120,8 +121,15 @@ export default function PartyDetailScreen() {
           onEdit={() => {
             // 수정 기능 구현
           }}
-          onDelete={() => {
-            // 삭제 기능 구현
+          onDelete={async () => {
+            try {
+              await deleteParty(partyId);
+              router.back();
+              return true;
+            } catch (error) {
+              console.error("파티 삭제 실패:", error);
+              return false;
+            }
           }}
         />
         {/* 스크롤 가능한 콘텐츠 영역 */}

@@ -54,19 +54,30 @@ export const getPartyDetail = async (
   params: PartyDetailParams
 ): Promise<PartyDetail> => {
   try {
-    const res = await privateAxios.get(
-      ENDPOINT.PARTY.GET_PARTY_DETAIL(params.partyId),
-      {
-        params: {
-          latitude: params.latitude,
-          longitude: params.longitude,
-        },
-      }
-    );
+    const res = await privateAxios.get(ENDPOINT.PARTY.DETAIL(params.partyId), {
+      params: {
+        latitude: params.latitude,
+        longitude: params.longitude,
+      },
+    });
 
     return res.data;
   } catch (error) {
     console.error("파티 상세 조회 실패:", error);
+    throw error;
+  }
+};
+
+/**
+ * 파티 삭제 API
+ * @param partyId 삭제할 파티 ID
+ * @returns 삭제 성공 여부
+ */
+export const deleteParty = async (partyId: number): Promise<void> => {
+  try {
+    await privateAxios.delete(ENDPOINT.PARTY.DETAIL(partyId));
+  } catch (error) {
+    console.error("파티 삭제 실패:", error);
     throw error;
   }
 };
