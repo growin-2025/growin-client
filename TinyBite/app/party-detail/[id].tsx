@@ -1,4 +1,5 @@
 import { deleteParty } from "@/api/partyApi";
+import ConfirmModal from "@/components/ConfirmModal";
 import PartyDetailBackButton from "@/components/main/party-detail/PartyDetailBackButton";
 import PartyDetailCTA from "@/components/main/party-detail/PartyDetailCTA";
 import PartyDetailHost from "@/components/main/party-detail/PartyDetailHost";
@@ -96,12 +97,12 @@ export default function PartyDetailScreen() {
   // 에러 발생 시
   if (error || !partyDetail) {
     return (
-      <View style={styles.errorContainer}>
-        <Text style={[styles.errorText, textStyles.title18_SB135]}>
-          파티 정보를 불러올 수 없습니다.
-        </Text>
-        <PartyDetailBackButton />
-      </View>
+      <ConfirmModal
+        visible={true}
+        title="삭제된 파티입니다"
+        singleButtonText="닫기"
+        onClose={() => router.back()}
+      />
     );
   }
 
@@ -265,17 +266,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: colors.white,
-  },
-  errorContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: colors.white,
-    paddingHorizontal: 20,
-  },
-  errorText: {
-    color: colors.gray[1],
-    marginBottom: 20,
-    textAlign: "center",
   },
 });
