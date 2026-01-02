@@ -5,7 +5,8 @@ import SubTitle from "@/components/create-party/SubTitle";
 import TextInputBox from "@/components/create-party/TextInputBox";
 import CreatePartyPageHeader from "@/components/CreatePartyPageHeader";
 import GlobalButton from "@/components/GlobalButton";
-import { Photo, useCreatingPartyStore } from "@/stores/creatingPartyStore";
+import { Photo } from "@/stores/creatingPartyStore";
+import { PhotoUrl, useEditPartyStore } from "@/stores/editPartyStore";
 import { colors } from "@/styles/colors";
 import { useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -40,38 +41,36 @@ export default function PartyCreateScreen() {
   const isAllEditable = allEditable === "true";
 
   const {
+    partyId,
     photos,
-    partyTitle,
-    totalAmount,
-    numberOfPeople,
-    pickUpLocation,
-    detailedDescription,
+    title,
+    totalPrice,
+    pickupLocation,
+    description,
     productLink,
     setPartyTitle,
     setTotalAmount,
     setPickUpLocation,
     setDetailedDescription,
     setProductLink,
-    resetCreateParty,
-  } = useCreatingPartyStore(
+  } = useEditPartyStore(
     useShallow((state) => ({
+      partyId: state.partyId,
       photos: state.photos,
-      partyTitle: state.partyTitle,
-      totalAmount: state.totalAmount,
-      numberOfPeople: state.numberOfPeople,
-      pickUpLocation: state.pickUpLocation,
-      detailedDescription: state.detailedDescription,
+      title: state.title,
+      totalPrice: state.totalPrice,
+      pickupLocation: state.pickupLocation,
+      description: state.description,
       productLink: state.productLink,
       setPartyTitle: state.setPartyTitle,
       setTotalAmount: state.setTotalAmount,
       setPickUpLocation: state.setPickUpLocation,
       setDetailedDescription: state.setDetailedDescription,
       setProductLink: state.setProductLink,
-      resetCreateParty: state.resetCreateParty,
     }))
   );
 
-  const renderItem = ({ item }: { item: Photo }) => {
+  const renderItem = ({ item }: { item: Photo | PhotoUrl }) => {
     return <PhotoItem id={item.id} imageUri={item.imageUri} />;
   };
 
@@ -108,7 +107,7 @@ export default function PartyCreateScreen() {
                 placeholder={config.titlePlaceholder}
                 maxLength={30}
                 onChangeText={setPartyTitle}
-                value={partyTitle}
+                value={title.value}
                 isEditable={isAllEditable}
               />
             </View>
@@ -119,7 +118,7 @@ export default function PartyCreateScreen() {
                 placeholder="0"
                 isAmount
                 onChangeText={setTotalAmount}
-                value={totalAmount}
+                value={totalPrice.value}
                 isEditable={isAllEditable}
               />
             </View>
@@ -136,7 +135,7 @@ export default function PartyCreateScreen() {
                 placeholder="예) 역삼역 1번 출구"
                 maxLength={30}
                 onChangeText={setPickUpLocation}
-                value={pickUpLocation}
+                value={pickupLocation.value}
                 isEditable={isAllEditable}
               />
             </View>
@@ -147,7 +146,7 @@ export default function PartyCreateScreen() {
                 placeholder="추가로 전달 할 내용이 있다면 적어주세요."
                 maxLength={60}
                 onChangeText={setDetailedDescription}
-                value={detailedDescription}
+                value={description}
               />
             </View>
 
@@ -158,7 +157,7 @@ export default function PartyCreateScreen() {
                   iconType="link"
                   placeholder="구매할 상품의 URL을 입력하세요."
                   onChangeText={setProductLink}
-                  value={productLink}
+                  value={productLink.value}
                   isEditable={isAllEditable}
                 />
               </View>
