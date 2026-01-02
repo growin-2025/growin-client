@@ -21,4 +21,9 @@ export const ENDPOINT = {
     GET_PARTIES: "/api/parties",
     DETAIL: (partyId: number) => `/api/parties/${partyId}`,
   },
+  USER: {
+    ME: "/api/v1/user/me",
+    NICKNAME_CHECK: "/api/v1/user/nickname/check",
+    LOCATION: "/api/v1/user/me/location",
+  },
 };
