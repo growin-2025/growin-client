@@ -124,7 +124,7 @@ export type EditedPartyInfo = {
   pickupLocation?: string;
   latitude?: number;
   longitude?: number;
-  productLink?: ProductLink;
+  productLink?: string;
   description?: string;
   images?: string[];
 };
