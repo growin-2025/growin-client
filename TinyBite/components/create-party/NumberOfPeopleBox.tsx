@@ -7,7 +7,11 @@ import { useShallow } from "zustand/shallow";
 const MINUS_ICON = require("@/assets/images/minus-24-gray.png");
 const PLUS_ICON = require("@/assets/images/plus-24-gray.png");
 
-const NumberOfPeopleBox = () => {
+interface NumberOfPeopleBoxProps {
+  isDisabled?: boolean;
+}
+
+const NumberOfPeopleBox = ({ isDisabled = true }: NumberOfPeopleBoxProps) => {
   const { numberOfPeople, setNumberOfPeople } = useCreatingPartyStore(
     useShallow((state) => ({
       numberOfPeople: state.numberOfPeople,
@@ -28,17 +32,28 @@ const NumberOfPeopleBox = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: isDisabled ? colors.white : colors.gray[3] },
+      ]}
+    >
       <View style={styles.inner}>
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={handleClickMinus}
+          disabled={!isDisabled}
         >
           <Image style={styles.image} source={MINUS_ICON} />
         </TouchableOpacity>
 
         <View style={styles.textContainer}>
-          <Text style={[styles.textNumber, textStyles.title20_SB135]}>
+          <Text
+            style={[
+              textStyles.title20_SB135,
+              { color: isDisabled ? colors.main : colors.gray[1] },
+            ]}
+          >
             {numberOfPeople}
           </Text>
           <Text style={[styles.textUnit, textStyles.body16_SB135]}>명</Text>
@@ -47,6 +62,7 @@ const NumberOfPeopleBox = () => {
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={handleClickPlus}
+          disabled={!isDisabled}
         >
           <Image style={styles.image} source={PLUS_ICON} />
         </TouchableOpacity>
@@ -60,7 +76,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 16,
     borderRadius: 16,
-    backgroundColor: colors.white,
     shadowColor: "rgba(0, 0, 0, 0.25)",
     shadowOpacity: 0.25,
     shadowOffset: { width: 0, height: 0 },
@@ -88,9 +103,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 4,
     alignItems: "center",
-  },
-  textNumber: {
-    color: colors.main,
   },
   textUnit: {
     color: colors.gray[1],
