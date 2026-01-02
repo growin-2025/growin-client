@@ -1,3 +1,4 @@
+import { patchParty } from "@/api/partyApi";
 import AddPhotoButton from "@/components/create-party/AddPhotoButton";
 import NumberOfPeopleBox from "@/components/create-party/NumberOfPeopleBox";
 import PhotoItem from "@/components/create-party/PhotoItem";
@@ -8,7 +9,11 @@ import GlobalButton from "@/components/GlobalButton";
 import { Photo } from "@/stores/creatingPartyStore";
 import { PhotoUrl, useEditPartyStore } from "@/stores/editPartyStore";
 import { colors } from "@/styles/colors";
-import { useLocalSearchParams } from "expo-router";
+import { ApiError } from "@/types/api";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { FlatList, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -53,6 +58,7 @@ export default function PartyCreateScreen() {
     setPickUpLocation,
     setDetailedDescription,
     setProductLink,
+    resetEditParty,
   } = useEditPartyStore(
     useShallow((state) => ({
       partyId: state.partyId,
@@ -67,8 +73,26 @@ export default function PartyCreateScreen() {
       setPickUpLocation: state.setPickUpLocation,
       setDetailedDescription: state.setDetailedDescription,
       setProductLink: state.setProductLink,
+      resetEditParty: state.resetEditParty,
     }))
   );
+
+  const EditPartyMutation = useMutation({
+    mutationFn: patchParty,
+    onSuccess: (data) => {
+      resetEditParty();
+      router.replace(`/party-detail/${partyId}`);
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      if (error.response?.data) {
+        const message = getErrorMessage(error.response.data);
+        alert(message);
+        console.error(message);
+      } else {
+        console.error("네트워크 연결을 확인해주세요.");
+      }
+    },
+  });
 
   const renderItem = ({ item }: { item: Photo | PhotoUrl }) => {
     return <PhotoItem id={item.id} imageUri={item.imageUri} />;
