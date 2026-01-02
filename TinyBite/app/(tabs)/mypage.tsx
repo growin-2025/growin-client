@@ -8,7 +8,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import {
-  FlatList,
   Image,
   Pressable,
   ScrollView,
@@ -111,23 +110,19 @@ export default function MyPageScreen() {
             </Text>
           </View>
         ) : (
-          <FlatList
-            data={activeParties}
-            renderItem={({ item }) => (
-              <MainCard
-                item={item}
-                containerStyle={styles.mypageCard}
-                onPress={() =>
-                  router.push({
-                    pathname: "/party-detail/[id]" as any,
-                    params: { id: item.partyId.toString() },
-                  })
-                }
-              />
-            )}
-            keyExtractor={(item) => item.partyId.toString()}
-            showsVerticalScrollIndicator={false}
-          />
+          activeParties.map((item) => (
+            <MainCard
+              key={item.partyId}
+              item={item}
+              containerStyle={styles.mypageCard}
+              onPress={() =>
+                router.push({
+                  pathname: "/party-detail/[id]" as any,
+                  params: { id: item.partyId.toString() },
+                })
+              }
+            />
+          ))
         )}
       </ScrollView>
     </SafeAreaView>
