@@ -63,6 +63,8 @@ export const useCreatingPartyStore = create<CreatingPartyState>((set, get) => ({
       const updatedPhotos = state.photos.filter((p) => p.id !== id);
       const newRepresentativePhoto =
         updatedPhotos.length === 0
+          ? state.seq + 1
+          : id === state.representativePhoto
           ? updatedPhotos[0].id
           : state.representativePhoto;
 
