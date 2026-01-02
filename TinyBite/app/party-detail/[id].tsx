@@ -257,13 +257,4 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: "center",
   },
-  retryButton: {
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 8,
-    backgroundColor: colors.main,
-  },
-  retryButtonText: {
-    color: colors.white,
-  },
 });

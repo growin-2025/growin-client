@@ -78,9 +78,10 @@ const styles = StyleSheet.create({
   linkIcon: {
     width: 20,
     height: 20,
+    tintColor: colors.gray[2],
   },
   linkLabel: {
-    color: colors.black,
+    color: colors.gray[1],
   },
   linkPhoto: {
     width: 60,
@@ -96,6 +97,6 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
   linkUrl: {
-    color: colors.gray[1],
+    color: colors.black,
   },
 });
