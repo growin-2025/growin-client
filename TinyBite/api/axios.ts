@@ -95,6 +95,9 @@ privateAxios.interceptors.response.use(
       !originalRequest._retry &&
       !originalRequest.url?.includes("/refresh")
     ) {
+      console.log("error.response?.status >>", error.response?.status);
+      console.log("긴 기다림 끝에 401 에러 뜸!!!!");
+
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
@@ -132,6 +135,7 @@ privateAxios.interceptors.response.use(
         return privateAxios(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
+        useAuthStore.getState().logout();
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
