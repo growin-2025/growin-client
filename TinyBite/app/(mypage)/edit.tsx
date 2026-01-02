@@ -1,8 +1,10 @@
+import { getUserMe } from "@/api/userApi";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Image,
   Pressable,
@@ -15,8 +17,23 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function EditProfileScreen() {
   const router = useRouter();
-  const [nickname, setNickname] = useState("가짜대학생");
   const maxLength = 12;
+
+  // 현재 사용자 정보 조회
+  const { data: userMe } = useQuery({
+    queryKey: ["getUserMe"],
+    queryFn: getUserMe,
+  });
+
+  // 닉네임 상태 관리
+  const [nickname, setNickname] = useState("");
+
+  // 사용자 정보가 로드되면 닉네임 초기화
+  useEffect(() => {
+    if (userMe?.name) {
+      setNickname(userMe.name);
+    }
+  }, [userMe]);
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
