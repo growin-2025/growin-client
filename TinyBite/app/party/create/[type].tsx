@@ -170,7 +170,7 @@ export default function PartyCreateScreen() {
       },
       ...(photoStringList && { images: photoStringList }),
       ...(productLink && { productLink }),
-      ...(detailedDescription && { productLink: detailedDescription }),
+      ...(detailedDescription && { description: detailedDescription }),
     };
 
     CreatePartyMutation.mutate(newPartyValue);
