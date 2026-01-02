@@ -1,4 +1,5 @@
 import { postLogout } from "@/api/authApi";
+import { getUserMe } from "@/api/userApi";
 import ConfirmModal from "@/components/ConfirmModal";
 import { useAuthStore } from "@/stores/authStore";
 import { colors } from "@/styles/colors";
@@ -13,11 +14,10 @@ import { useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useShallow } from "zustand/shallow";
-
-import { getUserMe } from "@/api/userApi";
 export default function SettingScreen() {
   const router = useRouter();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  //const [showWithdrawModal, setShowWithdrawModal] = useState(false);
 
   const { logout } = useAuthStore(
     useShallow((state) => ({
@@ -45,7 +45,41 @@ export default function SettingScreen() {
       }
     },
   });
-
+  /*
+  const withdrawMutation = useMutation({
+    mutationFn: deleteUserMe,
+    onSuccess: () => {
+      Toast.show({
+        type: "basicToast",
+        props: { text: "회원탈퇴가 완료되었습니다." },
+        position: "bottom",
+        bottomOffset: 98,
+        visibilityTime: 2000,
+      });
+      logout();
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      if (error.response?.data) {
+        const message = getErrorMessage(error.response.data);
+        Toast.show({
+          type: "basicToast",
+          props: { text: message },
+          position: "bottom",
+          bottomOffset: 98,
+          visibilityTime: 2000,
+        });
+      } else {
+        Toast.show({
+          type: "basicToast",
+          props: { text: "네트워크 연결을 확인해주세요." },
+          position: "bottom",
+          bottomOffset: 98,
+          visibilityTime: 2000,
+        });
+      }
+    },
+  });
+*/
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
@@ -82,10 +116,8 @@ export default function SettingScreen() {
             style={styles.chevronIcon}
           />
         </Pressable>
-
         {/* 구분선 */}
         <View style={styles.divider} />
-
         {/* 내 동네 설정 */}
         <Pressable
           style={styles.settingItem}
@@ -110,10 +142,8 @@ export default function SettingScreen() {
             />
           </View>
         </Pressable>
-
         {/* 구분선 */}
         <View style={styles.divider} />
-
         {/* 로그아웃 */}
         <Pressable
           style={styles.settingItem}
@@ -133,6 +163,27 @@ export default function SettingScreen() {
             style={styles.chevronIcon}
           />
         </Pressable>
+        {/*
+        <View style={styles.divider} />
+        <Pressable
+          style={styles.settingItem}
+          onPress={() => setShowWithdrawModal(true)}
+        >
+          <View style={styles.settingItemLeft}>
+            <Image
+              source={require("@/assets/images/chat/no-chat.png")}
+              style={styles.settingIcon}
+            />
+            <Text style={[styles.settingText, textStyles.body16_SB135]}>
+              회원 탈퇴
+            </Text>
+          </View>
+          <Image
+            source={require("@/assets/images/chevron/chevron-right-24.png")}
+            style={styles.chevronIcon}
+          />
+        </Pressable>
+        */}
       </View>
 
       {/* 로그아웃 확인 모달 */}
@@ -147,6 +198,20 @@ export default function SettingScreen() {
           logoutMutation.mutateAsync();
         }}
       />
+
+      {/* 회원탈퇴 확인 모달 
+      <ConfirmModal
+        visible={showWithdrawModal}
+        title="회원 탈퇴"
+        message={`회원 탈퇴 시 계정 정보 및 저장된 모든 정보가\n삭제 되어 복구가 불가해요.\n\n정말 탈퇴하시겠어요?`}
+        cancelText="아니오"
+        confirmText="예"
+        onClose={() => setShowWithdrawModal(false)}
+        onConfirm={() => {
+          withdrawMutation.mutateAsync();
+        }}
+      />
+      */}
     </SafeAreaView>
   );
 }
