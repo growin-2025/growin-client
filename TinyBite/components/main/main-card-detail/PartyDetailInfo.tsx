@@ -45,7 +45,7 @@ const PartyDetailInfo = ({ partyDetail }: PartyDetailInfoProps) => {
       title: partyDetail?.pickupLocation.place || "로딩 중...",
       meta: partyDetail?.distance
         ? `내 위치에서 ${partyDetail.distance}`
-        : "로딩 중...",
+        : "여기에서 픽업해요!",
     },
     {
       type: "group",
