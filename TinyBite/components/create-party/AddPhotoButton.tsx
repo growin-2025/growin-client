@@ -37,7 +37,6 @@ const AddPhotoButton = () => {
 
     if (!result.canceled) {
       const asset = result.assets[0];
-      console.log(asset);
       addPhoto(
         asset.uri,
         asset.mimeType || "image/jpeg",

@@ -51,8 +51,7 @@ export const getPartyList = async (
  * @param newParty 파티를 생성하는데 필요한 값
  */
 export const postCreateParty = async (newParty: CreatingPartyBody) => {
-  const res = await privateAxios.post(ENDPOINT.PARTY.CREATE_PARTIES, newParty);
-  console.log("postRefresh >>", res.data);
+  await privateAxios.post(ENDPOINT.PARTY.CREATE_PARTIES, newParty);
 };
 
 /**

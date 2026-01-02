@@ -1,5 +1,5 @@
 import { postLoginGoogle } from "@/api/authApi";
-import { getCurrentUser, signIn, signOut } from "@/hooks/useGoogleAuth";
+import { getCurrentUser, signIn } from "@/hooks/useGoogleAuth";
 import { useAuthStore } from "@/stores/authStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
@@ -57,8 +57,6 @@ export default function LoginScreen() {
   });
 
   const handleGoogleLogin = async () => {
-    await signOut();
-
     let idToken;
 
     const user = await getCurrentUser();
