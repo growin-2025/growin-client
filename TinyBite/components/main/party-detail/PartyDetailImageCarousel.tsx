@@ -9,6 +9,7 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 import Carousel from "react-native-reanimated-carousel";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // 캐러셀 높이 상수 (디자인 변경 시 한 곳만 수정하면 됨)
 const CAROUSEL_HEIGHT = 300;
@@ -48,6 +49,7 @@ const PartyDetailImageCarousel = ({
   scrollY,
   screenWidth,
 }: PartyDetailImageCarouselProps) => {
+  const insets = useSafeAreaInsets();
   const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 인덱스
   const [imageViewerVisible, setImageViewerVisible] = useState(false); // 이미지 뷰어 표시 여부
   const [imageViewerIndex, setImageViewerIndex] = useState(0); // 이미지 뷰어에서 보여줄 이미지 인덱스
@@ -143,6 +145,22 @@ const PartyDetailImageCarousel = ({
         onRequestClose={() => setImageViewerVisible(false)}
         swipeToCloseEnabled={true}
         doubleTapToZoomEnabled={true}
+        HeaderComponent={() => (
+          <View
+            style={{
+              paddingTop: insets.top + 2,
+              paddingRight: 20,
+              alignItems: "flex-end",
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => setImageViewerVisible(false)}
+              style={styles.closeButton}
+            >
+              <Text style={{ color: "white", fontSize: 24 }}>✕</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       />
     </View>
   );
@@ -198,5 +216,11 @@ const styles = StyleSheet.create({
   },
   paginationText: {
     color: "#FFFFFF",
+  },
+  closeButton: {
+    width: 36,
+    height: 36,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

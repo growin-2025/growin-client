@@ -46,7 +46,7 @@ const FloatingMenuOverlay = ({
                   setIsMenuOpen(false);
                   router.navigate({
                     pathname: "/party/create/[type]",
-                    params: { type: "delivery" },
+                    params: { type: "DELIVERY" },
                   });
                 }}
               >
@@ -67,7 +67,7 @@ const FloatingMenuOverlay = ({
                   setIsMenuOpen(false);
                   router.navigate({
                     pathname: "/party/create/[type]",
-                    params: { type: "necessities" },
+                    params: { type: "HOUSEHOLD" },
                   });
                 }}
               >
@@ -88,7 +88,7 @@ const FloatingMenuOverlay = ({
                   setIsMenuOpen(false);
                   router.navigate({
                     pathname: "/party/create/[type]",
-                    params: { type: "shopping" },
+                    params: { type: "GROCERY" },
                   });
                 }}
               >

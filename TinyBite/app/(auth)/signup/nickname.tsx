@@ -4,7 +4,7 @@ import { useSignupStore } from "@/stores/signupStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { ApiError } from "@/types/api";
-import { getErrorMessage } from "@/utils/getErrorMessage ";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 import { validateAndFilterNickname } from "@/utils/validateAndFilterText";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
