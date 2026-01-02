@@ -157,7 +157,18 @@ export default function PartyCreateScreen() {
     let photoStringList: string[] | undefined;
 
     if (photos.length) {
-      photoStringList = await UploadFileMutation.mutateAsync(photos);
+      try {
+        photoStringList = await UploadFileMutation.mutateAsync(photos);
+      } catch (error) {
+        Toast.show({
+          type: "basicToast",
+          props: { text: "사진 업로드에 실패했습니다. 다시 시도해주세요." },
+          position: "bottom",
+          bottomOffset: 133,
+          visibilityTime: 2000,
+        });
+        return;
+      }
     }
 
     const newPartyValue: CreatingPartyBody = {
