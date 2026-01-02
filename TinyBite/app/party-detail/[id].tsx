@@ -183,7 +183,6 @@ export default function PartyDetailScreen() {
             <PartyDetailInfo partyDetail={partyDetail} />
             {/* 상품 링크 */}
             {partyDetail?.productLink &&
-              partyDetail.productLink.productName?.trim() &&
               partyDetail.productLink.url?.trim() && (
                 <PartyDetailProductLink
                   productTitle={partyDetail.productLink.productName}

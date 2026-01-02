@@ -3,7 +3,7 @@ import { textStyles } from "@/styles/typography/textStyles";
 import { Image, StyleSheet, Text, View } from "react-native";
 
 interface PartyDetailProductLinkProps {
-  productTitle: string;
+  productTitle?: string | null;
   productUrl: string;
   thumbnailImage?: string;
 }
@@ -13,9 +13,6 @@ const PartyDetailProductLink = ({
   productUrl,
   thumbnailImage,
 }: PartyDetailProductLinkProps) => {
-  //임시 디폴트 이미지
-  const defaultThumbnail = require("@/assets/images/mainlist/detail/link-photo.png");
-
   return (
     <View style={styles.linkSection}>
       <View style={styles.linkHeader}>
@@ -29,15 +26,19 @@ const PartyDetailProductLink = ({
         </Text>
       </View>
       <View style={styles.linkContent}>
-        <Image
-          source={thumbnailImage ? { uri: thumbnailImage } : defaultThumbnail}
-          style={styles.linkPhoto}
-          resizeMode="cover"
-        />
+        {thumbnailImage && (
+          <Image
+            source={{ uri: thumbnailImage }}
+            style={styles.linkPhoto}
+            resizeMode="cover"
+          />
+        )}
         <View style={styles.linkTexts}>
-          <Text style={[styles.linkTitle, textStyles.body13_SB150]}>
-            {productTitle}
-          </Text>
+          {productTitle?.trim() && (
+            <Text style={[styles.linkTitle, textStyles.body13_SB150]}>
+              {productTitle}
+            </Text>
+          )}
           <Text style={[styles.linkUrl, textStyles.body13_M135]}>
             {productUrl}
           </Text>
@@ -54,7 +55,6 @@ const styles = StyleSheet.create({
     marginTop: 16,
     alignSelf: "center",
     width: "100%",
-    height: 110,
     backgroundColor: colors.background,
     borderRadius: 16,
     padding: 12,
