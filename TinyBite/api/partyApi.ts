@@ -138,6 +138,6 @@ export const patchParty = async ({
 }: {
   partyId: number;
   body: EditedPartyInfo;
-}): Promise<void> => {
+}) => {
   await privateAxios.patch(ENDPOINT.PARTY.EDIT_PARTIES(partyId), body);
 };

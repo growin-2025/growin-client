@@ -118,13 +118,13 @@ export type PartyDetail = {
  * 파티 수정 정보 타입
  */
 export type EditedPartyInfo = {
-  title: string;
-  totalPrice: number;
-  maxParticipants: number;
-  pickupLocation: string;
-  latitude: number;
-  longitude: number;
-  productLink: ProductLink;
-  description: string;
-  images: string[];
+  title?: string;
+  totalPrice?: number;
+  maxParticipants?: number;
+  pickupLocation?: string;
+  latitude?: number;
+  longitude?: number;
+  productLink?: ProductLink;
+  description?: string;
+  images?: string[];
 };
