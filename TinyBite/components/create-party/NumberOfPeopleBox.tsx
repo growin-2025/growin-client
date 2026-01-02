@@ -1,17 +1,26 @@
 import { useCreatingPartyStore } from "@/stores/creatingPartyStore";
+import { useEditPartyStore } from "@/stores/editPartyStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { useLocalSearchParams } from "expo-router";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useShallow } from "zustand/shallow";
 
 const MINUS_ICON = require("@/assets/images/minus-24-gray.png");
 const PLUS_ICON = require("@/assets/images/plus-24-gray.png");
+const MIN = 2;
+const MAX = 10;
 
 interface NumberOfPeopleBoxProps {
   isDisabled?: boolean;
 }
 
 const NumberOfPeopleBox = ({ isDisabled = true }: NumberOfPeopleBoxProps) => {
+  const { mode } = useLocalSearchParams<{
+    mode?: string;
+  }>();
+  const isEditingMode = mode === "edit";
+
   const { numberOfPeople, setNumberOfPeople } = useCreatingPartyStore(
     useShallow((state) => ({
       numberOfPeople: state.numberOfPeople,
@@ -19,15 +28,39 @@ const NumberOfPeopleBox = ({ isDisabled = true }: NumberOfPeopleBoxProps) => {
     }))
   );
 
+  const { maxParticipants, setMaxParticipants } = useEditPartyStore(
+    useShallow((state) => ({
+      maxParticipants: state.maxParticipants,
+      setMaxParticipants: state.setMaxParticipants,
+    }))
+  );
+
+  const getCurrentValue = () =>
+    isEditingMode ? maxParticipants?.value : numberOfPeople;
+
+  const setCurrentValue = (value: number) => {
+    if (isEditingMode) {
+      setMaxParticipants(value);
+    } else {
+      setNumberOfPeople(value);
+    }
+  };
+
   const handleClickMinus = () => {
-    if (numberOfPeople > 2) {
-      setNumberOfPeople(numberOfPeople - 1);
+    const current = getCurrentValue();
+    if (current === undefined) return;
+
+    if (current > MIN) {
+      setCurrentValue(current - 1);
     }
   };
 
   const handleClickPlus = () => {
-    if (numberOfPeople < 10) {
-      setNumberOfPeople(numberOfPeople + 1);
+    const current = getCurrentValue();
+    if (current === undefined) return;
+
+    if (current < MAX) {
+      setCurrentValue(current + 1);
     }
   };
 
@@ -54,7 +87,7 @@ const NumberOfPeopleBox = ({ isDisabled = true }: NumberOfPeopleBoxProps) => {
               { color: isDisabled ? colors.main : colors.gray[1] },
             ]}
           >
-            {numberOfPeople}
+            {isEditingMode ? maxParticipants.value : numberOfPeople}
           </Text>
           <Text style={[styles.textUnit, textStyles.body16_SB135]}>명</Text>
         </View>

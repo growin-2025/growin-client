@@ -1,14 +1,28 @@
 import { useCreatingPartyStore } from "@/stores/creatingPartyStore";
+import { useEditPartyStore } from "@/stores/editPartyStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import * as ImagePicker from "expo-image-picker";
+import { useLocalSearchParams } from "expo-router";
 import { Alert, Image, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { useShallow } from "zustand/shallow";
 
 const CAMERA_ICON = require("@/assets/images/camera-24-gray.png");
 
 const AddPhotoButton = () => {
-  const { addPhoto, photos } = useCreatingPartyStore(
+  const { mode } = useLocalSearchParams<{
+    mode?: string;
+  }>();
+  const isEditingMode = mode === "edit";
+
+  const { addPhoto: createAddPhoto, photos: createPhotos } =
+    useCreatingPartyStore(
+      useShallow((state) => ({
+        addPhoto: state.addPhoto,
+        photos: state.photos,
+      }))
+    );
+  const { addPhoto: editAddPhoto, photos: editPhotos } = useEditPartyStore(
     useShallow((state) => ({
       addPhoto: state.addPhoto,
       photos: state.photos,
@@ -27,7 +41,8 @@ const AddPhotoButton = () => {
       return;
     }
 
-    if (photos.length >= 5) return;
+    if (isEditingMode ? editPhotos.length >= 5 : createPhotos.length >= 5)
+      return;
 
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
@@ -37,11 +52,20 @@ const AddPhotoButton = () => {
 
     if (!result.canceled) {
       const asset = result.assets[0];
-      addPhoto(
-        asset.uri,
-        asset.mimeType || "image/jpeg",
-        asset.fileName || "photo"
-      );
+
+      if (isEditingMode) {
+        editAddPhoto(
+          asset.uri,
+          asset.mimeType || "image/jpeg",
+          asset.fileName || "photo"
+        );
+      } else {
+        createAddPhoto(
+          asset.uri,
+          asset.mimeType || "image/jpeg",
+          asset.fileName || "photo"
+        );
+      }
     }
   };
 
