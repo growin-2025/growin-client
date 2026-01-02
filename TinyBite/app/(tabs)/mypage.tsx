@@ -1,20 +1,18 @@
-import MainCard from "@/components/main/MainCard";
+import { getUserMe } from "@/api/userApi";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import {
-  Image,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MyPageScreen() {
   const router = useRouter();
+  const { data: userMe } = useQuery({
+    queryKey: ["getUserMe"],
+    queryFn: getUserMe,
+  });
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
       <StatusBar style="dark" />
@@ -58,7 +56,7 @@ export default function MyPageScreen() {
             resizeMode="contain"
           />
           <Text style={[styles.userName, textStyles.title18_SB135]}>
-            가짜대학생
+            {userMe?.name || "로딩 중..."}
           </Text>
           <Pressable
             style={styles.editButton}
@@ -82,15 +80,16 @@ export default function MyPageScreen() {
         </Text>
       </View>
       {/* Content */}
-      <ScrollView style={styles.contentWrapper}>
-        {/* Participating Parties Section */}
+      <View style={styles.contentWrapper}>
+        {/* 
         <MainCard containerStyle={styles.mypageCard} />
         <MainCard containerStyle={styles.mypageCard} />
         <MainCard containerStyle={styles.mypageCard} />
         <MainCard containerStyle={styles.mypageCard} />
         <MainCard containerStyle={styles.mypageCard} />
         <MainCard containerStyle={styles.mypageCard} />
-      </ScrollView>
+      */}
+      </View>
     </SafeAreaView>
   );
 }
