@@ -1,3 +1,4 @@
+import PartyDetailBackButton from "@/components/main/party-detail/PartyDetailBackButton";
 import PartyDetailCTA from "@/components/main/party-detail/PartyDetailCTA";
 import PartyDetailHost from "@/components/main/party-detail/PartyDetailHost";
 import PartyDetailHostNote from "@/components/main/party-detail/PartyDetailHostNote";
@@ -15,10 +16,8 @@ import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Image,
   StyleSheet,
   Text,
-  TouchableOpacity,
   useWindowDimensions,
   View,
 } from "react-native";
@@ -61,7 +60,7 @@ export default function PartyDetailScreen() {
   });
 
   const { width: SCREEN_WIDTH } = useWindowDimensions(); // 창 크기 변경 시 자동 업데이트
-  const insets = useSafeAreaInsets(); // SafeArea insets - 이미지를 스크롤뷰에 넣게 되어 부득이하게 추가 후 백버튼 높이 조절
+  const insets = useSafeAreaInsets(); // SafeArea insets - 헤더 배경 높이 계산용
   const [headerBackgroundOpacity, setHeaderBackgroundOpacity] = useState(0); // 헤더 배경 투명도 (0: 투명, 1: 불투명)
   const scrollY = useSharedValue(0); // 스크롤 위치 (react-native-reanimated용)
 
@@ -94,14 +93,7 @@ export default function PartyDetailScreen() {
         <Text style={[styles.errorText, textStyles.title18_SB135]}>
           파티 정보를 불러올 수 없습니다.
         </Text>
-        <TouchableOpacity
-          style={styles.retryButton}
-          onPress={() => router.back()}
-        >
-          <Text style={[styles.retryButtonText, textStyles.title18_SB135]}>
-            뒤로가기
-          </Text>
-        </TouchableOpacity>
+        <PartyDetailBackButton />
       </View>
     );
   }
@@ -122,19 +114,9 @@ export default function PartyDetailScreen() {
           ]}
         />
         {/* 뒤로가기 버튼 - 헤더 위에 고정 */}
-        <TouchableOpacity
-          onPress={() => router.back()}
-          style={[styles.backButton, { marginTop: insets.top + 2 }]}
-        >
-          <Image
-            source={require("@/assets/images/chevron/chevron-left-36.png")}
-            style={styles.backButtonImage}
-            resizeMode="contain"
-          />
-        </TouchableOpacity>
+        <PartyDetailBackButton />
         {/* 더보기 버튼 (오른쪽) - 헤더 위에 고정 */}
         <PartyDetailMoreButton
-          marginTop={insets.top + 2}
           onEdit={() => {
             // 수정 기능 구현
           }}
@@ -223,23 +205,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 4, // Android 그림자
-  },
-  // 뒤로가기 버튼
-  backButton: {
-    position: "absolute",
-    padding: 2,
-    marginLeft: 20,
-    width: 36,
-    height: 36,
-    borderRadius: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "rgba(0,0,0,0.3)", // 반투명 배경
-    zIndex: 11, // 헤더 배경 위에 표시
-  },
-  backButtonImage: {
-    width: 36,
-    height: 36,
   },
   // 스크롤 가능한 콘텐츠 컨테이너
   contentContainer: {
