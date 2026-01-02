@@ -10,6 +10,7 @@ import PartyDetailPill from "@/components/main/party-detail/PartyDetailPill";
 import PartyDetailProductLink from "@/components/main/party-detail/PartyDetailProductLink";
 import { usePartyDetail } from "@/hooks/usePartyDetail";
 import { useUserCoords } from "@/hooks/useUserCoords";
+import { useAuthStore } from "@/stores/authStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -38,6 +39,9 @@ export default function PartyDetailScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const partyId = id ? parseInt(id, 10) : 0;
+
+  // 현재 로그인한 사용자 정보
+  const user = useAuthStore((state) => state.user);
 
   // 위치 정보 가져오기
   const { coords, refresh: fetchCoords } = useUserCoords();
@@ -116,22 +120,24 @@ export default function PartyDetailScreen() {
         />
         {/* 뒤로가기 버튼 - 헤더 위에 고정 */}
         <PartyDetailBackButton />
-        {/* 더보기 버튼 (오른쪽) - 헤더 위에 고정 */}
-        <PartyDetailMoreButton
-          onEdit={() => {
-            // 수정 기능 구현
-          }}
-          onDelete={async () => {
-            try {
-              await deleteParty(partyId);
-              router.back();
-              return true;
-            } catch (error) {
-              console.error("파티 삭제 실패:", error);
-              return false;
-            }
-          }}
-        />
+        {/* 더보기 버튼 (오른쪽) - 헤더 위에 고정 - 본인이 작성한 파티일 때만 표시 */}
+        {partyDetail?.host.userId === user?.userId && (
+          <PartyDetailMoreButton
+            onEdit={() => {
+              // 수정 기능 구현
+            }}
+            onDelete={async () => {
+              try {
+                await deleteParty(partyId);
+                router.back();
+                return true;
+              } catch (error) {
+                console.error("파티 삭제 실패:", error);
+                return false;
+              }
+            }}
+          />
+        )}
         {/* 스크롤 가능한 콘텐츠 영역 */}
         <Animated.ScrollView
           style={styles.contentContainer}
