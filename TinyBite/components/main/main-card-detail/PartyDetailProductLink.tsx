@@ -5,7 +5,7 @@ import { Image, StyleSheet, Text, View } from "react-native";
 interface PartyDetailProductLinkProps {
   productTitle?: string | null;
   productUrl: string;
-  thumbnailImage?: string;
+  thumbnailImage?: string | null;
 }
 
 const PartyDetailProductLink = ({
