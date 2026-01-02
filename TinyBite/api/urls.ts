@@ -25,5 +25,6 @@ export const ENDPOINT = {
     ME: "/api/v1/user/me",
     NICKNAME_CHECK: "/api/v1/user/nickname/check",
     LOCATION: "/api/v1/user/me/location",
+    ACTIVE_PARTIES: "/api/v1/user/parties/active",
   },
 };
