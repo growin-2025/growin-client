@@ -127,7 +127,15 @@ export default function PartyDetailScreen() {
         {partyDetail?.host.userId === user?.userId && (
           <PartyDetailMoreButton
             onEdit={() => {
-              // 수정 기능 구현
+              router.navigate({
+                pathname: "/party/edit/[type]",
+                params: {
+                  type: "GROCERY",
+                  allEditable: (
+                    partyDetail.currentParticipants === 0
+                  ).toString(),
+                },
+              });
             }}
             onDelete={async () => {
               try {
