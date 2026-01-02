@@ -20,20 +20,12 @@ export const updateLocation = async (coords: {
   latitude: string;
   longitude: string;
 }): Promise<void> => {
-  console.log("updateLocation API 호출:", {
-    url: ENDPOINT.USER.LOCATION,
-    params: {
-      latitude: coords.latitude,
-      longitude: coords.longitude,
-    },
-  });
   const res = await privateAxios.patch(ENDPOINT.USER.LOCATION, null, {
     params: {
       latitude: coords.latitude,
       longitude: coords.longitude,
     },
   });
-  console.log("updateLocation API 응답:", res.data);
 };
 
 /**
@@ -62,10 +54,5 @@ export const checkNickname = async (nickname: string): Promise<void> => {
  * 회원 탈퇴 API
  */
 export const deleteUserMe = async (): Promise<void> => {
-  console.log("deleteUserMe API 호출:", {
-    url: ENDPOINT.USER.ME,
-    method: "DELETE",
-  });
-  const res = await privateAxios.delete(ENDPOINT.USER.ME);
-  console.log("deleteUserMe API 응답:", res.data);
+  await privateAxios.delete(ENDPOINT.USER.ME);
 };

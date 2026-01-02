@@ -30,9 +30,7 @@ export default function NeighborhoodSettingScreen() {
       // 서버에서 좌표를 주소로 변환하는데 시간이 걸릴 수 있으므로 약간의 딜레이 후 refetch
       setTimeout(async () => {
         await queryClient.invalidateQueries({ queryKey: ["getUserMe"] });
-        const { data: updatedUserMe } = await refetchUserMe();
-        console.log("업데이트 전 location:", userMe?.location);
-        console.log("업데이트 후 location:", updatedUserMe?.location);
+        await refetchUserMe();
         Toast.show({
           type: "basicToast",
           props: { text: "동네 설정이 완료되었습니다." },
