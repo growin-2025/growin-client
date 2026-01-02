@@ -1,3 +1,4 @@
+import PartyDetailCTA from "@/components/main/party-detail/PartyDetailCTA";
 import PartyDetailHost from "@/components/main/party-detail/PartyDetailHost";
 import PartyDetailHostNote from "@/components/main/party-detail/PartyDetailHostNote";
 import PartyDetailImageCarousel from "@/components/main/party-detail/PartyDetailImageCarousel";
@@ -26,10 +27,7 @@ import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
 } from "react-native-reanimated";
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 /**
  * 파티 상세 화면
@@ -194,29 +192,12 @@ export default function PartyDetailScreen() {
             <PartyDetailHostNote body={partyDetail?.description} />
           </View>
         </Animated.ScrollView>
-        {/* 하단 고정 CTA 버튼 (SafeArea 포함) */}
-        <SafeAreaView style={styles.ctaContainer} edges={["bottom"]}>
-          <TouchableOpacity
-            style={[styles.cta, partyDetail?.isClosed && styles.ctaDisabled]}
-            disabled={partyDetail?.isClosed}
-          >
-            <Text
-              style={[
-                styles.ctaText,
-                partyDetail?.isClosed && styles.ctaDisabledText,
-                textStyles.title18_SB135,
-              ]}
-            >
-              {partyDetail?.isClosed
-                ? "마감된 파티예요"
-                : partyDetail?.isParticipating
-                ? "채팅방으로 이동"
-                : partyDetail
-                ? `${partyDetail.pricePerPerson.toLocaleString()}원으로 참여하기`
-                : "로딩 중..."}
-            </Text>
-          </TouchableOpacity>
-        </SafeAreaView>
+        {/* 하단 고정 CTA 버튼 */}
+        <PartyDetailCTA
+          isClosed={partyDetail?.isClosed}
+          isParticipating={partyDetail?.isParticipating}
+          pricePerPerson={partyDetail?.pricePerPerson}
+        />
       </View>
     </>
   );
@@ -292,38 +273,6 @@ const styles = StyleSheet.create({
     height: 4,
     backgroundColor: colors.gray[4],
     marginBottom: 16,
-  },
-  // 하단 고정 CTA 버튼 영역
-  ctaContainer: {
-    paddingTop: 12,
-    paddingBottom: 18,
-    paddingHorizontal: 20,
-    backgroundColor: colors.white,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000000",
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 0 },
-    elevation: 4, // Android 그림자
-    zIndex: 10,
-  },
-  cta: {
-    width: "100%",
-    paddingVertical: 16,
-    borderRadius: 16,
-    backgroundColor: colors.main,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  ctaText: {
-    color: colors.white,
-  },
-  ctaDisabled: {
-    backgroundColor: colors.gray[2],
-  },
-  ctaDisabledText: {
-    color: colors.white,
   },
   loadingContainer: {
     flex: 1,
