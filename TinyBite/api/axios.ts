@@ -89,9 +89,9 @@ privateAxios.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // 401 에러이고 재시도하지 않은 요청인지 확인
+    // 401, 403 에러이고 재시도하지 않은 요청인지 확인
     if (
-      error.response?.status === 401 &&
+      (error.response?.status === 401 || error.response?.status === 403) &&
       !originalRequest._retry &&
       !originalRequest.url?.includes("/refresh")
     ) {

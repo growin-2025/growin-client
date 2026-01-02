@@ -1,3 +1,4 @@
+import { signOut } from "@/hooks/useGoogleAuth";
 import { LoginRespone, UserProfile } from "@/types/auth";
 import { router } from "expo-router";
 import * as SecureStore from "expo-secure-store";
@@ -23,6 +24,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ user: res.authResponse.user, isAuthenticated: true });
   },
   logout: async () => {
+    await signOut();
     await SecureStore.deleteItemAsync("googleIdToken");
     await SecureStore.deleteItemAsync("accessToken");
     await SecureStore.deleteItemAsync("refreshToken");
