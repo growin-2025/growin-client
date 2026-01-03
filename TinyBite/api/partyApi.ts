@@ -1,6 +1,7 @@
 import { Photo } from "@/stores/creatingPartyStore";
 import {
   CreatingPartyBody,
+  EditedPartyInfo,
   PartyDetail,
   PartyDetailParams,
   PartyItem,
@@ -128,7 +129,21 @@ export const deleteParty = async (partyId: number): Promise<void> => {
 };
 
 /**
- * 참여중인 파티 리스트 조회 API
+ * 파티 수정 API
+ * @param partyId 수정할 파티 id
+ * @param body 수정할 파티 정보
+ */
+export const patchParty = async ({
+  partyId,
+  body,
+}: {
+  partyId: number;
+  body: EditedPartyInfo;
+}) => {
+  await privateAxios.patch(ENDPOINT.PARTY.EDIT_PARTIES(partyId), body);
+};
+
+/* 참여중인 파티 리스트 조회 API
  * @returns 참여중인 파티 리스트
  */
 export const getActiveParties = async (): Promise<PartyItem[]> => {

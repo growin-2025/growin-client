@@ -1,4 +1,4 @@
-import { BASE_URL } from "@/api/urls";
+import { BASE_URL, ENDPOINT } from "@/api/urls";
 import { useAuthStore } from "@/stores/authStore";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
@@ -89,9 +89,14 @@ privateAxios.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // 401 에러이고 재시도하지 않은 요청인지 확인
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      const authStore = useAuthStore.getState();
+    // 401, 403 에러이고 재시도하지 않은 요청인지 확인
+    if (
+      (error.response?.status === 401 || error.response?.status === 403) &&
+      !originalRequest._retry &&
+      !originalRequest.url?.includes("/refresh")
+    ) {
+      console.log("error.response?.status >>", error.response?.status);
+      console.log("긴 기다림 끝에 401 에러 뜸!!!!");
 
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
@@ -111,19 +116,26 @@ privateAxios.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const success = await authStore.refreshAccessToken();
+        const refreshToken = await SecureStore.getItemAsync("refreshToken");
+        const res = await publicAxios.post(ENDPOINT.AUTH.REFRESH, {
+          refreshToken: refreshToken,
+        });
+        const data = res.data.data;
 
-        if (success) {
-          const newAccessToken = await SecureStore.getItemAsync("accessToken");
-          processQueue(null, newAccessToken);
-          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-          return privateAxios(originalRequest);
-        } else {
-          processQueue(error, null);
-          return Promise.reject(error);
-        }
+        await SecureStore.setItemAsync("accessToken", data.accessToken);
+        await SecureStore.setItemAsync("refreshToken", data.refreshToken);
+        useAuthStore.setState({
+          user: data.user,
+          isAuthenticated: true,
+        });
+
+        const newAccessToken = await SecureStore.getItemAsync("accessToken");
+        processQueue(null, newAccessToken);
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        return privateAxios(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
+        useAuthStore.getState().logout();
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

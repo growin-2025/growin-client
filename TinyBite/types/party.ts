@@ -49,6 +49,8 @@ export type CreatingPartyBody = {
   maxParticipants: number;
   pickupLocation: {
     place: string;
+    pickupLatitude: number;
+    pickupLongitude: number;
   };
   images?: string[];
   productLink?: string;
@@ -112,4 +114,21 @@ export type PartyDetail = {
   images: string[];
   isClosed: boolean;
   isParticipating: boolean;
+};
+
+/**
+ * 파티 수정 정보 타입
+ */
+export type EditedPartyInfo = {
+  title?: string;
+  totalPrice?: number;
+  maxParticipants?: number;
+  pickupLocation?: {
+    place: string;
+    pickupLatitude?: number;
+    pickupLongitude?: number;
+  };
+  productLink?: string;
+  description?: string;
+  images?: string[];
 };

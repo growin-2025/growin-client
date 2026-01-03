@@ -14,6 +14,7 @@ interface TextInputBoxProps {
   placeholder: string;
   onChangeText: (text: string) => void;
   value: string;
+  isEditable?: boolean;
 }
 
 const TextInputBox = ({
@@ -23,14 +24,24 @@ const TextInputBox = ({
   placeholder,
   onChangeText,
   value,
+  isEditable = true,
 }: TextInputBoxProps) => {
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: isEditable ? colors.white : colors.gray[3] },
+      ]}
+    >
       <View style={styles.inner}>
         {iconType && <Image source={iconUrl[iconType]} />}
 
         <TextInput
-          style={[styles.inputText, textStyles.body16_SB135]}
+          style={[
+            styles.inputText,
+            textStyles.body16_SB135,
+            { color: isEditable ? colors.black : colors.gray[1] },
+          ]}
           placeholder={placeholder}
           placeholderTextColor={colors.gray[1]}
           maxLength={maxLength}
@@ -40,10 +51,18 @@ const TextInputBox = ({
             onChangeText(isAmount ? text.replace(/[^0-9]/g, "") : text);
           }}
           value={value}
+          editable={isEditable}
         />
 
         {isAmount && (
-          <Text style={[styles.amountText, textStyles.body16_SB150]}>원</Text>
+          <Text
+            style={[
+              textStyles.body16_SB150,
+              { color: isEditable ? colors.black : colors.gray[1] },
+            ]}
+          >
+            원
+          </Text>
         )}
       </View>
     </View>
@@ -55,7 +74,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 16,
     borderRadius: 16,
-    backgroundColor: colors.white,
     shadowColor: "rgba(0, 0, 0, 0.25)",
     shadowOpacity: 0.25,
     shadowOffset: { width: 0, height: 0 },
@@ -69,10 +87,6 @@ const styles = StyleSheet.create({
   },
   inputText: {
     flex: 1,
-    color: colors.black,
-  },
-  amountText: {
-    color: colors.black,
   },
 });
 

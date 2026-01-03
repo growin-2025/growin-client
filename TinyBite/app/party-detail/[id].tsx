@@ -12,6 +12,7 @@ import PartyDetailPill from "@/components/main/party-detail/PartyDetailPill";
 import PartyDetailProductLink from "@/components/main/party-detail/PartyDetailProductLink";
 import { usePartyDetail } from "@/hooks/usePartyDetail";
 import { useUserCoords } from "@/hooks/useUserCoords";
+import { useEditPartyStore } from "@/stores/editPartyStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -42,6 +43,9 @@ export default function PartyDetailScreen() {
   const queryClient = useQueryClient();
   const { id } = useLocalSearchParams<{ id: string }>();
   const partyId = id ? parseInt(id, 10) : 0;
+  const setInitialPartyInfo = useEditPartyStore(
+    (state) => state.setInitialPartyInfo
+  );
 
   // 현재 로그인한 사용자 정보 조회
   const { data: userMe } = useQuery({
@@ -64,6 +68,7 @@ export default function PartyDetailScreen() {
     data: partyDetail,
     isLoading,
     error,
+    isSuccess,
   } = usePartyDetail({
     partyId,
     latitude: coords?.latitude?.toString() || "",
@@ -109,6 +114,11 @@ export default function PartyDetailScreen() {
     );
   }
 
+  // 데이터를 성공적으로 받아왔을 시
+  if (isSuccess) {
+    setInitialPartyInfo(partyDetail);
+  }
+
   return (
     <>
       {/* 상태바 스타일: 헤더가 나타나면 dark, 아니면 light */}
@@ -130,7 +140,16 @@ export default function PartyDetailScreen() {
         {partyDetail?.host.userId === userMe?.userId && (
           <PartyDetailMoreButton
             onEdit={() => {
-              // 수정 기능 구현
+              router.navigate({
+                pathname: "/party/edit/[type]",
+                params: {
+                  type: "GROCERY",
+                  mode: "edit",
+                  allEditable: (
+                    partyDetail.currentParticipants === 0
+                  ).toString(),
+                },
+              });
             }}
             onDelete={async () => {
               try {

@@ -1,6 +1,8 @@
 import { useCreatingPartyStore } from "@/stores/creatingPartyStore";
+import { useEditPartyStore } from "@/stores/editPartyStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { useLocalSearchParams } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 import { useShallow } from "zustand/shallow";
 
@@ -11,7 +13,18 @@ interface SubTitleProps {
 }
 
 const SubTitle = ({ subTitle, caption, isPic }: SubTitleProps) => {
-  const { photos } = useCreatingPartyStore(
+  const { mode } = useLocalSearchParams<{
+    mode?: string;
+  }>();
+  const isEditingMode = mode === "edit";
+
+  const { photos: createPhotos } = useCreatingPartyStore(
+    useShallow((state) => ({
+      photos: state.photos,
+    }))
+  );
+
+  const { photos: editPhotos } = useEditPartyStore(
     useShallow((state) => ({
       photos: state.photos,
     }))
@@ -26,7 +39,7 @@ const SubTitle = ({ subTitle, caption, isPic }: SubTitleProps) => {
 
         {isPic ? (
           <Text style={[styles.picCaptionText, textStyles.body16_B150]}>
-            ({photos.length}/5)
+            ({isEditingMode ? editPhotos.length : createPhotos.length}/5)
           </Text>
         ) : (
           <Text style={[styles.captionText, textStyles.body16_SB135]}>

@@ -1,13 +1,26 @@
 import { useCreatingPartyStore } from "@/stores/creatingPartyStore";
+import { useEditPartyStore } from "@/stores/editPartyStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { useLocalSearchParams } from "expo-router";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useShallow } from "zustand/shallow";
 
 const MINUS_ICON = require("@/assets/images/minus-24-gray.png");
 const PLUS_ICON = require("@/assets/images/plus-24-gray.png");
+const MIN = 2;
+const MAX = 10;
 
-const NumberOfPeopleBox = () => {
+interface NumberOfPeopleBoxProps {
+  isDisabled?: boolean;
+}
+
+const NumberOfPeopleBox = ({ isDisabled = true }: NumberOfPeopleBoxProps) => {
+  const { mode } = useLocalSearchParams<{
+    mode?: string;
+  }>();
+  const isEditingMode = mode === "edit";
+
   const { numberOfPeople, setNumberOfPeople } = useCreatingPartyStore(
     useShallow((state) => ({
       numberOfPeople: state.numberOfPeople,
@@ -15,31 +28,66 @@ const NumberOfPeopleBox = () => {
     }))
   );
 
+  const { maxParticipants, setMaxParticipants } = useEditPartyStore(
+    useShallow((state) => ({
+      maxParticipants: state.maxParticipants,
+      setMaxParticipants: state.setMaxParticipants,
+    }))
+  );
+
+  const getCurrentValue = () =>
+    isEditingMode ? maxParticipants?.value : numberOfPeople;
+
+  const setCurrentValue = (value: number) => {
+    if (isEditingMode) {
+      setMaxParticipants(value);
+    } else {
+      setNumberOfPeople(value);
+    }
+  };
+
   const handleClickMinus = () => {
-    if (numberOfPeople > 2) {
-      setNumberOfPeople(numberOfPeople - 1);
+    const current = getCurrentValue();
+    if (current === undefined) return;
+
+    if (current > MIN) {
+      setCurrentValue(current - 1);
     }
   };
 
   const handleClickPlus = () => {
-    if (numberOfPeople < 10) {
-      setNumberOfPeople(numberOfPeople + 1);
+    const current = getCurrentValue();
+    if (current === undefined) return;
+
+    if (current < MAX) {
+      setCurrentValue(current + 1);
     }
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: isDisabled ? colors.white : colors.gray[3] },
+      ]}
+    >
       <View style={styles.inner}>
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={handleClickMinus}
+          disabled={!isDisabled}
         >
           <Image style={styles.image} source={MINUS_ICON} />
         </TouchableOpacity>
 
         <View style={styles.textContainer}>
-          <Text style={[styles.textNumber, textStyles.title20_SB135]}>
-            {numberOfPeople}
+          <Text
+            style={[
+              textStyles.title20_SB135,
+              { color: isDisabled ? colors.main : colors.gray[1] },
+            ]}
+          >
+            {isEditingMode ? maxParticipants.value : numberOfPeople}
           </Text>
           <Text style={[styles.textUnit, textStyles.body16_SB135]}>명</Text>
         </View>
@@ -47,6 +95,7 @@ const NumberOfPeopleBox = () => {
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={handleClickPlus}
+          disabled={!isDisabled}
         >
           <Image style={styles.image} source={PLUS_ICON} />
         </TouchableOpacity>
@@ -60,7 +109,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 16,
     borderRadius: 16,
-    backgroundColor: colors.white,
     shadowColor: "rgba(0, 0, 0, 0.25)",
     shadowOpacity: 0.25,
     shadowOffset: { width: 0, height: 0 },
@@ -88,9 +136,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 4,
     alignItems: "center",
-  },
-  textNumber: {
-    color: colors.main,
   },
   textUnit: {
     color: colors.gray[1],

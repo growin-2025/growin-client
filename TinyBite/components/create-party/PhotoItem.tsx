@@ -1,6 +1,8 @@
 import { useCreatingPartyStore } from "@/stores/creatingPartyStore";
+import { useEditPartyStore } from "@/stores/editPartyStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { useLocalSearchParams } from "expo-router";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useShallow } from "zustand/shallow";
 
@@ -12,23 +14,53 @@ interface PhotoItemProps {
 }
 
 const PhotoItem = ({ id, imageUri }: PhotoItemProps) => {
-  const { deletePhoto, representativePhoto, setRepresentativePhoto } =
-    useCreatingPartyStore(
-      useShallow((state) => ({
-        deletePhoto: state.deletePhoto,
-        representativePhoto: state.representativePhoto,
-        setRepresentativePhoto: state.setRepresentativePhoto,
-      }))
-    );
+  const { mode } = useLocalSearchParams<{
+    mode?: string;
+  }>();
+  const isEditingMode = mode === "edit";
+
+  const {
+    deletePhoto: createDeletePhoto,
+    representativePhoto: createRepresentativePhoto,
+    setRepresentativePhoto: createSetRepresentativePhoto,
+  } = useCreatingPartyStore(
+    useShallow((state) => ({
+      deletePhoto: state.deletePhoto,
+      representativePhoto: state.representativePhoto,
+      setRepresentativePhoto: state.setRepresentativePhoto,
+    }))
+  );
+
+  const {
+    deletePhoto: editDeletePhoto,
+    representativePhoto: editRepresentativePhoto,
+    setRepresentativePhoto: editSetRepresentativePhoto,
+  } = useEditPartyStore(
+    useShallow((state) => ({
+      deletePhoto: state.deletePhoto,
+      representativePhoto: state.representativePhoto,
+      setRepresentativePhoto: state.setRepresentativePhoto,
+    }))
+  );
 
   const onClickDeletePhoto = () => {
-    deletePhoto(id);
+    if (isEditingMode) {
+      editDeletePhoto(id);
+    } else {
+      createDeletePhoto(id);
+    }
   };
 
   return (
     <TouchableOpacity
       style={styles.container}
-      onLongPress={() => setRepresentativePhoto(id)}
+      onLongPress={() => {
+        if (isEditingMode) {
+          editSetRepresentativePhoto(id);
+        } else {
+          createSetRepresentativePhoto(id);
+        }
+      }}
     >
       <View style={styles.imageContainer}>
         <Image
@@ -37,7 +69,10 @@ const PhotoItem = ({ id, imageUri }: PhotoItemProps) => {
           resizeMode="cover"
         />
 
-        {id === representativePhoto && (
+        {id ===
+          (isEditingMode
+            ? editRepresentativePhoto
+            : createRepresentativePhoto) && (
           <View style={styles.textContainer}>
             <Text style={[styles.text, textStyles.body12_M135]}>대표</Text>
           </View>

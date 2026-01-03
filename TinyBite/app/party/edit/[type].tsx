@@ -1,4 +1,4 @@
-import { postCreateParty, postFile } from "@/api/partyApi";
+import { patchParty, postFile } from "@/api/partyApi";
 import AddPhotoButton from "@/components/create-party/AddPhotoButton";
 import NumberOfPeopleBox from "@/components/create-party/NumberOfPeopleBox";
 import PhotoItem from "@/components/create-party/PhotoItem";
@@ -6,10 +6,11 @@ import SubTitle from "@/components/create-party/SubTitle";
 import TextInputBox from "@/components/create-party/TextInputBox";
 import CreatePartyPageHeader from "@/components/CreatePartyPageHeader";
 import GlobalButton from "@/components/GlobalButton";
-import { Photo, useCreatingPartyStore } from "@/stores/creatingPartyStore";
+import { Photo } from "@/stores/creatingPartyStore";
+import { PhotoUrl, useEditPartyStore } from "@/stores/editPartyStore";
 import { colors } from "@/styles/colors";
 import { ApiError } from "@/types/api";
-import { CreatingPartyBody } from "@/types/party";
+import { EditedPartyInfo } from "@/types/party";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -19,12 +20,6 @@ import { FlatList, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { useShallow } from "zustand/shallow";
-
-const PARTY_TITLES = {
-  DELIVERY: "배달 파티 생성",
-  GROCERY: "장보기 파티 생성",
-  HOUSEHOLD: "생필품 파티 생성",
-} as const;
 
 const PARTY_CONFIG = {
   DELIVERY: {
@@ -45,39 +40,44 @@ export default function PartyCreateScreen() {
   const { type } = useLocalSearchParams<{
     type: "DELIVERY" | "GROCERY" | "HOUSEHOLD";
   }>();
+  const { allEditable } = useLocalSearchParams<{
+    allEditable?: string;
+  }>();
 
-  const title = PARTY_TITLES[type];
   const config = PARTY_CONFIG[type];
+  const isAllEditable = allEditable === "true";
 
   const {
+    partyId,
     photos,
-    partyTitle,
-    totalAmount,
-    numberOfPeople,
-    pickUpLocation,
-    detailedDescription,
+    title,
+    totalPrice,
+    maxParticipants,
+    pickupLocation,
+    description,
     productLink,
     setPartyTitle,
     setTotalAmount,
     setPickUpLocation,
     setDetailedDescription,
     setProductLink,
-    resetCreateParty,
-  } = useCreatingPartyStore(
+    resetEditParty,
+  } = useEditPartyStore(
     useShallow((state) => ({
+      partyId: state.partyId,
       photos: state.photos,
-      partyTitle: state.partyTitle,
-      totalAmount: state.totalAmount,
-      numberOfPeople: state.numberOfPeople,
-      pickUpLocation: state.pickUpLocation,
-      detailedDescription: state.detailedDescription,
+      title: state.title,
+      totalPrice: state.totalPrice,
+      maxParticipants: state.maxParticipants,
+      pickupLocation: state.pickupLocation,
+      description: state.description,
       productLink: state.productLink,
       setPartyTitle: state.setPartyTitle,
       setTotalAmount: state.setTotalAmount,
       setPickUpLocation: state.setPickUpLocation,
       setDetailedDescription: state.setDetailedDescription,
       setProductLink: state.setProductLink,
-      resetCreateParty: state.resetCreateParty,
+      resetEditParty: state.resetEditParty,
     }))
   );
 
@@ -97,11 +97,11 @@ export default function PartyCreateScreen() {
     },
   });
 
-  const CreatePartyMutation = useMutation({
-    mutationFn: postCreateParty,
+  const EditPartyMutation = useMutation({
+    mutationFn: patchParty,
     onSuccess: (data) => {
-      resetCreateParty();
-      router.replace("/(tabs)");
+      resetEditParty();
+      router.replace(`/party-detail/${partyId}`);
     },
     onError: (error: AxiosError<ApiError>) => {
       if (error.response?.data) {
@@ -114,7 +114,7 @@ export default function PartyCreateScreen() {
     },
   });
 
-  const renderItem = ({ item }: { item: Photo }) => {
+  const renderItem = ({ item }: { item: Photo | PhotoUrl }) => {
     return <PhotoItem id={item.id} imageUri={item.imageUri} />;
   };
 
@@ -131,62 +131,74 @@ export default function PartyCreateScreen() {
     }
   };
 
-  const isValid = (): boolean => {
-    if (partyTitle && totalAmount && numberOfPeople && pickUpLocation) {
-      return true;
-    }
-    return false;
-  };
-
-  const showCorrectLinkToast = () => {
-    Toast.show({
-      type: "basicToast",
-      props: { text: "올바른 URL 형식으로 입력해주세요." },
-      position: "bottom",
-      bottomOffset: 133,
-      visibilityTime: 2000,
-    });
-  };
-
-  const onClickCreateParty = async () => {
-    if (productLink && !isValidLink(productLink)) {
-      showCorrectLinkToast();
+  const onClickEditParty = async () => {
+    if (productLink.isEdited && !isValidLink(productLink.value)) {
+      Toast.show({
+        type: "basicToast",
+        props: { text: "올바른 URL 형식으로 입력해주세요." },
+        position: "bottom",
+        bottomOffset: 133,
+        visibilityTime: 2000,
+      });
       return;
     }
 
-    let photoStringList: string[] | undefined;
+    try {
+      // 1. 새로 추가된 사진들만 필터링
+      const newPhotos = photos.filter(
+        (photo): photo is Photo => "mimeType" in photo
+      );
 
-    if (photos.length) {
-      try {
-        photoStringList = await UploadFileMutation.mutateAsync(photos);
-      } catch (error) {
-        Toast.show({
-          type: "basicToast",
-          props: { text: "사진 업로드에 실패했습니다. 다시 시도해주세요." },
-          position: "bottom",
-          bottomOffset: 133,
-          visibilityTime: 2000,
-        });
-        return;
+      // 2. 새 사진들 업로드
+      let uploadedImageUrls: string[] = [];
+      if (newPhotos.length > 0) {
+        const uploadResults = await UploadFileMutation.mutateAsync(newPhotos);
+        uploadedImageUrls = uploadResults;
       }
+
+      // 3. 전체 이미지 URL 배열 생성 (순서 유지)
+      let uploadIndex = 0;
+      const allImageUrls = photos.map((photo) => {
+        if ("mimeType" in photo) {
+          // Photo 타입 -> 업로드된 URL 사용
+          return uploadedImageUrls[uploadIndex++];
+        } else {
+          // PhotoUrl 타입 -> 기존 imageUri 사용
+          return photo.imageUri;
+        }
+      });
+
+      const body: EditedPartyInfo = {
+        // 필수 필드
+        images: allImageUrls,
+        description: description,
+        pickupLocation: {
+          place: pickupLocation.place,
+          pickupLatitude: pickupLocation.pickupLatitude,
+          pickupLongitude: pickupLocation.pickupLongitude,
+        },
+      };
+
+      if (title.isEdited) {
+        body.title = title.value;
+      }
+      if (totalPrice.isEdited) {
+        body.totalPrice = Number(totalPrice.value);
+      }
+      if (maxParticipants.isEdited) {
+        body.maxParticipants = maxParticipants.value;
+      }
+      if (productLink.isEdited) {
+        body.productLink = productLink.value;
+      }
+
+      await EditPartyMutation.mutateAsync({
+        partyId: partyId,
+        body: body,
+      });
+    } catch (error) {
+      console.error("파티 수정 중 오류:", error);
     }
-
-    const newPartyValue: CreatingPartyBody = {
-      title: partyTitle,
-      category: type,
-      totalPrice: Number(totalAmount),
-      maxParticipants: numberOfPeople,
-      pickupLocation: {
-        place: pickUpLocation.place,
-        pickupLatitude: pickUpLocation.pickupLatitude,
-        pickupLongitude: pickUpLocation.pickupLongitude,
-      },
-      ...(photoStringList && { images: photoStringList }),
-      ...(productLink && { productLink }),
-      ...(detailedDescription && { description: detailedDescription }),
-    };
-
-    CreatePartyMutation.mutate(newPartyValue);
   };
 
   return (
@@ -194,7 +206,7 @@ export default function PartyCreateScreen() {
       <StatusBar style="dark" />
 
       <View style={styles.container}>
-        <CreatePartyPageHeader title={title} />
+        <CreatePartyPageHeader title="파티 수정" />
 
         <ScrollView style={styles.contentContainer}>
           <SafeAreaView style={styles.contentInner} edges={["bottom"]}>
@@ -218,7 +230,8 @@ export default function PartyCreateScreen() {
                 placeholder={config.titlePlaceholder}
                 maxLength={30}
                 onChangeText={setPartyTitle}
-                value={partyTitle}
+                value={title.value}
+                isEditable={isAllEditable}
               />
             </View>
 
@@ -228,13 +241,14 @@ export default function PartyCreateScreen() {
                 placeholder="0"
                 isAmount
                 onChangeText={setTotalAmount}
-                value={totalAmount}
+                value={totalPrice.value}
+                isEditable={isAllEditable}
               />
             </View>
 
             <View style={styles.section}>
               <SubTitle subTitle="모집 인원" caption="(나 포함)" />
-              <NumberOfPeopleBox />
+              <NumberOfPeopleBox isDisabled={isAllEditable} />
             </View>
 
             <View style={styles.section}>
@@ -244,7 +258,8 @@ export default function PartyCreateScreen() {
                 placeholder="예) 역삼역 1번 출구"
                 maxLength={30}
                 onChangeText={setPickUpLocation}
-                value={pickUpLocation.place}
+                value={pickupLocation.place}
+                isEditable={isAllEditable}
               />
             </View>
 
@@ -254,7 +269,7 @@ export default function PartyCreateScreen() {
                 placeholder="추가로 전달 할 내용이 있다면 적어주세요."
                 maxLength={60}
                 onChangeText={setDetailedDescription}
-                value={detailedDescription}
+                value={description}
               />
             </View>
 
@@ -265,7 +280,8 @@ export default function PartyCreateScreen() {
                   iconType="link"
                   placeholder="구매할 상품의 URL을 입력하세요."
                   onChangeText={setProductLink}
-                  value={productLink}
+                  value={productLink.value}
+                  isEditable={isAllEditable}
                 />
               </View>
             )}
@@ -273,11 +289,7 @@ export default function PartyCreateScreen() {
         </ScrollView>
 
         <SafeAreaView style={styles.createButtonContainer} edges={["bottom"]}>
-          <GlobalButton
-            onClick={onClickCreateParty}
-            text="파티 시작하기"
-            disabled={!isValid()}
-          />
+          <GlobalButton onClick={onClickEditParty} text="완료" />
         </SafeAreaView>
       </View>
     </>
