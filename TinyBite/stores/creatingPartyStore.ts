@@ -41,9 +41,9 @@ export const useCreatingPartyStore = create<CreatingPartyState>((set, get) => ({
   totalAmount: "",
   numberOfPeople: 2,
   pickUpLocation: {
-    place: "중구 명동",
-    pickupLatitude: 37.569,
-    pickupLongitude: 126.991,
+    place: "마포구 서강동",
+    pickupLatitude: 37.55103512680912,
+    pickupLongitude: 126.9254146711746,
   },
   detailedDescription: "",
   productLink: "",
@@ -104,9 +104,9 @@ export const useCreatingPartyStore = create<CreatingPartyState>((set, get) => ({
   setPickUpLocation: (location: string) => {
     set(() => ({
       pickUpLocation: {
-        place: "중구 명동",
-        pickupLatitude: 37.569,
-        pickupLongitude: 126.991,
+        place: "마포구 서강동",
+        pickupLatitude: 37.55103512680912,
+        pickupLongitude: 126.9254146711746,
       },
     }));
   },
@@ -129,9 +129,9 @@ export const useCreatingPartyStore = create<CreatingPartyState>((set, get) => ({
       totalAmount: "",
       numberOfPeople: 2,
       pickUpLocation: {
-        place: "중구 명동",
-        pickupLatitude: 37.569,
-        pickupLongitude: 126.991,
+        place: "마포구 서강동",
+        pickupLatitude: 37.55103512680912,
+        pickupLongitude: 126.9254146711746,
       },
       detailedDescription: "",
       productLink: "",

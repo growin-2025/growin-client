@@ -170,9 +170,9 @@ export const useEditPartyStore = create<editPartyState>((set) => ({
     set(() => ({
       pickupLocation: {
         isEdited: true,
-        place: "중구 명동",
-        pickupLatitude: 37.569,
-        pickupLongitude: 126.991,
+        place: "마포구 서강동",
+        pickupLatitude: 37.55103512680912,
+        pickupLongitude: 126.9254146711746,
       },
     }));
   },

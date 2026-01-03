@@ -9,6 +9,7 @@ export const postLoginGoogle = async (loginData: LoginGoogle) => {
 
 export const postSignupGoogle = async (signupData: SignupGoogle) => {
   const res = await publicAxios.post(ENDPOINT.AUTH.SIGNUP_GOOGLE, signupData);
+  console.log("1차 확인 필요 postSignupGoogle >>", res.data);
   return res.data.data;
 };
 
