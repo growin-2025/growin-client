@@ -54,8 +54,6 @@ export default function PartyCreateScreen() {
     totalPrice,
     maxParticipants,
     pickupLocation,
-    latitude,
-    longitude,
     description,
     productLink,
     setPartyTitle,
@@ -72,8 +70,6 @@ export default function PartyCreateScreen() {
       totalPrice: state.totalPrice,
       maxParticipants: state.maxParticipants,
       pickupLocation: state.pickupLocation,
-      latitude: state.latitude,
-      longitude: state.longitude,
       description: state.description,
       productLink: state.productLink,
       setPartyTitle: state.setPartyTitle,
@@ -176,9 +172,11 @@ export default function PartyCreateScreen() {
         // 필수 필드
         images: allImageUrls,
         description: description,
-        pickupLocation: pickupLocation.value,
-        latitude: latitude.value,
-        longitude: longitude.value,
+        pickupLocation: {
+          place: pickupLocation.place,
+          pickupLatitude: pickupLocation.pickupLatitude,
+          pickupLongitude: pickupLocation.pickupLongitude,
+        },
       };
 
       if (title.isEdited) {
@@ -260,7 +258,7 @@ export default function PartyCreateScreen() {
                 placeholder="예) 역삼역 1번 출구"
                 maxLength={30}
                 onChangeText={setPickUpLocation}
-                value={pickupLocation.value}
+                value={pickupLocation.place}
                 isEditable={isAllEditable}
               />
             </View>

@@ -123,9 +123,11 @@ export type EditedPartyInfo = {
   title?: string;
   totalPrice?: number;
   maxParticipants?: number;
-  pickupLocation?: string;
-  latitude?: number;
-  longitude?: number;
+  pickupLocation?: {
+    place: string;
+    pickupLatitude?: number;
+    pickupLongitude?: number;
+  };
   productLink?: string;
   description?: string;
   images?: string[];

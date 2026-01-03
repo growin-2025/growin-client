@@ -26,15 +26,9 @@ export interface editPartyState {
   };
   pickupLocation: {
     isEdited: boolean;
-    value: string;
-  };
-  latitude: {
-    isEdited: boolean;
-    value: number;
-  };
-  longitude: {
-    isEdited: boolean;
-    value: number;
+    place: string;
+    pickupLatitude: number;
+    pickupLongitude: number;
   };
   description: string;
   productLink: {
@@ -74,15 +68,9 @@ export const useEditPartyStore = create<editPartyState>((set) => ({
   },
   pickupLocation: {
     isEdited: false,
-    value: "",
-  },
-  latitude: {
-    isEdited: false,
-    value: 37.569,
-  },
-  longitude: {
-    isEdited: false,
-    value: 126.991,
+    place: "",
+    pickupLatitude: 37.569,
+    pickupLongitude: 126.991,
   },
   description: "",
   productLink: {
@@ -113,15 +101,9 @@ export const useEditPartyStore = create<editPartyState>((set) => ({
       },
       pickupLocation: {
         isEdited: false,
-        value: info.pickupLocation.place,
-      },
-      latitude: {
-        isEdited: false,
-        value: info.pickupLocation.pickupLatitude,
-      },
-      longitude: {
-        isEdited: false,
-        value: info.pickupLocation.pickupLongitude,
+        place: info.pickupLocation.place,
+        pickupLatitude: info.pickupLocation.pickupLatitude,
+        pickupLongitude: info.pickupLocation.pickupLongitude,
       },
       description: info.description || "",
       productLink: {
@@ -188,7 +170,9 @@ export const useEditPartyStore = create<editPartyState>((set) => ({
     set(() => ({
       pickupLocation: {
         isEdited: true,
-        value: location,
+        place: "중구 명동",
+        pickupLatitude: 37.569,
+        pickupLongitude: 126.991,
       },
     }));
   },
@@ -233,15 +217,9 @@ export const useEditPartyStore = create<editPartyState>((set) => ({
       },
       pickupLocation: {
         isEdited: false,
-        value: "",
-      },
-      latitude: {
-        isEdited: false,
-        value: 37.569,
-      },
-      longitude: {
-        isEdited: false,
-        value: 126.991,
+        place: "",
+        pickupLatitude: 37.569,
+        pickupLongitude: 126.991,
       },
       description: "",
       productLink: {
