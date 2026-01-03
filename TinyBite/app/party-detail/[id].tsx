@@ -1,4 +1,5 @@
 import { deleteParty } from "@/api/partyApi";
+import { getUserMe } from "@/api/userApi";
 import ConfirmModal from "@/components/ConfirmModal";
 import PartyDetailBackButton from "@/components/main/party-detail/PartyDetailBackButton";
 import PartyDetailCTA from "@/components/main/party-detail/PartyDetailCTA";
@@ -11,11 +12,10 @@ import PartyDetailPill from "@/components/main/party-detail/PartyDetailPill";
 import PartyDetailProductLink from "@/components/main/party-detail/PartyDetailProductLink";
 import { usePartyDetail } from "@/hooks/usePartyDetail";
 import { useUserCoords } from "@/hooks/useUserCoords";
-import { useAuthStore } from "@/stores/authStore";
 import { useEditPartyStore } from "@/stores/editPartyStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
@@ -43,12 +43,15 @@ export default function PartyDetailScreen() {
   const queryClient = useQueryClient();
   const { id } = useLocalSearchParams<{ id: string }>();
   const partyId = id ? parseInt(id, 10) : 0;
-
-  // 현재 로그인한 사용자 정보
-  const user = useAuthStore((state) => state.user);
   const setInitialPartyInfo = useEditPartyStore(
     (state) => state.setInitialPartyInfo
   );
+
+  // 현재 로그인한 사용자 정보 조회
+  const { data: userMe } = useQuery({
+    queryKey: ["getUserMe"],
+    queryFn: getUserMe,
+  });
 
   // 위치 정보 가져오기
   const { coords, refresh: fetchCoords } = useUserCoords();
@@ -134,7 +137,7 @@ export default function PartyDetailScreen() {
         {/* 뒤로가기 버튼 - 헤더 위에 고정 */}
         <PartyDetailBackButton />
         {/* 더보기 버튼 (오른쪽) - 헤더 위에 고정 - 본인이 작성한 파티일 때만 표시 */}
-        {partyDetail?.host.userId === user?.userId && (
+        {partyDetail?.host.userId === userMe?.userId && (
           <PartyDetailMoreButton
             onEdit={() => {
               router.navigate({

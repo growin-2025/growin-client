@@ -4,6 +4,7 @@ import {
   EditedPartyInfo,
   PartyDetail,
   PartyDetailParams,
+  PartyItem,
   PartyListParams,
   PartyListResponse,
 } from "@/types/party";
@@ -140,4 +141,17 @@ export const patchParty = async ({
   body: EditedPartyInfo;
 }) => {
   await privateAxios.patch(ENDPOINT.PARTY.EDIT_PARTIES(partyId), body);
+};
+
+/* 참여중인 파티 리스트 조회 API
+ * @returns 참여중인 파티 리스트
+ */
+export const getActiveParties = async (): Promise<PartyItem[]> => {
+  try {
+    const res = await privateAxios.get(ENDPOINT.USER.ACTIVE_PARTIES);
+    return res.data || [];
+  } catch (error) {
+    console.error("참여중인 파티 리스트 로딩 실패:", error);
+    return [];
+  }
 };
