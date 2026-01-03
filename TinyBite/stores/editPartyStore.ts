@@ -80,13 +80,13 @@ export const useEditPartyStore = create<editPartyState>((set) => ({
 
   setInitialPartyInfo: (info: PartyDetail) =>
     set({
-      seq: info.images.length,
+      seq: info.images?.length || 0,
       partyId: info.partyId,
-      photos: info.images.map((imageUri, index) => ({
+      photos: (info.images || []).map((imageUri, index) => ({
         id: index + 1,
         imageUri: imageUri,
       })),
-      representativePhoto: info.images.length > 0 ? 1 : 0,
+      representativePhoto: (info.images?.length || 0) > 0 ? 1 : 0,
       title: {
         isEdited: false,
         value: info.title,
