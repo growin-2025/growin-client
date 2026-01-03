@@ -1,5 +1,5 @@
 import { postLogout } from "@/api/authApi";
-import { getUserMe } from "@/api/userApi";
+import { deleteUserMe, getUserMe } from "@/api/userApi";
 import ConfirmModal from "@/components/ConfirmModal";
 import { useAuthStore } from "@/stores/authStore";
 import { colors } from "@/styles/colors";
@@ -13,11 +13,12 @@ import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 import { useShallow } from "zustand/shallow";
 export default function SettingScreen() {
   const router = useRouter();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  //const [showWithdrawModal, setShowWithdrawModal] = useState(false);
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
 
   const { logout } = useAuthStore(
     useShallow((state) => ({
@@ -45,7 +46,6 @@ export default function SettingScreen() {
       }
     },
   });
-  /*
   const withdrawMutation = useMutation({
     mutationFn: deleteUserMe,
     onSuccess: () => {
@@ -79,7 +79,6 @@ export default function SettingScreen() {
       }
     },
   });
-*/
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
@@ -94,7 +93,6 @@ export default function SettingScreen() {
         <Text style={[styles.headerTitle, textStyles.title20_B135]}>설정</Text>
         <View style={styles.placeholder} />
       </View>
-
       {/* Content */}
       <View style={styles.contentWrapper}>
         {/* 알림 설정 */}
@@ -163,7 +161,6 @@ export default function SettingScreen() {
             style={styles.chevronIcon}
           />
         </Pressable>
-        {/*
         <View style={styles.divider} />
         <Pressable
           style={styles.settingItem}
@@ -183,9 +180,7 @@ export default function SettingScreen() {
             style={styles.chevronIcon}
           />
         </Pressable>
-        */}
       </View>
-
       {/* 로그아웃 확인 모달 */}
       <ConfirmModal
         visible={showLogoutModal}
@@ -198,12 +193,11 @@ export default function SettingScreen() {
           logoutMutation.mutateAsync();
         }}
       />
-
-      {/* 회원탈퇴 확인 모달 
+      {/* 회원탈퇴 확인 모달 */}
       <ConfirmModal
         visible={showWithdrawModal}
         title="회원 탈퇴"
-        message={`회원 탈퇴 시 계정 정보 및 저장된 모든 정보가\n삭제 되어 복구가 불가해요.\n\n정말 탈퇴하시겠어요?`}
+        message={`회원 탈퇴 시 계정 정보 및 저장된 모든 정보가\n삭제 되어 30일 간 복구가 불가해요.\n\n정말 탈퇴하시겠어요?`}
         cancelText="아니오"
         confirmText="예"
         onClose={() => setShowWithdrawModal(false)}
@@ -211,7 +205,6 @@ export default function SettingScreen() {
           withdrawMutation.mutateAsync();
         }}
       />
-      */}
     </SafeAreaView>
   );
 }
