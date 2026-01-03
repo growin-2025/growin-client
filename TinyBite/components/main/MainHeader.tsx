@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderBottomLeftRadius: 16,
     borderBottomRightRadius: 16,
+    paddingTop: 12,
   },
   // 메인 컨테이너 스타일
   container: {

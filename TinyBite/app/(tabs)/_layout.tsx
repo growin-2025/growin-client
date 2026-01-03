@@ -2,11 +2,13 @@ import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { Tabs } from "expo-router";
 import { Image } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const PRIMARY_COLOR = colors.main;
 const INACTIVE_COLOR = colors.gray[2];
 
 export default function TabsLayout() {
+  const insets = useSafeAreaInsets();
   return (
     <Tabs
       screenOptions={{
@@ -19,7 +21,7 @@ export default function TabsLayout() {
           ...textStyles.body13_SB135,
         },
         tabBarStyle: {
-          height: 92,
+          height: 68 + insets.bottom,
           paddingTop: 12,
           paddingBottom: 12,
           backgroundColor: colors.white,
