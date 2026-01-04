@@ -206,23 +206,23 @@ export default function EditProfileScreen() {
           </Pressable>
         </View>
 
-        {/* Nickname Input */}
-        <View style={styles.nicknameWrapper}>
-          <View style={styles.nicknameInputWrapper}>
-            <Text style={[styles.nicknameLabel, textStyles.body16_SB135]}>
-              닉네임
-            </Text>
+        <View style={styles.nicknameInputWrapper}>
+          <Text style={[styles.nicknameLabel, textStyles.body16_SB135]}>
+            닉네임
+          </Text>
+          <View style={{ alignSelf: "stretch" }}>
             <TextInput
               style={[styles.nicknameInput, textStyles.title18_SB135]}
-              value={nickname}
               onChangeText={handleNicknameChange}
-              maxLength={maxLength}
+              value={nickname}
               placeholder="수정할 닉네임을 입력하세요"
+              keyboardType="default"
+              maxLength={maxLength}
             />
-            <Text style={[styles.charCount, textStyles.body12_M135]}>
-              ({Math.min(nickname.length, displayMaxLength)}/{displayMaxLength})
-            </Text>
           </View>
+          <Text style={[styles.charCount, textStyles.body12_M135]}>
+            ({Math.min(nickname.length, displayMaxLength)}/{displayMaxLength})
+          </Text>
         </View>
       </View>
     </SafeAreaView>
@@ -295,32 +295,32 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 5,
   },
-  nicknameWrapper: {
-    width: "100%",
-    flexDirection: "row",
-    alignItems: "flex-start",
-    gap: 12,
-  },
   nicknameInputWrapper: {
-    flex: 1,
-    height: 96,
+    width: "100%",
+    gap: 8,
     padding: 12,
+    justifyContent: "center",
+    alignItems: "flex-start",
     backgroundColor: colors.white,
-    borderRadius: 12,
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 0 },
+    borderRadius: 16,
+    borderWidth: 0,
+    // 그림자 효과 (iOS)
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 4,
+    // 그림자 효과 (Android)
+    elevation: 3,
   },
   nicknameLabel: {
     color: colors.gray[1],
-    marginBottom: 8,
   },
   nicknameInput: {
-    flex: 1,
+    alignSelf: "stretch",
     color: colors.black,
-    marginBottom: 4,
+    padding: 0,
+    margin: 0,
+    textAlignVertical: "center",
   },
   charCount: {
     color: colors.gray[1],
