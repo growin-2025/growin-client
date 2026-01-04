@@ -2,6 +2,7 @@ import { useCreatingPartyStore } from "@/stores/creatingPartyStore";
 import { useEditPartyStore } from "@/stores/editPartyStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import * as ImageManipulator from "expo-image-manipulator";
 import * as ImagePicker from "expo-image-picker";
 import { useLocalSearchParams } from "expo-router";
 import { Alert, Image, StyleSheet, Text, TouchableOpacity } from "react-native";
@@ -53,15 +54,21 @@ const AddPhotoButton = () => {
     if (!result.canceled) {
       const asset = result.assets[0];
 
+      const manipulatedImage = await ImageManipulator.manipulateAsync(
+        asset.uri,
+        [{ resize: { width: 1024 } }],
+        { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
+      );
+
       if (isEditingMode) {
         editAddPhoto(
-          asset.uri,
+          manipulatedImage.uri,
           asset.mimeType || "image/jpeg",
           asset.fileName || "photo"
         );
       } else {
         createAddPhoto(
-          asset.uri,
+          manipulatedImage.uri,
           asset.mimeType || "image/jpeg",
           asset.fileName || "photo"
         );
