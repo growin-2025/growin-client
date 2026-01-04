@@ -101,7 +101,7 @@ export default function PartyDetailScreen() {
   }, [isSuccess, partyDetail, setInitialPartyInfo]);
 
   // 로딩 중일 때
-  if (isLoading || !coords) {
+  if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={colors.main} />
