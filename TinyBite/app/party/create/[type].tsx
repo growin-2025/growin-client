@@ -272,18 +272,15 @@ export default function PartyCreateScreen() {
                 </View>
               )}
             </View>
-
-            <SafeAreaView
-              style={styles.createButtonContainer}
-              edges={["bottom"]}
-            >
-              <GlobalButton
-                onClick={onClickCreateParty}
-                text="파티 시작하기"
-                disabled={!isValid()}
-              />
-            </SafeAreaView>
           </ScrollView>
+
+          <SafeAreaView style={styles.createButtonContainer} edges={["bottom"]}>
+            <GlobalButton
+              onClick={onClickCreateParty}
+              text="파티 시작하기"
+              disabled={!isValid()}
+            />
+          </SafeAreaView>
         </KeyboardAwareScrollView>
       </View>
     </>
