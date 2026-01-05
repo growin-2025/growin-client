@@ -93,8 +93,15 @@ export default function PartyDetailScreen() {
     },
   });
 
+  // 데이터를 성공적으로 받아왔을 시 Store 업데이트 (렌더링 중 업데이트 방지)
+  useEffect(() => {
+    if (isSuccess && partyDetail) {
+      setInitialPartyInfo(partyDetail);
+    }
+  }, [isSuccess, partyDetail, setInitialPartyInfo]);
+
   // 로딩 중일 때
-  if (isLoading || !coords) {
+  if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={colors.main} />
@@ -112,11 +119,6 @@ export default function PartyDetailScreen() {
         onClose={() => router.back()}
       />
     );
-  }
-
-  // 데이터를 성공적으로 받아왔을 시
-  if (isSuccess) {
-    setInitialPartyInfo(partyDetail);
   }
 
   return (

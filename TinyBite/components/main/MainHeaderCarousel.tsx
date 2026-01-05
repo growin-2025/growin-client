@@ -59,8 +59,8 @@ const MainHeaderCarousel = ({
         data={data}
         scrollAnimationDuration={1000}
         autoPlay={true}
-        autoPlayInterval={5000}
-        loop={true}
+        autoPlayInterval={2000}
+        loop={false}
         onSnapToItem={handlePageChange}
         renderItem={({
           item,
