@@ -158,6 +158,9 @@ export default function PartyDetailScreen() {
                 await deleteParty(partyId);
                 // 파티 리스트 쿼리 무효화하여 자동으로 새로고침
                 queryClient.invalidateQueries({ queryKey: ["getParties"] });
+                queryClient.invalidateQueries({
+                  queryKey: ["getHostingParties"],
+                });
                 router.back();
                 return true;
               } catch (error: any) {
