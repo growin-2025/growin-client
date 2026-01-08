@@ -7,6 +7,8 @@ import {
   PartyItem,
   PartyListParams,
   PartyListResponse,
+  SearchPartyParams,
+  SearchPartyResponse,
 } from "@/types/party";
 import { Platform } from "react-native";
 import { privateAxios } from "./axios";
@@ -167,5 +169,72 @@ export const getHostingParties = async (): Promise<PartyItem[]> => {
   } catch (error) {
     console.error("호스팅 중인 파티 리스트 로딩 실패:", error);
     return [];
+  }
+};
+
+/**
+ * 파티 검색 API
+ * @param params 검색 파라미터 (q, category, page, size)
+ * @returns 검색된 파티 리스트 응답
+ */
+export const searchParties = async (
+  params: SearchPartyParams
+): Promise<SearchPartyResponse> => {
+  try {
+    const res = await privateAxios.get<SearchPartyResponse>(
+      ENDPOINT.PARTY.SEARCH,
+      {
+        params: {
+          q: params.q,
+          category: params.category || "ALL",
+          page: params.page ?? 0,
+          size: params.size ?? 20,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.error("파티 검색 실패:", error);
+    throw error;
+  }
+};
+
+/**
+ * 최근 검색 로그 조회 API
+ * @returns 최근 검색어 리스트
+ */
+export const getSearchLog = async (): Promise<string[]> => {
+  try {
+    const res = await privateAxios.get(ENDPOINT.PARTY.SEARCH_LOG);
+    return res.data?.data || [];
+  } catch (error) {
+    console.error("최근 검색 로그 조회 실패:", error);
+    return [];
+  }
+};
+
+/**
+ * 최근 검색 로그 삭제 API
+ * @param keyword 삭제할 검색어
+ */
+export const deleteSearchLog = async (keyword: string): Promise<void> => {
+  try {
+    await privateAxios.delete(ENDPOINT.PARTY.SEARCH_LOG_DELETE(keyword));
+  } catch (error) {
+    console.error("최근 검색 로그 삭제 실패:", error);
+    throw error;
+  }
+};
+
+/**
+ * 모든 최근 검색 로그 삭제 API
+ * @returns 삭제 성공 여부
+ */
+export const deleteAllSearchLog = async (): Promise<void> => {
+  try {
+    await privateAxios.delete(ENDPOINT.PARTY.SEARCH_LOG);
+  } catch (error) {
+    console.error("모든 최근 검색 로그 삭제 실패:", error);
+    throw error;
   }
 };
