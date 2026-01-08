@@ -1,33 +1,19 @@
-import { getActiveParties } from "@/api/partyApi";
 import { getUserMe } from "@/api/userApi";
-import MainCard from "@/components/main/MainCard";
+import MyPartyList from "@/components/mypage/MyPartyList";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { PartyItem } from "@/types/party";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import {
-  Image,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MyPageScreen() {
   const router = useRouter();
+
   const { data: userMe } = useQuery({
     queryKey: ["getUserMe"],
     queryFn: getUserMe,
-  });
-
-  // 참여중인 파티 리스트 조회
-  const { data: activeParties = [], isLoading } = useQuery<PartyItem[]>({
-    queryKey: ["getActiveParties"],
-    queryFn: getActiveParties,
   });
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
@@ -90,41 +76,8 @@ export default function MyPageScreen() {
           </Pressable>
         </View>
       </View>
-      <View style={styles.sectionWrapper}>
-        <Text style={[styles.sectionTitle, textStyles.body16_B150]}>
-          참여 중인 파티
-        </Text>
-      </View>
-      {/* Content */}
-      <ScrollView style={styles.contentWrapper}>
-        {isLoading ? (
-          <View style={styles.emptyContainer}>
-            <Text style={[styles.emptyText, textStyles.body16_SB135]}>
-              로딩 중...
-            </Text>
-          </View>
-        ) : activeParties.length === 0 ? (
-          <View style={styles.emptyContainer}>
-            <Text style={[styles.emptyText, textStyles.body16_SB135]}>
-              참여 중인 파티가 없습니다.
-            </Text>
-          </View>
-        ) : (
-          activeParties.map((item) => (
-            <MainCard
-              key={item.partyId}
-              item={item}
-              containerStyle={styles.mypageCard}
-              onPress={() =>
-                router.push({
-                  pathname: "/party-detail/[id]" as any,
-                  params: { id: item.partyId.toString() },
-                })
-              }
-            />
-          ))
-        )}
-      </ScrollView>
+      {/* Party List */}
+      <MyPartyList />
     </SafeAreaView>
   );
 }
@@ -189,29 +142,5 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: colors.black,
-  },
-  contentWrapper: {
-    flex: 1,
-    backgroundColor: colors.background,
-    paddingHorizontal: 20,
-  },
-  mypageCard: {
-    borderRadius: 0,
-    shadowColor: "transparent",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0,
-    shadowRadius: 0,
-    elevation: 0,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.gray[4],
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingTop: 40,
-  },
-  emptyText: {
-    color: colors.gray[1],
   },
 });
