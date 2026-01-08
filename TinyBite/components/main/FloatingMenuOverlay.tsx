@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   floatingButtonInModal: {
     position: "absolute",
     right: 20,
-    bottom: 100,
+    bottom: 110,
   },
 });
 
