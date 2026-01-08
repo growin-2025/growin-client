@@ -132,3 +132,28 @@ export type EditedPartyInfo = {
   description?: string;
   images?: string[];
 };
+
+/**
+ * 검색 API 요청 파라미터 타입
+ */
+export type SearchPartyParams = {
+  q: string;
+  category?: PartyCategory;
+  page?: number;
+  size?: number;
+};
+
+/**
+ * 검색 API 응답 데이터 타입
+ */
+export type SearchPartyResponseData = {
+  parties: PartyItem[];
+  hasNext: boolean;
+};
+
+/**
+ * 검색 API 응답 타입
+ */
+export type SearchPartyResponse = {
+  data: SearchPartyResponseData;
+};
