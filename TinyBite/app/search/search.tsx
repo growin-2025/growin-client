@@ -1,96 +1,112 @@
+import { searchParties } from "@/api/partyApi";
 import { getUserMe } from "@/api/userApi";
+import MainCategory from "@/components/main/MainCategory";
+import RecentSearchList from "@/components/search/RecentSearchList";
+import SearchBar from "@/components/search/SearchBar";
+import SearchResultList from "@/components/search/SearchResultList";
+import { usePartyStore } from "@/stores/partyStore";
 import { colors } from "@/styles/colors";
-import { textStyles } from "@/styles/typography/textStyles";
+import { PartyItem } from "@/types/party";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import {
-  Image,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SearchScreen() {
   const router = useRouter();
+  const partyType = usePartyStore((state) => state.partyType);
+  const setPartyType = usePartyStore((state) => state.setPartyType);
   const [searchText, setSearchText] = useState("");
-  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  // 유저 정보 조회
+  // 유저 정보 조회 (검색 화면에서만 필요할 때 호출)
   const { data: userMe } = useQuery({
     queryKey: ["getUserMe"],
     queryFn: getUserMe,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
+
+  // 검색 결과 조회 (useQuery 사용)
+  const {
+    data: searchResponse,
+    isLoading: isSearching,
+    error: searchError,
+  } = useQuery({
+    queryKey: ["search", searchQuery, partyType],
+    queryFn: () =>
+      searchParties({
+        q: searchQuery,
+        category: partyType,
+        page: 0,
+        size: 20,
+      }),
+    enabled: !!searchQuery && searchQuery.trim().length > 0,
+  });
+
+  const searchResults = searchResponse?.data.parties || [];
+  const hasNext = searchResponse?.data.hasNext || false;
 
   const location = userMe?.location || "역삼동";
 
   const handleClearSearch = () => {
     setSearchText("");
+    setSearchQuery("");
   };
 
-  const handleDeleteAll = () => {
-    setRecentSearches([]);
+  const handleRecentSearchClick = (keyword: string) => {
+    setSearchText(keyword);
+    setSearchQuery(keyword);
+    setPartyType("ALL"); // 검색 시 카테고리를 전체로 초기화
   };
+
+  const handleSubmitSearch = () => {
+    if (searchText.trim()) {
+      setSearchQuery(searchText.trim());
+      setPartyType("ALL"); // 검색 시 카테고리를 전체로 초기화
+    }
+  };
+
+  const handleItemPress = (item: PartyItem) => {
+    router.push({
+      pathname: "/party-detail/[id]" as any,
+      params: { id: item.partyId.toString() },
+    });
+  };
+
+  // 검색어가 없을 때만 최근 검색 화면 표시
+  const showRecentSearches = !searchQuery;
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
       <StatusBar style="dark" />
-      {/* 헤더 */}
-      <View style={styles.header}>
-        <Pressable onPress={() => router.back()}>
-          <Image
-            source={require("@/assets/images/chevron/chevron-left-36-gray.png")}
-            style={styles.backIcon}
-            resizeMode="contain"
-          />
-        </Pressable>
-        <View style={styles.searchInputContainer}>
-          <TextInput
-            style={styles.searchInput}
-            placeholder={`${location} 근처에서 검색`}
-            placeholderTextColor={colors.gray[1]}
-            value={searchText}
-            onChangeText={setSearchText}
-          />
-          {searchText.length > 0 && (
-            <Pressable onPress={handleClearSearch} style={styles.clearButton}>
-              <Image
-                source={require("@/assets/images/delete-icon-24.png")}
-                style={styles.clearIcon}
-                resizeMode="contain"
-              />
-            </Pressable>
-          )}
-        </View>
-      </View>
+      {/* 검색바 */}
+      <SearchBar
+        value={searchText}
+        onChangeText={setSearchText}
+        onSubmitEditing={handleSubmitSearch}
+        onClear={handleClearSearch}
+        placeholder={`${location} 근처에서 검색`}
+      />
 
-      {/* 최근 검색 헤더 */}
-      <View style={styles.recentHeader}>
-        <Text style={[styles.recentTitle, textStyles.body16_SB135]}>
-          최근 검색
-        </Text>
-        <Pressable onPress={handleDeleteAll}>
-          <Text style={[styles.deleteAllText, textStyles.body15_SB135]}>
-            전체 삭제
-          </Text>
-        </Pressable>
-      </View>
-
-      {/* 최근 검색 리스트 */}
-      <ScrollView style={styles.content}>
-        <View style={styles.recentSection}>
-          <View style={styles.emptyContainer}>
-            <Text style={[styles.emptyText, textStyles.title18_SB135]}>
-              최근 검색 내역이 없습니다.
-            </Text>
-          </View>
+      {/* 카테고리 필터 (검색 실행 후 표시) */}
+      {!showRecentSearches && (
+        <View style={styles.categoryWrapper}>
+          <MainCategory />
         </View>
-      </ScrollView>
+      )}
+
+      {showRecentSearches ? (
+        <RecentSearchList onItemClick={handleRecentSearchClick} />
+      ) : (
+        <SearchResultList
+          searchResults={searchResults}
+          isLoading={isSearching}
+          onItemPress={handleItemPress}
+        />
+      )}
     </SafeAreaView>
   );
 }
@@ -100,68 +116,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    gap: 8,
-  },
-  backIcon: {
-    width: 36,
-    height: 36,
-    tintColor: colors.gray[1],
-  },
-  searchInputContainer: {
-    flex: 1,
-    position: "relative",
-    justifyContent: "center",
-  },
-  searchInput: {
-    backgroundColor: colors.gray[4],
-    borderRadius: 16,
-    padding: 12,
-    paddingRight: 40,
-    ...textStyles.body16_M135,
-  },
-  clearButton: {
-    position: "absolute",
-    right: 8,
-    width: 24,
-    height: 24,
-    borderRadius: 100,
-    backgroundColor: colors.gray[3],
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  clearIcon: {
-    width: 16,
-    height: 16,
-    tintColor: colors.white,
-  },
-  recentHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingTop: 28,
-    paddingBottom: 16,
-  },
-  content: {
-    flex: 1,
-  },
-  recentSection: {
-    paddingHorizontal: 20,
-  },
-  recentTitle: {
-    color: colors.gray[1],
-  },
-  deleteAllText: {
-    color: colors.gray[2],
-  },
-  emptyContainer: {
-    alignItems: "center",
-  },
-  emptyText: {
-    color: colors.gray[1],
+  categoryWrapper: {
+    marginTop: 12,
+    marginBottom: 12,
   },
 });
