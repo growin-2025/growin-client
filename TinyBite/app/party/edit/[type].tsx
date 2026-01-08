@@ -101,6 +101,7 @@ export default function PartyCreateScreen() {
     mutationFn: patchParty,
     onSuccess: (data) => {
       resetEditParty();
+      router.back();
       router.replace(`/party-detail/${partyId}`);
     },
     onError: (error: AxiosError<ApiError>) => {
