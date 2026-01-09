@@ -4,13 +4,14 @@ import MainCategory from "@/components/main/MainCategory";
 import RecentSearchList from "@/components/search/RecentSearchList";
 import SearchBar from "@/components/search/SearchBar";
 import SearchResultList from "@/components/search/SearchResultList";
+import { useUserCoords } from "@/hooks/useUserCoords";
 import { usePartyStore } from "@/stores/partyStore";
 import { colors } from "@/styles/colors";
 import { PartyItem } from "@/types/party";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -21,7 +22,7 @@ export default function SearchScreen() {
   const [searchText, setSearchText] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // 유저 정보 조회 (검색 화면에서만 필요할 때 호출)
+  // 유저 정보 조회
   const { data: userMe } = useQuery({
     queryKey: ["getUserMe"],
     queryFn: getUserMe,
@@ -29,25 +30,43 @@ export default function SearchScreen() {
     refetchOnWindowFocus: false,
   });
 
+  // 사용자 위치 정보 조회
+  const { coords, refresh: fetchCoords } = useUserCoords();
+
+  // 컴포넌트 마운트 시 위치 정보 가져오기
+  useEffect(() => {
+    if (!coords) {
+      fetchCoords();
+    }
+  }, []);
+
   // 검색 결과 조회 (useQuery 사용)
   const {
     data: searchResponse,
     isLoading: isSearching,
     error: searchError,
   } = useQuery({
-    queryKey: ["search", searchQuery, partyType],
+    queryKey: [
+      "search",
+      searchQuery,
+      partyType,
+      coords?.latitude,
+      coords?.longitude,
+    ],
     queryFn: () =>
       searchParties({
         q: searchQuery,
         category: partyType,
+        lat: coords?.latitude || 0,
+        lon: coords?.longitude || 0,
         page: 0,
         size: 20,
       }),
-    enabled: !!searchQuery && searchQuery.trim().length > 0,
+    enabled: !!searchQuery && searchQuery.trim().length > 0 && !!coords,
   });
 
-  const searchResults = searchResponse?.data.parties || [];
-  const hasNext = searchResponse?.data.hasNext || false;
+  const searchResults = searchResponse?.parties || [];
+  const hasNext = searchResponse?.hasNext || false;
 
   const location = userMe?.location || "역삼동";
 
