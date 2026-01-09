@@ -24,8 +24,9 @@ interface ChatItemProps {
 const ChatItem = ({ item }: ChatItemProps) => {
   const router = useRouter();
 
-  // mock data : 채팅방 룸 번호
+  // mock data : 채팅방 룸 번호, type
   const roomID = 1;
+  const roomType = "oneOnOne"; // "oneOnOne" | "party"
 
   // 채팅 타입 확인 (1:1 채팅인지 파티 채팅인지)
   const isOneOnOne = item.chatType === "oneOnOne";
@@ -35,7 +36,7 @@ const ChatItem = ({ item }: ChatItemProps) => {
       pathname: "/chat/[id]",
       params: {
         id: roomID,
-        // type: room.type, // 'direct' | 'group'
+        type: roomType,
         // name: room.name
       },
     });
