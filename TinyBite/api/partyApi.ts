@@ -9,6 +9,7 @@ import {
   PartyListResponse,
   SearchPartyParams,
   SearchPartyResponse,
+  SearchPartyResponseData,
 } from "@/types/party";
 import { Platform } from "react-native";
 import { privateAxios } from "./axios";
@@ -26,8 +27,8 @@ export const getPartyList = async (
     const res = await privateAxios.get(ENDPOINT.PARTY.GET_PARTIES, {
       params: {
         category: params.category,
-        latitude: params.latitude,
-        longitude: params.longitude,
+        userLat: params.latitude,
+        userLon: params.longitude,
       },
     });
 
@@ -101,8 +102,8 @@ export const getPartyDetail = async (
   try {
     const res = await privateAxios.get(ENDPOINT.PARTY.DETAIL(params.partyId), {
       params: {
-        latitude: params.latitude,
-        longitude: params.longitude,
+        userLat: params.latitude,
+        userLon: params.longitude,
       },
     });
 
@@ -179,7 +180,7 @@ export const getHostingParties = async (): Promise<PartyItem[]> => {
  */
 export const searchParties = async (
   params: SearchPartyParams
-): Promise<SearchPartyResponse> => {
+): Promise<SearchPartyResponseData> => {
   try {
     const res = await privateAxios.get<SearchPartyResponse>(
       ENDPOINT.PARTY.SEARCH,
@@ -187,12 +188,14 @@ export const searchParties = async (
         params: {
           q: params.q,
           category: params.category || "ALL",
+          lat: params.lat,
+          lon: params.lon,
           page: params.page ?? 0,
           size: params.size ?? 20,
         },
       }
     );
-    return res.data;
+    return res.data.data;
   } catch (error) {
     console.error("파티 검색 실패:", error);
     throw error;
