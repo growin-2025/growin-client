@@ -4,12 +4,18 @@
 export type PartyCategory = "ALL" | "DELIVERY" | "GROCERY" | "HOUSEHOLD";
 
 /**
+ * 파티 리스트 정렬 타입
+ */
+export type PartySortType = "LATEST" | "DISTANCE";
+
+/**
  * 파티 리스트 조회 요청 파라미터 타입
  */
 export type PartyListParams = {
   category?: PartyCategory;
   latitude: string;
   longitude: string;
+  sortType?: PartySortType;
 };
 
 /**
