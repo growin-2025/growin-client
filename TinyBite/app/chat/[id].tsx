@@ -1,35 +1,49 @@
+import ChatMessageComponent from "@/components/chat/message/ChatMessage";
 import ChatRoomLayout from "@/components/layout/ChatRoomLayout";
-import { colors } from "@/styles/colors";
+import { mockChatGroup } from "@/mocks/mockChatGroup";
+import { mockChatOneToOne } from "@/mocks/mockChatOneToOne";
+import { ChatMessage, ChatType } from "@/types/chat";
 import { useLocalSearchParams } from "expo-router";
-import { FlatList, StyleSheet, Text } from "react-native";
+import { FlatList } from "react-native";
+
+const MY_USER_ID = 1;
 
 export default function ChatRoomScreen() {
   const {
     id,
-    // type,
+    type, // "oneOnOne" | "party"
     // name
   } = useLocalSearchParams<{
     id: string;
-    type?: string;
+    type: ChatType;
     name?: string;
   }>();
+
+  // const isPartyChat = type === "party";
+  const isPartyChat = true;
+  // const isPartyChat = false;
+
+  const chatMessages: ChatMessage[] = isPartyChat
+    ? mockChatGroup
+    : mockChatOneToOne;
 
   return (
     <ChatRoomLayout>
       <FlatList
-        data={["item", "item2", "item3", "item4"]}
-        inverted // ← 메시지가 아래에서 위로 쌓임
+        data={chatMessages}
+        inverted
         style={{ flex: 1 }}
-        contentContainerStyle={{ paddingBottom: 20 }}
-        renderItem={({ item }) => <Text>item</Text>}
-        keyExtractor={(item) => item}
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: "flex-end",
+          gap: 8,
+          paddingVertical: 8,
+        }}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <ChatMessageComponent message={item} myUserId={MY_USER_ID} />
+        )}
       />
     </ChatRoomLayout>
   );
 }
-
-const styles = StyleSheet.create({
-  safeAreaBottom: {
-    backgroundColor: colors.white,
-  },
-});
