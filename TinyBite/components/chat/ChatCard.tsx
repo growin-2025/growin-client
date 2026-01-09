@@ -5,6 +5,7 @@ import {
   OneOnOneChatStatusType,
   PartyStatusType,
 } from "@/types/chat";
+import { useRouter } from "expo-router";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ChatCardImage from "./ChatCardImage";
 import OneOnOneChatStatusTag from "./OneOnOneChatStatusTag";
@@ -12,7 +13,6 @@ import PartyStatusTag from "./PartyStatusTag";
 
 interface ChatItemProps {
   item: ChatItemType;
-  onPress?: () => void;
 }
 
 /**
@@ -21,12 +21,28 @@ interface ChatItemProps {
  * - 파티 채팅: 네모 형식 파티 이미지, 파티 제목, 인원수
  * - 공통: 마지막 메시지, 시간, 상태 태그, 읽지 않은 메시지 수 배지
  */
-const ChatItem = ({ item, onPress }: ChatItemProps) => {
+const ChatItem = ({ item }: ChatItemProps) => {
+  const router = useRouter();
+
+  // mock data : 채팅방 룸 번호
+  const roomID = 1;
+
   // 채팅 타입 확인 (1:1 채팅인지 파티 채팅인지)
   const isOneOnOne = item.chatType === "oneOnOne";
 
+  const handleChatPress = () => {
+    router.navigate({
+      pathname: "/chat/[id]",
+      params: {
+        id: roomID,
+        // type: room.type, // 'direct' | 'group'
+        // name: room.name
+      },
+    });
+  };
+
   return (
-    <TouchableOpacity style={styles.chatItem} onPress={onPress}>
+    <TouchableOpacity style={styles.chatItem} onPress={handleChatPress}>
       {/* 프로필 이미지 영역 */}
       <View style={styles.profileContainer}>
         <ChatCardImage item={item} />
