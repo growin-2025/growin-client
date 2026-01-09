@@ -3,7 +3,7 @@ import { colors } from "@/styles/colors";
 import { useLocalSearchParams } from "expo-router";
 import { FlatList, StyleSheet, Text } from "react-native";
 
-export default function PartyCreateScreen() {
+export default function ChatRoomScreen() {
   const {
     id,
     // type,
