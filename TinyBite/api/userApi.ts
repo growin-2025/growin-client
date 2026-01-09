@@ -56,3 +56,22 @@ export const checkNickname = async (nickname: string): Promise<void> => {
 export const deleteUserMe = async (): Promise<void> => {
   await privateAxios.delete(ENDPOINT.USER.ME);
 };
+
+/**
+ * 프로필 이미지 업데이트 API
+ * @param profileImage 프로필 이미지 URL (string)
+ */
+export const updateProfileImage = async (
+  profileImage: string
+): Promise<void> => {
+  await privateAxios.patch(ENDPOINT.USER.PROFILE_IMAGE, {
+    profileImage: profileImage,
+  });
+};
+
+/**
+ * 프로필 이미지 삭제 API
+ */
+export const deleteProfileImage = async (): Promise<void> => {
+  await privateAxios.delete(ENDPOINT.USER.PROFILE_IMAGE);
+};
