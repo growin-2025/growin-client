@@ -46,6 +46,13 @@ const ChatRoomLayout = ({ children }: ChatRoomLayoutProps) => {
             {/* group 파티장 - 모집 완료 */}
             {/* <ChatPartyClosureCard /> */}
 
+            {/* group 참여자 - 진행상황 */}
+            {/* <ChatPartyProgressCard
+              status="진행 중"
+              currentMembers={1}
+              maxMembers={3}
+            /> */}
+
             <View style={{ flex: 1 }}>{children}</View>
           </View>
           <ChatInputBox />
