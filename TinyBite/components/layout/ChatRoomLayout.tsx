@@ -34,6 +34,9 @@ const ChatRoomLayout = ({ children }: ChatRoomLayoutProps) => {
               onReject={() => console.log("거절")}
             />
 
+            {/* 1:1 참여자 - 대기 */}
+            {/* <ChatJoinPendingCard /> */}
+
             <View style={{ flex: 1 }}>{children}</View>
           </View>
           <ChatInputBox />
