@@ -105,8 +105,7 @@ const MainCard = ({ item, onPress, containerStyle }: MainCardProps) => {
             </Text>
           </View>
           <Text style={[styles.meta, textStyles.body13_SB135]}>
-            {/* {item.distance}  |*/}
-            {item.timeAgo}
+            {item.distanceKm} | {item.timeAgo}
           </Text>
         </View>
       </View>
