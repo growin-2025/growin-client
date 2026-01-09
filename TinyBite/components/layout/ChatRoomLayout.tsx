@@ -37,6 +37,9 @@ const ChatRoomLayout = ({ children }: ChatRoomLayoutProps) => {
             {/* 1:1 참여자 - 대기 */}
             {/* <ChatJoinPendingCard /> */}
 
+            {/* 1:1 참여자 - 수락됨 */}
+            {/* <ChatJoinAcceptedCard /> */}
+
             <View style={{ flex: 1 }}>{children}</View>
           </View>
           <ChatInputBox />
