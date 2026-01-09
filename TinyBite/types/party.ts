@@ -139,6 +139,8 @@ export type EditedPartyInfo = {
 export type SearchPartyParams = {
   q: string;
   category?: PartyCategory;
+  lat: number;
+  lon: number;
   page?: number;
   size?: number;
 };
