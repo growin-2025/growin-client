@@ -145,7 +145,7 @@ export default function PartyDetailScreen() {
               router.navigate({
                 pathname: "/party/edit/[type]",
                 params: {
-                  type: "GROCERY",
+                  type: partyDetail?.category,
                   mode: "edit",
                   allEditable: (
                     partyDetail.currentParticipants === 1

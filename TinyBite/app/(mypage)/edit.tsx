@@ -1,21 +1,17 @@
 import { checkNickname, getUserMe, updateNickname } from "@/api/userApi";
+import NicknameInputCard from "@/components/mypage/NicknameInputCard";
+import ProfileEditHeader from "@/components/mypage/ProfileEditHeader";
+import ProfileImageBottomSheet from "@/components/mypage/ProfileImageBottomSheet";
 import { colors } from "@/styles/colors";
-import { textStyles } from "@/styles/typography/textStyles";
 import { ApiError } from "@/types/api";
 import { getErrorMessage } from "@/utils/getErrorMessage";
+import { getProfileSource } from "@/utils/image";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect, useState } from "react";
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { Image, Pressable, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
@@ -34,6 +30,7 @@ export default function EditProfileScreen() {
 
   // 닉네임 상태 관리
   const [nickname, setNickname] = useState("");
+  const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
 
   // 사용자 정보가 로드되면 닉네임 초기화
   useEffect(() => {
@@ -130,13 +127,22 @@ export default function EditProfileScreen() {
     },
   });
 
-  // 유효성 검사
-  const isValid =
+  // 1. 이미지 존재 여부를 판단하는 변수를 상단에 선언
+  const hasProfileImage = !!(
+    userMe?.userProfileImage && userMe.userProfileImage.startsWith("http")
+  );
+
+  // 2. 닉네임 변경 여부
+  const isNicknameChanged = nickname !== userMe?.name;
+
+  // 3. 유효성 검사
+  const isNicknameValid =
     nickname.length >= minLength &&
     nickname.length <= displayMaxLength &&
     nickname.trim() !== "";
-  const hasChanged = nickname !== userMe?.name;
-  const canSave = isValid && hasChanged;
+
+  // 버튼 활성화 조건
+  const canSave = isNicknameValid && isNicknameChanged;
 
   // 완료 버튼 핸들러
   const handleSave = () => {
@@ -151,50 +157,32 @@ export default function EditProfileScreen() {
     checkNicknameMutation.mutate(nickname.trim());
   };
 
+  const isLoading =
+    updateNicknameMutation.isPending || checkNicknameMutation.isPending;
+
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
       <StatusBar style="dark" />
-      {/* Header */}
-      <View style={styles.headerWrapper}>
-        <Pressable onPress={() => router.back()}>
-          <Image
-            source={require("@/assets/images/chevron/chevron-left-44.png")}
-            style={styles.backIcon}
-          />
-        </Pressable>
-        <Text style={[styles.headerTitle, textStyles.title20_B135]}>
-          프로필 수정
-        </Text>
-        <Pressable
-          onPress={handleSave}
-          disabled={
-            !canSave ||
-            updateNicknameMutation.isPending ||
-            checkNicknameMutation.isPending
-          }
-        >
-          <Text
-            style={[
-              styles.saveButton,
-              canSave ? styles.saveButtonActive : styles.saveButtonInactive,
-              textStyles.body16_SB135,
-            ]}
-          >
-            완료
-          </Text>
-        </Pressable>
-      </View>
+      <ProfileEditHeader
+        onBack={() => router.back()}
+        onSave={handleSave}
+        canSave={canSave}
+        isLoading={isLoading}
+      />
 
       {/* Content */}
       <View style={styles.contentWrapper}>
         {/* Profile Picture */}
         <View style={styles.profileImageWrapper}>
           <Image
-            source={require("@/assets/images/mainlist/detail/default-host-profile.png")}
+            source={getProfileSource(userMe?.userProfileImage)}
             style={styles.profileImage}
             resizeMode="cover"
           />
-          <Pressable style={styles.cameraButton}>
+          <Pressable
+            style={styles.cameraButton}
+            onPress={() => setBottomSheetVisible(true)}
+          >
             <Image
               source={require("@/assets/images/mypage/camera.png")}
               style={{
@@ -206,25 +194,20 @@ export default function EditProfileScreen() {
           </Pressable>
         </View>
 
-        <View style={styles.nicknameInputWrapper}>
-          <Text style={[styles.nicknameLabel, textStyles.body16_SB135]}>
-            닉네임
-          </Text>
-          <View style={{ alignSelf: "stretch" }}>
-            <TextInput
-              style={[styles.nicknameInput, textStyles.title18_SB135]}
-              onChangeText={handleNicknameChange}
-              value={nickname}
-              placeholder="수정할 닉네임을 입력하세요"
-              keyboardType="default"
-              maxLength={maxLength}
-            />
-          </View>
-          <Text style={[styles.charCount, textStyles.body12_M135]}>
-            ({Math.min(nickname.length, displayMaxLength)}/{displayMaxLength})
-          </Text>
-        </View>
+        <NicknameInputCard
+          value={nickname}
+          onChangeText={handleNicknameChange}
+          maxLength={maxLength}
+          displayMaxLength={displayMaxLength}
+        />
       </View>
+
+      {/* 프로필 이미지 변경 바텀시트 */}
+      <ProfileImageBottomSheet
+        visible={bottomSheetVisible}
+        hasProfileImage={hasProfileImage}
+        onClose={() => setBottomSheetVisible(false)}
+      />
     </SafeAreaView>
   );
 }
@@ -234,29 +217,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
     paddingHorizontal: 20,
-  },
-  headerWrapper: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 20,
-    height: 36,
-  },
-  backIcon: {
-    width: 36,
-    height: 36,
-  },
-  headerTitle: {
-    color: colors.black,
-  },
-  saveButton: {
-    color: colors.gray[1],
-  },
-  saveButtonActive: {
-    color: colors.main,
-  },
-  saveButtonInactive: {
-    color: colors.gray[1],
   },
   contentWrapper: {
     flex: 1,
@@ -272,10 +232,6 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.25,
-    shadowRadius: 5,
     boxShadow: "0 0 5px 0 rgba(0, 0, 0, 0.25)",
   },
   cameraButton: {
@@ -289,10 +245,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 5,
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
     boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
   },
   nicknameInputWrapper: {
@@ -304,10 +256,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 16,
     borderWidth: 0,
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
     boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
   },
   nicknameLabel: {

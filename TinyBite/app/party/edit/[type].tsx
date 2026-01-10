@@ -12,7 +12,7 @@ import { colors } from "@/styles/colors";
 import { ApiError } from "@/types/api";
 import { EditedPartyInfo } from "@/types/party";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -37,7 +37,8 @@ const PARTY_CONFIG = {
   },
 } as const;
 
-export default function PartyEditScreen() {
+export default function PartyCreateScreen() {
+  const queryClient = useQueryClient();
   const { type } = useLocalSearchParams<{
     type: "DELIVERY" | "GROCERY" | "HOUSEHOLD";
   }>();
@@ -101,6 +102,11 @@ export default function PartyEditScreen() {
   const EditPartyMutation = useMutation({
     mutationFn: patchParty,
     onSuccess: (data) => {
+      // 상세화면 쿼리 무효화하여 최신 데이터로 갱신
+      queryClient.invalidateQueries({ queryKey: ["getPartyDetail"] });
+      // 파티 리스트 쿼리 무효화
+      queryClient.invalidateQueries({ queryKey: ["getParties"] });
+      queryClient.invalidateQueries({ queryKey: ["getHostingParties"] });
       resetEditParty();
       router.dismissTo(`/party-detail/${partyId}`);
     },

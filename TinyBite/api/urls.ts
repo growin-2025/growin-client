@@ -32,5 +32,6 @@ export const ENDPOINT = {
     LOCATION: "/api/v1/user/me/location",
     ACTIVE_PARTIES: "/api/v1/user/parties/participating",
     HOSTING_PARTIES: "/api/v1/user/parties/hosting",
+    PROFILE_IMAGE: "/api/v1/user/me/profile-image",
   },
 };
