@@ -18,13 +18,13 @@ interface MainCardProps {
 }
 
 const MainCard = ({ item, onPress, containerStyle }: MainCardProps) => {
+  // 이미지 로딩 에러 상태 관리
+  const [imageError, setImageError] = useState(false);
+
   // item이 없으면 렌더링하지 않음
   if (!item) {
     return null;
   }
-
-  // 이미지 로딩 에러 상태 관리
-  const [imageError, setImageError] = useState(false);
 
   // 가격 포맷팅 (예: 5000 -> "5,000원")
   const formattedPrice = `${item.pricePerPerson.toLocaleString()}원`;
