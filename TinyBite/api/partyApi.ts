@@ -155,3 +155,17 @@ export const getActiveParties = async (): Promise<PartyItem[]> => {
     return [];
   }
 };
+
+/**
+ * 호스팅 중인 파티 리스트 조회 API
+ * @returns 호스팅 중인 파티 리스트
+ */
+export const getHostingParties = async (): Promise<PartyItem[]> => {
+  try {
+    const res = await privateAxios.get(ENDPOINT.USER.HOSTING_PARTIES);
+    return res.data || [];
+  } catch (error) {
+    console.error("호스팅 중인 파티 리스트 로딩 실패:", error);
+    return [];
+  }
+};

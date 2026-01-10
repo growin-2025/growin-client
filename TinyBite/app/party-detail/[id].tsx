@@ -148,7 +148,7 @@ export default function PartyDetailScreen() {
                   type: "GROCERY",
                   mode: "edit",
                   allEditable: (
-                    partyDetail.currentParticipants === 0
+                    partyDetail.currentParticipants === 1
                   ).toString(),
                 },
               });
@@ -158,7 +158,10 @@ export default function PartyDetailScreen() {
                 await deleteParty(partyId);
                 // 파티 리스트 쿼리 무효화하여 자동으로 새로고침
                 queryClient.invalidateQueries({ queryKey: ["getParties"] });
-                router.back();
+                queryClient.invalidateQueries({
+                  queryKey: ["getHostingParties"],
+                });
+                router.replace("/(tabs)");
                 return true;
               } catch (error: any) {
                 // 400(이미 참여자가 있음 / 권한 없음) 상태 코드인 경우 에러 로그 출력하지 않음
