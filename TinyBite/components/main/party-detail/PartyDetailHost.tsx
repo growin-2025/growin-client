@@ -1,5 +1,6 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { getProfileSource } from "@/utils/image";
 import { Image, StyleSheet, Text, View } from "react-native";
 
 interface PartyDetailHostProps {
@@ -13,28 +14,24 @@ const PartyDetailHost = ({
   name,
   location,
 }: PartyDetailHostProps) => {
-  const defaultAvatar = require("@/assets/images/mainlist/detail/default-host-profile.png");
-
   return (
     <View style={styles.rowBetween}>
-      <View style={styles.hostRow}>
-        <Image
-          source={profileImage ? { uri: profileImage } : defaultAvatar}
-          style={styles.hostAvatarImage}
-          resizeMode="cover"
-        />
-        <View>
-          <Text style={[styles.hostName, textStyles.body15_SB135]}>{name}</Text>
-          <View style={styles.hostMetaRow}>
-            <Image
-              source={require("@/assets/images/mainlist/detail/location-icon.png")}
-              style={styles.hostMetaIcon}
-              resizeMode="contain"
-            />
-            <Text style={[styles.hostMeta, textStyles.body13_SB135]}>
-              {location}
-            </Text>
-          </View>
+      <Image
+        source={getProfileSource(profileImage)}
+        style={styles.hostAvatarImage}
+        resizeMode="cover"
+      />
+      <View>
+        <Text style={[styles.hostName, textStyles.body15_SB135]}>{name}</Text>
+        <View style={styles.hostMetaRow}>
+          <Image
+            source={require("@/assets/images/mainlist/detail/location-icon.png")}
+            style={styles.hostMetaIcon}
+            resizeMode="contain"
+          />
+          <Text style={[styles.hostMeta, textStyles.body13_SB135]}>
+            {location}
+          </Text>
         </View>
       </View>
     </View>
@@ -46,20 +43,17 @@ export default PartyDetailHost;
 const styles = StyleSheet.create({
   rowBetween: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 12,
-  },
-  hostRow: {
-    flexDirection: "row",
     gap: 9,
   },
   hostAvatarImage: {
     width: 40,
     height: 40,
+    borderRadius: 20,
   },
   hostName: {
-    color: "#000000",
+    color: colors.black,
   },
   hostMetaRow: {
     marginTop: 2,
@@ -67,7 +61,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   hostMetaIcon: {
-    padding: 1,
     width: 18,
     height: 18,
   },

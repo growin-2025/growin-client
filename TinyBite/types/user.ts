@@ -5,4 +5,5 @@ export type UserMeResponse = {
   userId: number;
   name: string;
   location: string;
+  userProfileImage?: string;
 };

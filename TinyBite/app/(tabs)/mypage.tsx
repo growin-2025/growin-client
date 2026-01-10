@@ -2,6 +2,7 @@ import { getUserMe } from "@/api/userApi";
 import MyPartyList from "@/components/mypage/MyPartyList";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { getProfileSource } from "@/utils/image";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -53,9 +54,9 @@ export default function MyPageScreen() {
       <View style={styles.profileWrapper}>
         <View style={styles.profileCard}>
           <Image
-            source={require("@/assets/images/mainlist/detail/default-host-profile.png")}
+            source={getProfileSource(userMe?.userProfileImage)}
             style={styles.avatar}
-            resizeMode="contain"
+            resizeMode="cover"
           />
           <Text style={[styles.userName, textStyles.title18_SB135]}>
             {userMe?.name || "로딩 중..."}
@@ -121,6 +122,8 @@ const styles = StyleSheet.create({
   avatar: {
     width: 60,
     height: 60,
+    borderRadius: 30,
+    boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
   },
   userName: {
     flex: 1,
@@ -142,5 +145,28 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: colors.black,
+  },
+  contentWrapper: {
+    flex: 1,
+    backgroundColor: colors.background,
+    paddingHorizontal: 20,
+  },
+  mypageCard: {
+    borderRadius: 0,
+    shadowColor: "transparent",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0,
+    shadowRadius: 0,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.gray[4],
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 40,
+  },
+  emptyText: {
+    color: colors.gray[1],
   },
 });

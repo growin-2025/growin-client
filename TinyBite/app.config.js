@@ -60,6 +60,14 @@ module.exports = {
           "Allow 한입만 to use your location.",
       },
     ],
+    [
+      "expo-camera",
+      {
+        cameraPermission: "Allow 한입만 to access your camera",
+        microphonePermission: "Allow 한입만 to access your microphone",
+        recordAudioAndroid: true,
+      },
+    ],
   ],
   experiments: {
     typedRoutes: true,

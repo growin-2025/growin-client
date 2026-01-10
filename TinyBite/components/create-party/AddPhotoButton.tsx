@@ -47,7 +47,7 @@ const AddPhotoButton = () => {
 
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
-      allowsEditing: true,
+      allowsEditing: false,
       quality: 1,
     });
 
@@ -93,11 +93,11 @@ const styles = StyleSheet.create({
     gap: 4,
     borderRadius: 16,
     backgroundColor: colors.white,
-    shadowColor: "rgba(0, 0, 0, 0.25)",
+    shadowColor: "#000000",
     shadowOpacity: 0.25,
     shadowOffset: { width: 0, height: 0 },
     shadowRadius: 4,
-    elevation: 4,
+    boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
   },
   image: {
     width: 24,

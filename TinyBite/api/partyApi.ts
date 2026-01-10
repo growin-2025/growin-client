@@ -11,6 +11,7 @@ import {
   SearchPartyResponse,
   SearchPartyResponseData,
 } from "@/types/party";
+import { parseProfileImage } from "@/utils/parseProfileImage";
 import { Platform } from "react-native";
 import { privateAxios } from "./axios";
 import { ENDPOINT } from "./urls";
@@ -111,7 +112,18 @@ export const getPartyDetail = async (
       },
     });
 
-    return res.data;
+    const data = res.data;
+
+    // 반환 시 가공된 값을 포함
+    return {
+      ...data,
+      host: data.host
+        ? {
+            ...data.host,
+            profileImage: parseProfileImage(data.host.profileImage) ?? "",
+          }
+        : data.host,
+    };
   } catch (error) {
     console.error("파티 상세 조회 실패:", error);
     throw error;

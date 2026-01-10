@@ -186,12 +186,11 @@ const styles = StyleSheet.create({
     padding: 12,
     marginBottom: 12,
     gap: 4,
-    // 그림자 효과 (elevation = 4.dp, spotColor/ambientColor = Color(0x40000000))
     shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 4,
+    boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
   },
   locationIcon: {
     width: 24,

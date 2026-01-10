@@ -46,3 +46,26 @@ export type ChatItemType = {
   memberCount?: number;
   category?: PartyCategoryType;
 };
+
+/**
+ * 채팅방 메시지 타입
+ */
+export type ChatMessageType = "text" | "image" | "system" | "date";
+
+/**
+ * 채팅방 메시지 인터페이스
+ */
+export interface ChatMessage {
+  id: string;
+  type: ChatMessageType;
+  createdAt: string;
+
+  // text, image 전용
+  senderId?: number;
+  nickname?: string;
+  text?: string;
+  imageUrl?: string;
+
+  // system 전용
+  systemMessage?: string;
+}
