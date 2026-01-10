@@ -32,10 +32,6 @@ const TextInputBox = ({
         styles.container,
         { backgroundColor: isEditable ? colors.white : colors.gray[3] },
         isEditable && {
-          shadowColor: "#000000",
-          shadowOpacity: 0.25,
-          shadowOffset: { width: 0, height: 0 },
-          shadowRadius: 4,
           boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
         },
       ]}

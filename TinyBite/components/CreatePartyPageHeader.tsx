@@ -29,10 +29,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 12,
     backgroundColor: "#fff",
-    shadowColor: "#000000",
-    shadowOpacity: 0.25,
-    shadowOffset: { width: 0, height: 0 },
-    shadowRadius: 4,
     boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
   },
   container: {

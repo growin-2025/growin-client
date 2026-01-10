@@ -82,10 +82,6 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 16,
     backgroundColor: colors.background,
-    shadowColor: "#000000",
-    shadowOpacity: 0.25,
-    shadowOffset: { width: 0, height: 0 },
-    shadowRadius: 8,
     boxShadow: "0 0 8px 0 rgba(0, 0, 0, 0.25)",
   },
   inputArea: {
