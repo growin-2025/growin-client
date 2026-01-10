@@ -1,6 +1,7 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { useCameraPermissions } from "expo-camera";
+import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
@@ -20,12 +21,46 @@ const ChatBottomPanel = ({
 }: ChatBottomPanelProps) => {
   const [permission, requestPermission] = useCameraPermissions();
   const [showCameraModal, setShowCameraModal] = useState(false);
+  const [showGalleryModal, setShowGalleryModal] = useState(false);
   const router = useRouter();
 
-  const handleGalleryPress = () => {
-    console.log("갤러리 열기");
-    setIsPanelVisible(false);
-    // TODO: 갤러리 열기 로직
+  const handleGalleryPress = async () => {
+    // 갤러리 권한 확인
+    const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
+
+    if (status !== "granted") {
+      setShowGalleryModal(true);
+      return;
+    }
+
+    // 갤러리에서 이미지 선택
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      allowsEditing: false,
+      quality: 0.8,
+      allowsMultipleSelection: false,
+    });
+
+    if (!result.canceled && result.assets.length > 0) {
+      const selectedImage = result.assets[0];
+
+      // 파일명 추출
+      const uriParts = selectedImage.uri.split("/");
+      const fileName =
+        uriParts[uriParts.length - 1] || `photo_${Date.now()}.jpg`;
+
+      setIsPanelVisible(false);
+
+      // 미리보기 화면으로 이동
+      router.push({
+        pathname: "/gallery-preview",
+        params: {
+          uri: selectedImage.uri,
+          fileName: fileName,
+          mimeType: selectedImage.mimeType || "image/jpeg",
+        },
+      });
+    }
   };
 
   const handleCameraPress = async () => {
