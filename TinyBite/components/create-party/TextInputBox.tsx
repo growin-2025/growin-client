@@ -31,6 +31,13 @@ const TextInputBox = ({
       style={[
         styles.container,
         { backgroundColor: isEditable ? colors.white : colors.gray[3] },
+        isEditable && {
+          shadowColor: "#000000",
+          shadowOpacity: 0.25,
+          shadowOffset: { width: 0, height: 0 },
+          shadowRadius: 4,
+          boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
+        },
       ]}
     >
       <View style={styles.inner}>
@@ -74,11 +81,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 16,
     borderRadius: 16,
-    shadowColor: "rgba(0, 0, 0, 0.25)",
-    shadowOpacity: 0.25,
-    shadowOffset: { width: 0, height: 0 },
-    shadowRadius: 4,
-    elevation: 4,
   },
   inner: {
     flexDirection: "row",
@@ -87,6 +89,7 @@ const styles = StyleSheet.create({
   },
   inputText: {
     flex: 1,
+    padding: 0,
   },
 });
 

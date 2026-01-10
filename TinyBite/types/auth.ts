@@ -21,6 +21,13 @@ export type UserCoords = {
   latitude: string;
   longitude: string;
 };
+export type SignupRespone = {
+  accessToken: string;
+  refreshToken: string;
+  tokenType: string;
+  expiresIn: number;
+  user: UserProfile;
+};
 
 export type LoginRespone = {
   signup: boolean;

@@ -6,6 +6,7 @@ import { TermCode, useSignupStore } from "@/stores/signupStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { ApiError } from "@/types/api";
+import { SignupRespone } from "@/types/auth";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -68,10 +69,9 @@ export default function RegionScreen() {
 
   const SignupMutation = useMutation({
     mutationFn: postSignupGoogle,
-    onSuccess: (data) => {
-      console.log("postSignupGoogle >>", data);
+    onSuccess: (data: SignupRespone) => {
       resetSignupStore();
-      login(data);
+      login({ signup: true, authResponse: data });
       router.replace("/(auth)/signup/complete");
     },
     onError: (error: AxiosError<ApiError>) => {
@@ -204,13 +204,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 16,
     borderWidth: 0,
-    // 그림자 효과 (iOS)
-    shadowColor: "#000",
+    shadowColor: "#000000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    // 그림자 효과 (Android)
-    elevation: 3,
+    boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
   },
   input: {
     flex: 1,

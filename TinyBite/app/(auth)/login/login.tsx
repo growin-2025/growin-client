@@ -1,5 +1,5 @@
 import { postLoginGoogle } from "@/api/authApi";
-import { getCurrentUser, signIn } from "@/hooks/useGoogleAuth";
+import { signIn, signOut } from "@/hooks/useGoogleAuth";
 import { useAuthStore } from "@/stores/authStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
@@ -35,7 +35,7 @@ export default function LoginScreen() {
     onSuccess: (data) => {
       if (data.signup) {
         login(data);
-        router.push("/(tabs)");
+        router.dismissTo("/(tabs)");
       } else {
         router.push("/(auth)/signup/terms");
       }
@@ -57,15 +57,9 @@ export default function LoginScreen() {
   });
 
   const handleGoogleLogin = async () => {
-    let idToken;
+    await signOut();
 
-    const user = await getCurrentUser();
-    if (user) {
-      idToken = user.idToken;
-    } else {
-      idToken = await signIn();
-    }
-
+    const idToken = await signIn();
     if (idToken) {
       await SecureStore.setItemAsync("googleIdToken", idToken);
       await loginMutation.mutateAsync({

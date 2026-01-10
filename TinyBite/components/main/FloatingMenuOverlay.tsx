@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import FloatingMenuButton from "./FloatingMenuButton";
 
 interface FloatingMenuOverlayProps {
@@ -21,6 +22,8 @@ const FloatingMenuOverlay = ({
   isMenuOpen,
   setIsMenuOpen,
 }: FloatingMenuOverlayProps) => {
+  const insets = useSafeAreaInsets();
+
   return (
     <>
       {/* 메뉴가 열렸을 때만 Modal 렌더링 */}
@@ -33,7 +36,7 @@ const FloatingMenuOverlay = ({
           onRequestClose={() => setIsMenuOpen(false)}
         >
           <Pressable
-            style={styles.modalOverlay}
+            style={[styles.modalOverlay, { paddingBottom: 82 + insets.bottom }]}
             onPress={() => setIsMenuOpen(false)}
           >
             <View
@@ -103,7 +106,7 @@ const FloatingMenuOverlay = ({
             </View>
 
             {/* 플로팅 버튼 - Modal 내부에 배치하여 최상위 유지 */}
-            <View style={styles.floatingButtonInModal} pointerEvents="box-none">
+            <View pointerEvents="box-none">
               <FloatingMenuButton onPress={() => setIsMenuOpen(false)} />
             </View>
           </Pressable>
@@ -120,7 +123,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "flex-end",
     paddingHorizontal: 20,
-    paddingVertical: 160,
     backgroundColor: "rgba(34, 34, 34, 0.5)",
   },
 
@@ -130,11 +132,11 @@ const styles = StyleSheet.create({
     gap: 8,
     borderRadius: 16,
     backgroundColor: "#fff",
-    // 그림자 효과 (iOS)
-    shadowColor: "rgba(0, 0, 0, 0.25)",
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.25,
     shadowRadius: 16,
-    // 그림자 효과 (Android)
-    elevation: 3,
+    boxShadow: "0 0 16px 0 rgba(0, 0, 0, 0.25)",
   },
 
   menuButton: {
@@ -156,12 +158,6 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: colors.gray[4],
     paddingHorizontal: 8,
-  },
-
-  floatingButtonInModal: {
-    position: "absolute",
-    right: 20,
-    bottom: 110,
   },
 });
 

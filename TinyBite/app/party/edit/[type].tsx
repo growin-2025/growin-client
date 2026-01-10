@@ -16,7 +16,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { FlatList, ScrollView, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
@@ -211,96 +211,95 @@ export default function PartyCreateScreen() {
   return (
     <>
       <StatusBar style="dark" />
-
       <View style={styles.container}>
         <CreatePartyPageHeader title="파티 수정" />
-
-        <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
-          <ScrollView style={styles.contentContainer}>
-            <SafeAreaView style={styles.contentInner} edges={["bottom"]}>
-              <View style={styles.section}>
-                <SubTitle subTitle="사진 등록" isPic />
-                <View style={styles.photoContainer}>
-                  <AddPhotoButton />
-                  <FlatList
-                    data={photos}
-                    renderItem={renderItem}
-                    keyExtractor={(item) => item.id.toString()}
-                    horizontal={true}
-                    contentContainerStyle={{ gap: 8 }}
-                  />
-                </View>
+        <View style={{ flex: 1 }}>
+          <KeyboardAwareScrollView
+            contentContainerStyle={styles.contentContainer}
+            bottomOffset={30}
+          >
+            <View style={styles.section}>
+              <SubTitle subTitle="사진 등록" isPic />
+              <View style={styles.photoContainer}>
+                <AddPhotoButton />
+                <FlatList
+                  data={photos}
+                  renderItem={renderItem}
+                  keyExtractor={(item) => item.id.toString()}
+                  horizontal={true}
+                  contentContainerStyle={{ gap: 8 }}
+                />
               </View>
+            </View>
 
+            <View style={styles.section}>
+              <SubTitle subTitle="파티 제목" caption="(메뉴명)" />
+              <TextInputBox
+                placeholder={config.titlePlaceholder}
+                maxLength={30}
+                onChangeText={setPartyTitle}
+                value={title.value}
+                isEditable={isAllEditable}
+              />
+            </View>
+
+            <View style={styles.section}>
+              <SubTitle subTitle="예상 총 주문 금액" />
+              <TextInputBox
+                placeholder="0"
+                isAmount
+                onChangeText={setTotalAmount}
+                value={totalPrice.value}
+                isEditable={isAllEditable}
+              />
+            </View>
+
+            <View style={styles.section}>
+              <SubTitle subTitle="모집 인원" caption="(나 포함)" />
+              <NumberOfPeopleBox isEditable={isAllEditable} />
+            </View>
+
+            <View style={styles.section}>
+              <SubTitle subTitle="수령 장소" />
+              <TextInputBox
+                iconType="location"
+                placeholder="예) 역삼역 1번 출구"
+                maxLength={30}
+                onChangeText={setPickUpLocation}
+                value={pickupLocation.place}
+                isEditable={isAllEditable}
+              />
+            </View>
+
+            <View style={styles.section}>
+              <SubTitle subTitle="상세 설명" />
+              <TextInputBox
+                placeholder="추가로 전달 할 내용이 있다면 적어주세요."
+                maxLength={60}
+                onChangeText={setDetailedDescription}
+                value={description}
+              />
+            </View>
+
+            {config.showProductLink && (
               <View style={styles.section}>
-                <SubTitle subTitle="파티 제목" caption="(메뉴명)" />
+                <SubTitle subTitle="상품 링크" />
                 <TextInputBox
-                  placeholder={config.titlePlaceholder}
-                  maxLength={30}
-                  onChangeText={setPartyTitle}
-                  value={title.value}
+                  iconType="link"
+                  placeholder="구매할 상품의 URL을 입력하세요."
+                  onChangeText={setProductLink}
+                  value={productLink.value}
                   isEditable={isAllEditable}
                 />
               </View>
-
-              <View style={styles.section}>
-                <SubTitle subTitle="예상 총 주문 금액" />
-                <TextInputBox
-                  placeholder="0"
-                  isAmount
-                  onChangeText={setTotalAmount}
-                  value={totalPrice.value}
-                  isEditable={isAllEditable}
-                />
-              </View>
-
-              <View style={styles.section}>
-                <SubTitle subTitle="모집 인원" caption="(나 포함)" />
-                <NumberOfPeopleBox isDisabled={isAllEditable} />
-              </View>
-
-              <View style={styles.section}>
-                <SubTitle subTitle="수령 장소" />
-                <TextInputBox
-                  iconType="location"
-                  placeholder="예) 역삼역 1번 출구"
-                  maxLength={30}
-                  onChangeText={setPickUpLocation}
-                  value={pickupLocation.place}
-                  isEditable={isAllEditable}
-                />
-              </View>
-
-              <View style={styles.section}>
-                <SubTitle subTitle="상세 설명" />
-                <TextInputBox
-                  placeholder="추가로 전달 할 내용이 있다면 적어주세요."
-                  maxLength={60}
-                  onChangeText={setDetailedDescription}
-                  value={description}
-                />
-              </View>
-
-              {config.showProductLink && (
-                <View style={styles.section}>
-                  <SubTitle subTitle="상품 링크" />
-                  <TextInputBox
-                    iconType="link"
-                    placeholder="구매할 상품의 URL을 입력하세요."
-                    onChangeText={setProductLink}
-                    value={productLink.value}
-                    isEditable={isAllEditable}
-                  />
-                </View>
-              )}
-            </SafeAreaView>
-          </ScrollView>
-
-          <SafeAreaView style={styles.createButtonContainer} edges={["bottom"]}>
+            )}
+          </KeyboardAwareScrollView>
+          <View style={styles.createButtonContainer}>
             <GlobalButton onClick={onClickEditParty} text="완료" />
-          </SafeAreaView>
-        </KeyboardAwareScrollView>
+          </View>
+        </View>
       </View>
+      <SafeAreaView style={styles.safeAreaBottom} edges={["bottom"]} />
     </>
   );
 }
@@ -311,10 +310,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   contentContainer: {
-    flex: 1,
-  },
-  contentInner: {
-    flex: 1,
     gap: 16,
     paddingVertical: 12,
     paddingHorizontal: 20,
@@ -330,11 +325,14 @@ const styles = StyleSheet.create({
     paddingTop: 12,
     paddingHorizontal: 20,
     paddingBottom: 17,
-    backgroundColor: "#fff",
-    shadowColor: "rgba(0, 0, 0, 0.25)",
+    backgroundColor: colors.white,
+    shadowColor: "#000000",
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 4,
+    boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
+  },
+  safeAreaBottom: {
+    backgroundColor: colors.white,
   },
 });

@@ -1,16 +1,27 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  ImageSourcePropType,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 interface ConfirmModalProps {
   visible: boolean;
+  icon?: ImageSourcePropType;
   title: string;
   message?: string;
   onClose: () => void;
   // 2개 버튼 모드
   cancelText?: string;
   confirmText?: string;
+  cancelTextColor?: string;
   onConfirm?: () => void | Promise<void | boolean>;
+  cancelButtonColor?: string;
   confirmButtonColor?: string;
   // 1개 버튼 모드
   singleButtonText?: string;
@@ -25,12 +36,15 @@ interface ConfirmModalProps {
  */
 export default function ConfirmModal({
   visible,
+  icon,
   title,
   message,
   onClose,
   cancelText,
   confirmText,
+  cancelTextColor = colors.white,
   onConfirm,
+  cancelButtonColor = colors.gray[2],
   confirmButtonColor = colors.main,
   singleButtonText,
   onSingleButtonPress,
@@ -66,30 +80,42 @@ export default function ConfirmModal({
     >
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
-          <View
-            style={[styles.titleContainer, { marginBottom: titleMarginBottom }]}
-          >
-            {title.split("\n").map((line, index) => (
-              <Text
-                key={index}
-                style={[styles.modalTitle, textStyles.title18_SB135]}
-              >
-                {line}
-              </Text>
-            ))}
-          </View>
-          {message && (
-            <View style={styles.messageContainer}>
-              {message.split("\n").map((line, index) => (
+          {icon && (
+            <View style={styles.iconWrapper}>
+              <Image source={icon} style={styles.icon} resizeMode="contain" />
+            </View>
+          )}
+
+          <View style={styles.contentWrapper}>
+            <View
+              style={[
+                styles.titleContainer,
+                { marginBottom: titleMarginBottom },
+              ]}
+            >
+              {title.split("\n").map((line, index) => (
                 <Text
                   key={index}
-                  style={[styles.modalMessage, textStyles.body13_SB135]}
+                  style={[styles.modalTitle, textStyles.title18_SB135]}
                 >
                   {line}
                 </Text>
               ))}
             </View>
-          )}
+            {message && (
+              <View style={styles.messageContainer}>
+                {message.split("\n").map((line, index) => (
+                  <Text
+                    key={index}
+                    style={[styles.modalMessage, textStyles.body13_SB135]}
+                  >
+                    {line}
+                  </Text>
+                ))}
+              </View>
+            )}
+          </View>
+
           {isSingleButtonMode ? (
             <Pressable
               style={[
@@ -106,11 +132,15 @@ export default function ConfirmModal({
           ) : (
             <View style={styles.modalButtons}>
               <Pressable
-                style={[styles.modalButton, styles.cancelButton]}
+                style={[
+                  styles.modalButton,
+                  styles.cancelButton,
+                  { backgroundColor: cancelButtonColor },
+                ]}
                 onPress={onClose}
               >
                 <Text
-                  style={[styles.cancelButtonText, textStyles.title18_SB135]}
+                  style={[textStyles.title18_SB135, { color: cancelTextColor }]}
                 >
                   {cancelText || "취소"}
                 </Text>
@@ -145,13 +175,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalContent: {
-    paddingHorizontal: 12,
+    alignSelf: "stretch",
+    paddingHorizontal: 16,
     paddingVertical: 20,
+    marginHorizontal: 20,
     backgroundColor: colors.white,
     borderRadius: 16,
-    width: "100%",
-    maxWidth: 362,
+    gap: 20,
   },
+  iconWrapper: {
+    alignSelf: "center",
+    borderRadius: 100,
+    backgroundColor: colors.sub,
+    padding: 15,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  icon: { width: 50, height: 50 },
+  contentWrapper: { gap: 4 },
   titleContainer: {
     alignItems: "center",
   },
@@ -161,7 +202,6 @@ const styles = StyleSheet.create({
   },
   messageContainer: {
     alignItems: "center",
-    marginBottom: 20,
   },
   modalMessage: {
     color: colors.gray[1],
@@ -180,10 +220,6 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     width: 116,
-    backgroundColor: colors.gray[2],
-  },
-  cancelButtonText: {
-    color: colors.white,
   },
   confirmButton: {
     width: 214,

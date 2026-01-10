@@ -25,12 +25,11 @@ const styles = StyleSheet.create({
     aspectRatio: 1 / 1,
     borderRadius: 100,
     backgroundColor: colors.main,
-    // Android 그림자
-    elevation: 2,
-    // iOS 그림자
-    shadowColor: "#000",
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
+    boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
   },
   image: {
     width: 32,

@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
+    boxShadow: "0 0 5px 0 rgba(0, 0, 0, 0.25)",
   },
   cameraButton: {
     position: "absolute",
@@ -246,5 +246,30 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 5,
     boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
+  },
+  nicknameInputWrapper: {
+    width: "100%",
+    gap: 8,
+    padding: 12,
+    justifyContent: "center",
+    alignItems: "flex-start",
+    backgroundColor: colors.white,
+    borderRadius: 16,
+    borderWidth: 0,
+    boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
+  },
+  nicknameLabel: {
+    color: colors.gray[1],
+  },
+  nicknameInput: {
+    alignSelf: "stretch",
+    color: colors.black,
+    padding: 0,
+    margin: 0,
+    textAlignVertical: "center",
+  },
+  charCount: {
+    color: colors.gray[1],
+    alignSelf: "flex-end",
   },
 });

@@ -97,11 +97,11 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 2 },
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowRadius: 4,
+    boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
   },
   // 내 프로필 래퍼 (오른쪽, 겹침, 54x54)
   myProfileWrapper: {
