@@ -108,7 +108,7 @@ export default function SearchScreen() {
   const showRecentSearches = !searchQuery;
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={["top"]}>
       <StatusBar style="dark" />
       {/* 검색바 */}
       <SearchBar

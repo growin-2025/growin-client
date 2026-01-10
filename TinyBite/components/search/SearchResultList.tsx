@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
   listContent: {
     flexGrow: 1,
     backgroundColor: colors.background,
+    paddingBottom: 60,
   },
   searchCard: {
     width: "100%",
