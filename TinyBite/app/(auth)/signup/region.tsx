@@ -6,6 +6,7 @@ import { TermCode, useSignupStore } from "@/stores/signupStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { ApiError } from "@/types/api";
+import { SignupRespone } from "@/types/auth";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -68,10 +69,9 @@ export default function RegionScreen() {
 
   const SignupMutation = useMutation({
     mutationFn: postSignupGoogle,
-    onSuccess: (data) => {
-      console.log("postSignupGoogle >>", data);
+    onSuccess: (data: SignupRespone) => {
       resetSignupStore();
-      login(data);
+      login({ signup: true, authResponse: data });
       router.replace("/(auth)/signup/complete");
     },
     onError: (error: AxiosError<ApiError>) => {
