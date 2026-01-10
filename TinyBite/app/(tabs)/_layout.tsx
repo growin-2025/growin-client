@@ -25,13 +25,11 @@ export default function TabsLayout() {
           paddingTop: 12,
           paddingBottom: 12,
           backgroundColor: colors.white,
-          borderTopWidth: 0,
-          shadowColor: "rgba(0,0,0,0.25)",
+          shadowColor: "#000000",
           shadowOpacity: 0.25,
-          shadowOffset: { width: 0, height: -2 },
-          shadowRadius: 8,
-          // Android elevation for shadow
-          elevation: 4,
+          shadowOffset: { width: 0, height: 0 },
+          shadowRadius: 4,
+          boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
         },
       }}
     >

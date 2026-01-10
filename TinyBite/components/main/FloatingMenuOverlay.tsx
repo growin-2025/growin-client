@@ -130,11 +130,11 @@ const styles = StyleSheet.create({
     gap: 8,
     borderRadius: 16,
     backgroundColor: "#fff",
-    // 그림자 효과 (iOS)
-    shadowColor: "rgba(0, 0, 0, 0.25)",
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.25,
     shadowRadius: 16,
-    // 그림자 효과 (Android)
-    elevation: 3,
+    boxShadow: "0 0 16px 0 rgba(0, 0, 0, 0.25)",
   },
 
   menuButton: {

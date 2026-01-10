@@ -91,13 +91,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 16,
     borderWidth: 0,
-    // 그림자 효과 (iOS)
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    // 그림자 효과 (Android)
-    elevation: 3,
+    boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
   },
   label: {
     color: colors.gray[1],

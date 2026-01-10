@@ -247,10 +247,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     zIndex: 10, // 콘텐츠 위에 표시
     shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 4, // Android 그림자
+    boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.1)",
   },
   // 스크롤 가능한 콘텐츠 컨테이너
   contentContainer: {

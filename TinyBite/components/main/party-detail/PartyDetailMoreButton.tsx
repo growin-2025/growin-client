@@ -165,10 +165,10 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
     zIndex: 101, // 오버레이 위에 표시
     shadowColor: "#000000",
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.25,
     shadowRadius: 8,
-    elevation: 8,
+    boxShadow: "0 0 8px 0 rgba(0, 0, 0, 0.25)",
   },
   // 드래그 핸들
   bottomSheetHandle: {

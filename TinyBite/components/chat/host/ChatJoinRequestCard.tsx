@@ -83,6 +83,10 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.25,
+    shadowRadius: 2,
     boxShadow: "0 0 2px 0 rgba(0, 0, 0, 0.25)",
   },
   nickname: {

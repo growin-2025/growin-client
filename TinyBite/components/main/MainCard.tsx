@@ -127,12 +127,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
-    /* shadow */
     shadowColor: "#000000",
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.25,
-    shadowRadius: 2,
-    elevation: 4,
+    shadowRadius: 4,
+    boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
   },
   thumbnailContainer: {
     width: 90,

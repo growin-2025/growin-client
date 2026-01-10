@@ -12,10 +12,10 @@ const MIN = 2;
 const MAX = 10;
 
 interface NumberOfPeopleBoxProps {
-  isDisabled?: boolean;
+  isEditable?: boolean;
 }
 
-const NumberOfPeopleBox = ({ isDisabled = true }: NumberOfPeopleBoxProps) => {
+const NumberOfPeopleBox = ({ isEditable = true }: NumberOfPeopleBoxProps) => {
   const { mode } = useLocalSearchParams<{
     mode?: string;
   }>();
@@ -68,14 +68,21 @@ const NumberOfPeopleBox = ({ isDisabled = true }: NumberOfPeopleBoxProps) => {
     <View
       style={[
         styles.container,
-        { backgroundColor: isDisabled ? colors.white : colors.gray[3] },
+        { backgroundColor: isEditable ? colors.white : colors.gray[3] },
+        isEditable && {
+          shadowColor: "#000000",
+          shadowOpacity: 0.25,
+          shadowOffset: { width: 0, height: 0 },
+          shadowRadius: 4,
+          boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
+        },
       ]}
     >
       <View style={styles.inner}>
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={handleClickMinus}
-          disabled={!isDisabled}
+          disabled={!isEditable}
         >
           <Image style={styles.image} source={MINUS_ICON} />
         </TouchableOpacity>
@@ -84,7 +91,7 @@ const NumberOfPeopleBox = ({ isDisabled = true }: NumberOfPeopleBoxProps) => {
           <Text
             style={[
               textStyles.title20_SB135,
-              { color: isDisabled ? colors.main : colors.gray[1] },
+              { color: isEditable ? colors.main : colors.gray[1] },
             ]}
           >
             {isEditingMode ? maxParticipants.value : numberOfPeople}
@@ -95,7 +102,7 @@ const NumberOfPeopleBox = ({ isDisabled = true }: NumberOfPeopleBoxProps) => {
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={handleClickPlus}
-          disabled={!isDisabled}
+          disabled={!isEditable}
         >
           <Image style={styles.image} source={PLUS_ICON} />
         </TouchableOpacity>
@@ -109,11 +116,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 16,
     borderRadius: 16,
-    shadowColor: "rgba(0, 0, 0, 0.25)",
-    shadowOpacity: 0.25,
-    shadowOffset: { width: 0, height: 0 },
-    shadowRadius: 4,
-    elevation: 4,
   },
   inner: {
     flexDirection: "row",

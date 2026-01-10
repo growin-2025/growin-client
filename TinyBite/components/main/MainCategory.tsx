@@ -95,12 +95,11 @@ const styles = StyleSheet.create({
     height: 36,
     borderRadius: 100,
     gap: 6,
-    // shadow
     shadowColor: "#000000",
-    shadowOpacity: 0.25,
-    shadowRadius: 2,
     shadowOffset: { width: 0, height: 0 },
-    elevation: 2,
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
   },
   chipActive: {
     backgroundColor: ACTIVE_BG,
