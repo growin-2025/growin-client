@@ -9,6 +9,7 @@ const INACTIVE_COLOR = colors.gray[2];
 
 export default function TabsLayout() {
   const insets = useSafeAreaInsets();
+
   return (
     <Tabs
       screenOptions={{
@@ -21,9 +22,8 @@ export default function TabsLayout() {
           ...textStyles.body13_SB135,
         },
         tabBarStyle: {
-          height: 68 + insets.bottom,
+          height: 74 + insets.bottom,
           paddingTop: 12,
-          paddingBottom: 12,
           backgroundColor: colors.white,
           shadowColor: "#000000",
           shadowOpacity: 0.25,
@@ -48,7 +48,6 @@ export default function TabsLayout() {
                 width: 28,
                 height: 28,
                 resizeMode: "contain",
-                marginTop: -4,
               }}
             />
           ),
@@ -69,7 +68,6 @@ export default function TabsLayout() {
                 width: 28,
                 height: 28,
                 resizeMode: "contain",
-                marginTop: -4,
               }}
             />
           ),
@@ -90,7 +88,6 @@ export default function TabsLayout() {
                 width: 28,
                 height: 28,
                 resizeMode: "contain",
-                marginTop: -4,
               }}
             />
           ),
