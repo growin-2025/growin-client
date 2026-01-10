@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    boxShadow: "0 0 3px 0 rgba(0, 0, 0, 0.25)",
+    boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
   },
   userName: {
     flex: 1,
