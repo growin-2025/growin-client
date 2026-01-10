@@ -8,12 +8,16 @@ interface SearchResultListProps {
   searchResults: PartyItem[];
   isLoading: boolean;
   onItemPress: (item: PartyItem) => void;
+  onEndReached?: () => void;
+  isFetchingNextPage?: boolean;
 }
 
 const SearchResultList = ({
   searchResults,
   isLoading,
   onItemPress,
+  onEndReached,
+  isFetchingNextPage,
 }: SearchResultListProps) => {
   const renderSearchResult = ({ item }: { item: PartyItem }) => (
     <MainCard
@@ -53,6 +57,17 @@ const SearchResultList = ({
       ItemSeparatorComponent={ItemSeparator}
       contentContainerStyle={styles.listContent}
       showsVerticalScrollIndicator={false}
+      onEndReached={onEndReached}
+      onEndReachedThreshold={0.5}
+      ListFooterComponent={
+        isFetchingNextPage ? (
+          <View style={styles.footerContainer}>
+            <Text style={[styles.footerText, textStyles.body16_M135]}>
+              더 불러오는 중...
+            </Text>
+          </View>
+        ) : null
+      }
     />
   );
 };
@@ -91,5 +106,12 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     color: colors.gray[1],
+  },
+  footerContainer: {
+    paddingVertical: 20,
+    alignItems: "center",
+  },
+  footerText: {
+    color: colors.gray[2],
   },
 });

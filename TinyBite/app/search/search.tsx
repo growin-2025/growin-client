@@ -8,7 +8,7 @@ import { useUserCoords } from "@/hooks/useUserCoords";
 import { usePartyStore } from "@/stores/partyStore";
 import { colors } from "@/styles/colors";
 import { PartyItem } from "@/types/party";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
@@ -40,12 +40,15 @@ export default function SearchScreen() {
     }
   }, []);
 
-  // 검색 결과 조회 (useQuery 사용)
+  // 검색 결과 조회 (useInfiniteQuery 사용)
   const {
-    data: searchResponse,
+    data: searchData,
     isLoading: isSearching,
     error: searchError,
-  } = useQuery({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: [
       "search",
       searchQuery,
@@ -53,20 +56,26 @@ export default function SearchScreen() {
       coords?.latitude,
       coords?.longitude,
     ],
-    queryFn: () =>
+    queryFn: ({ pageParam = 0 }) =>
       searchParties({
         q: searchQuery,
         category: partyType,
         lat: coords?.latitude || 0,
         lon: coords?.longitude || 0,
-        page: 0,
+        page: pageParam,
         size: 20,
       }),
+    getNextPageParam: (lastPage, allPages) => {
+      // hasNext가 true면 다음 페이지 번호 반환, 아니면 undefined (더 이상 로드 안 함)
+      return lastPage?.hasNext ? allPages.length : undefined;
+    },
     enabled: !!searchQuery && searchQuery.trim().length > 0 && !!coords,
+    initialPageParam: 0,
   });
 
-  const searchResults = searchResponse?.parties || [];
-  const hasNext = searchResponse?.hasNext || false;
+  // 모든 페이지의 파티들을 하나의 배열로 합치기
+  const searchResults =
+    searchData?.pages?.flatMap((page) => page?.parties || []) || [];
 
   const location = userMe?.location || "역삼동";
 
@@ -124,6 +133,12 @@ export default function SearchScreen() {
           searchResults={searchResults}
           isLoading={isSearching}
           onItemPress={handleItemPress}
+          onEndReached={() => {
+            if (hasNextPage && !isFetchingNextPage) {
+              fetchNextPage();
+            }
+          }}
+          isFetchingNextPage={isFetchingNextPage}
         />
       )}
     </SafeAreaView>
