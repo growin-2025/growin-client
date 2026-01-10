@@ -106,12 +106,12 @@ export const useProfileImage = (options?: UseProfileImageOptions) => {
         source === "camera"
           ? await ImagePicker.launchCameraAsync({
               mediaTypes: ["images"],
-              allowsEditing: true,
+              allowsEditing: false,
               quality: 1,
             })
           : await ImagePicker.launchImageLibraryAsync({
               mediaTypes: ["images"],
-              allowsEditing: true,
+              allowsEditing: false,
               quality: 1,
             });
 
