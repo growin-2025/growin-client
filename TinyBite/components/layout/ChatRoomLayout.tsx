@@ -20,18 +20,6 @@ const ChatRoomLayout = ({ children }: ChatRoomLayoutProps) => {
     setIsPanelVisible((prev) => !prev);
   };
 
-  const handleGalleryPress = () => {
-    console.log("갤러리 열기");
-    setIsPanelVisible(false);
-    // TODO: 갤러리 열기 로직
-  };
-
-  const handleCameraPress = () => {
-    console.log("카메라 열기");
-    setIsPanelVisible(false);
-    // TODO: 카메라 열기 로직
-  };
-
   return (
     <>
       <StatusBar style="dark" />
@@ -81,8 +69,7 @@ const ChatRoomLayout = ({ children }: ChatRoomLayoutProps) => {
             />
             <ChatBottomPanel
               isVisible={isPanelVisible}
-              onGalleryPress={handleGalleryPress}
-              onCameraPress={handleCameraPress}
+              setIsPanelVisible={setIsPanelVisible}
             />
           </View>
         </KeyboardAvoidingView>

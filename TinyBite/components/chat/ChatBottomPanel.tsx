@@ -1,31 +1,37 @@
-// components/chat/ChatBottomPanel.tsx
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const GALLERY_ICON = require("@/assets/images/chat/gallery.png");
 const CAMERA_ICON = require("@/assets/images/chat/camera.png");
 
 interface ChatBottomPanelProps {
   isVisible: boolean;
-  onGalleryPress: () => void;
-  onCameraPress: () => void;
+  setIsPanelVisible: (visible: boolean) => void;
 }
 
 const ChatBottomPanel = ({
   isVisible,
-  onGalleryPress,
-  onCameraPress,
+  setIsPanelVisible,
 }: ChatBottomPanelProps) => {
-  const insets = useSafeAreaInsets();
+  const handleGalleryPress = () => {
+    console.log("갤러리 열기");
+    setIsPanelVisible(false);
+    // TODO: 갤러리 열기 로직
+  };
+
+  const handleCameraPress = () => {
+    console.log("카메라 열기");
+    setIsPanelVisible(false);
+    // TODO: 카메라 열기 로직
+  };
 
   if (!isVisible) return null;
 
   return (
     <View>
       <View style={styles.panelContent}>
-        <Pressable style={styles.option} onPress={onGalleryPress}>
+        <Pressable style={styles.option} onPress={handleGalleryPress}>
           <View style={styles.iconContainer}>
             <Image source={GALLERY_ICON} style={styles.optionIcon} />
           </View>
@@ -34,7 +40,7 @@ const ChatBottomPanel = ({
           </Text>
         </Pressable>
 
-        <Pressable style={styles.option} onPress={onCameraPress}>
+        <Pressable style={styles.option} onPress={handleCameraPress}>
           <View style={styles.iconContainer}>
             <Image source={CAMERA_ICON} style={styles.optionIcon} />
           </View>
