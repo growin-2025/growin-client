@@ -1,22 +1,40 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { useCallback, useState } from "react";
-import { Image, StyleSheet, TextInput, View } from "react-native";
+import {
+  Image,
+  Keyboard,
+  Pressable,
+  StyleSheet,
+  TextInput,
+  View,
+} from "react-native";
 
 const PLUS_ICON = require("@/assets/images/plus-32-gray.png");
 const SEND_ICON = require("@/assets/images/chat/send.png");
+interface ChatInputBoxProps {
+  onPlusPress: () => void;
+  isPanelVisible: boolean;
+}
 
-const ChatInputBox = () => {
+const ChatInputBox = ({ onPlusPress, isPanelVisible }: ChatInputBoxProps) => {
   const [message, setMessage] = useState("");
 
   const handleMessageChange = useCallback((text: string) => {
     setMessage(text);
   }, []);
 
+  const handlePlusPress = () => {
+    Keyboard.dismiss();
+    onPlusPress();
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.containerWrapper}>
-        <Image style={styles.iconPlus} source={PLUS_ICON} />
+        <Pressable onPress={handlePlusPress}>
+          <Image style={styles.iconPlus} source={PLUS_ICON} />
+        </Pressable>
 
         <View style={styles.inputWrapper}>
           <TextInput
@@ -28,6 +46,11 @@ const ChatInputBox = () => {
             onChangeText={handleMessageChange}
             value={message}
             numberOfLines={3}
+            onFocus={() => {
+              if (isPanelVisible) {
+                onPlusPress();
+              }
+            }}
           />
         </View>
 
@@ -38,17 +61,7 @@ const ChatInputBox = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: colors.white,
-    paddingTop: 12,
-    paddingBottom: 11,
-    paddingHorizontal: 20,
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
-  },
+  container: {},
   containerWrapper: {
     alignItems: "center",
     gap: 8,

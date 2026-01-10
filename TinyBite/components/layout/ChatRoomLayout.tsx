@@ -2,10 +2,11 @@ import ChatInputBox from "@/components/chat/ChatInputBox";
 import ChatRoomHeader from "@/components/ChatRoomHeader";
 import { colors } from "@/styles/colors";
 import { StatusBar } from "expo-status-bar";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { SafeAreaView } from "react-native-safe-area-context";
+import ChatBottomPanel from "../chat/ChatBottomPanel";
 import { ChatJoinRequestCard } from "../chat/host/ChatJoinRequestCard";
 
 interface ChatRoomLayoutProps {
@@ -13,6 +14,24 @@ interface ChatRoomLayoutProps {
 }
 
 const ChatRoomLayout = ({ children }: ChatRoomLayoutProps) => {
+  const [isPanelVisible, setIsPanelVisible] = useState(false);
+
+  const togglePanel = () => {
+    setIsPanelVisible((prev) => !prev);
+  };
+
+  const handleGalleryPress = () => {
+    console.log("갤러리 열기");
+    setIsPanelVisible(false);
+    // TODO: 갤러리 열기 로직
+  };
+
+  const handleCameraPress = () => {
+    console.log("카메라 열기");
+    setIsPanelVisible(false);
+    // TODO: 카메라 열기 로직
+  };
+
   return (
     <>
       <StatusBar style="dark" />
@@ -55,7 +74,17 @@ const ChatRoomLayout = ({ children }: ChatRoomLayoutProps) => {
 
             <View style={{ flex: 1 }}>{children}</View>
           </View>
-          <ChatInputBox />
+          <View style={styles.bottomContainer}>
+            <ChatInputBox
+              onPlusPress={togglePanel}
+              isPanelVisible={isPanelVisible}
+            />
+            <ChatBottomPanel
+              isVisible={isPanelVisible}
+              onGalleryPress={handleGalleryPress}
+              onCameraPress={handleCameraPress}
+            />
+          </View>
         </KeyboardAvoidingView>
       </View>
       <SafeAreaView style={styles.safeAreaBottom} edges={["bottom"]} />
@@ -67,6 +96,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.sub,
+  },
+  bottomContainer: {
+    gap: 24,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    backgroundColor: colors.white,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
   },
   safeAreaBottom: {
     backgroundColor: colors.white,
