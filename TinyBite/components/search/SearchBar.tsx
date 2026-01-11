@@ -53,7 +53,7 @@ const SearchBar = ({
       <View style={styles.searchInputContainer}>
         <View style={{ alignSelf: "stretch" }}>
           <TextInput
-            autoFocus={true}
+            // autoFocus={true}
             style={styles.searchInput}
             placeholder={placeholder}
             placeholderTextColor={colors.gray[1]}
