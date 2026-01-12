@@ -1,6 +1,6 @@
 import { getPartyList } from "@/api/partyApi";
 import { usePartyStore } from "@/stores/partyStore";
-import { PartyListResponse } from "@/types/party";
+import { PartyListResponse } from "@/types/party.types";
 import { useQuery } from "@tanstack/react-query";
 
 /**
