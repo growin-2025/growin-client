@@ -1,3 +1,4 @@
+import { PickupLocation, useEditPartyStore } from "@/stores/editPartyStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { router } from "expo-router";
@@ -27,7 +28,8 @@ interface PlaceItem {
 export default function PartyPlaceSearch() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<PlaceItem[]>([]);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedItem, setSelectedItem] = useState<PlaceItem | null>(null);
+  const { setPickUpLocation } = useEditPartyStore();
 
   useEffect(() => {
     if (!query) return setResults([]);
@@ -40,23 +42,18 @@ export default function PartyPlaceSearch() {
   }, [query]);
 
   const fetchKakaoPlaces = async (text: string) => {
-    console.log("1");
     try {
       const url =
         `https://dapi.kakao.com/v2/local/search/keyword.json?` +
         `query=${encodeURIComponent(text)}`;
 
-      console.log("2");
       const res = await fetch(url, {
         headers: {
           Authorization: `KakaoAK ${KAKAO_REST_API_KEY}`,
         },
       });
 
-      console.log("3");
       const json = await res.json();
-      console.log("4");
-      console.log("json >>", json);
       setResults(json.documents || []);
     } catch (error) {
       console.error("Kakao place search error:", error);
@@ -64,11 +61,21 @@ export default function PartyPlaceSearch() {
   };
 
   const onPressPlace = (item: PlaceItem) => {
-    setSelectedId(item.id);
+    setSelectedItem(item);
 
     console.log("선택한 장소명:", item.place_name);
     console.log("위도(latitude):", item.y);
     console.log("경도(longitude):", item.x);
+  };
+
+  const onPressDone = () => {
+    const locationData: PickupLocation = {
+      name: selectedItem?.place_name!,
+      latitude: parseFloat(selectedItem?.y!),
+      longitude: parseFloat(selectedItem?.x!),
+    };
+    setPickUpLocation(locationData);
+    router.back();
   };
 
   return (
@@ -82,7 +89,7 @@ export default function PartyPlaceSearch() {
           수령장소
         </Text>
 
-        <TouchableOpacity onPress={() => console.log("완료")}>
+        <TouchableOpacity onPress={onPressDone}>
           <Text style={[styles.textDone, textStyles.title18_SB135]}>완료</Text>
         </TouchableOpacity>
       </SafeAreaView>
@@ -110,7 +117,7 @@ export default function PartyPlaceSearch() {
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ gap: 12 }}
           renderItem={({ item }) => {
-            const isSelected = item.id === selectedId;
+            const isSelected = item.id === selectedItem?.id;
 
             return (
               <TouchableOpacity onPress={() => onPressPlace(item)}>
