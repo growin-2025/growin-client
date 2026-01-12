@@ -15,7 +15,7 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, Pressable, StyleSheet, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
@@ -232,13 +232,15 @@ export default function PartyCreateScreen() {
 
             <View style={styles.section}>
               <SubTitle subTitle="수령 장소" />
-              <TextInputBox
-                iconType="location"
-                placeholder="예) 역삼역 1번 출구"
-                maxLength={30}
-                onChangeText={setPickUpLocation}
-                value={pickUpLocation.place}
-              />
+              <Pressable onPress={() => router.push("/search/location")}>
+                <TextInputBox
+                  iconType="location"
+                  placeholder="예) 역삼역 1번 출구"
+                  maxLength={30}
+                  onChangeText={setPickUpLocation}
+                  value={pickUpLocation.place}
+                />
+              </Pressable>
             </View>
 
             <View style={styles.section}>
