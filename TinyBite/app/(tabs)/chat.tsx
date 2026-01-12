@@ -1,8 +1,8 @@
 import ChatCard from "@/components/chat/ChatCard";
-import { mockChatData } from "@/mocks/chatData";
+import { useGetOnetoOneRoomListQuery } from "@/hooks/queries/useChatRoom";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { ChatItemType } from "@/types/chat";
+import { OneToOneChatCardSchema } from "@/types/chat.types";
 import { useState } from "react";
 import {
   FlatList,
@@ -26,6 +26,8 @@ type FilterTab = "전체" | "참여중인 파티" | "1:1 채팅";
  * - 채팅 리스트: 사용자별 채팅 아이템 표시
  */
 export default function ChatScreen() {
+  const { data: onetoOneRoomList = [] } = useGetOnetoOneRoomListQuery();
+
   // 선택된 필터 탭 상태
   const [selectedFilter, setSelectedFilter] = useState<FilterTab>("전체");
 
@@ -35,17 +37,26 @@ export default function ChatScreen() {
   /**
    * 필터에 맞는 데이터 필터링
    */
-  const filteredData = mockChatData.filter((item) => {
-    if (selectedFilter === "전체") return true;
-    if (selectedFilter === "1:1 채팅") return item.chatType === "oneOnOne";
-    if (selectedFilter === "참여중인 파티") return item.chatType === "party";
-    return true;
-  });
+  const filteredData: OneToOneChatCardSchema[] = onetoOneRoomList.filter(
+    (item) => {
+      if (selectedFilter === "전체") return true;
+      if (selectedFilter === "1:1 채팅") return item.roomType === "ONE_TO_ONE";
+      if (selectedFilter === "참여중인 파티") return item.roomType === "Group";
+      return true;
+    }
+  );
+  // .map((item) => ({
+  //   id: item.chatRoomId,
+  //   lastMessage: item.recentMessage,
+  //   timestamp: item.recentTime,
+  //   targetName: item.partyTitle || "", // Add missing required property
+  //   ...item,
+  // }));
 
   /**
    * 채팅 아이템 렌더링 함수
    */
-  const renderChatItem = ({ item }: { item: ChatItemType }) => {
+  const renderChatItem = ({ item }: { item: OneToOneChatCardSchema }) => {
     return <ChatCard item={item} />;
   };
 
@@ -107,7 +118,7 @@ export default function ChatScreen() {
         <FlatList
           data={filteredData}
           renderItem={renderChatItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.chatRoomId.toString()}
           ItemSeparatorComponent={ItemSeparator}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
