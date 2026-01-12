@@ -1,10 +1,11 @@
-import { getUserMe, updateLocation } from "@/api/userApi";
+import { updateLocation } from "@/api/userApi";
 import { useUserCoords } from "@/hooks/useUserCoords";
+import { useAuthStore } from "@/stores/authStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { ApiError } from "@/types/api";
+import { ApiError } from "@/types/api.types";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -18,10 +19,7 @@ export default function NeighborhoodSettingScreen() {
   const { refresh } = useUserCoords();
 
   // 현재 사용자 정보 조회
-  const { data: userMe, refetch: refetchUserMe } = useQuery({
-    queryKey: ["getUserMe"],
-    queryFn: getUserMe,
-  });
+  const { user } = useAuthStore();
 
   // 위치 업데이트 mutation
   const updateLocationMutation = useMutation({
@@ -30,7 +28,7 @@ export default function NeighborhoodSettingScreen() {
       // 서버에서 좌표를 주소로 변환하는데 시간이 걸릴 수 있으므로 약간의 딜레이 후 refetch
       setTimeout(async () => {
         await queryClient.invalidateQueries({ queryKey: ["getUserMe"] });
-        await refetchUserMe();
+        // await refetchUserMe();
         Toast.show({
           type: "basicToast",
           props: { text: "동네 설정이 완료되었습니다." },
@@ -119,7 +117,7 @@ export default function NeighborhoodSettingScreen() {
             resizeMode="contain"
           />
           <Text style={[styles.addressText, textStyles.title18_SB135]}>
-            {userMe?.location || "로딩 중..."}
+            {user?.location || "로딩 중..."}
           </Text>
         </View>
 

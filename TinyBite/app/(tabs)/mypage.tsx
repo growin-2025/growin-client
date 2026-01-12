@@ -1,9 +1,8 @@
-import { getUserMe } from "@/api/userApi";
 import MyPartyList from "@/components/mypage/MyPartyList";
+import { useAuthStore } from "@/stores/authStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { getProfileSource } from "@/utils/image";
-import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
@@ -11,11 +10,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MyPageScreen() {
   const router = useRouter();
+  const { user } = useAuthStore();
 
-  const { data: userMe } = useQuery({
-    queryKey: ["getUserMe"],
-    queryFn: getUserMe,
-  });
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
       <StatusBar style="dark" />
@@ -54,12 +50,12 @@ export default function MyPageScreen() {
       <View style={styles.profileWrapper}>
         <View style={styles.profileCard}>
           <Image
-            source={getProfileSource(userMe?.userProfileImage)}
+            source={getProfileSource(user?.userProfileImage)}
             style={styles.avatar}
             resizeMode="cover"
           />
           <Text style={[styles.userName, textStyles.title18_SB135]}>
-            {userMe?.name || "로딩 중..."}
+            {user?.nickname || "로딩 중..."}
           </Text>
           <Pressable
             style={styles.editButton}

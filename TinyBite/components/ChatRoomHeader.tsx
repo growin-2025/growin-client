@@ -2,10 +2,10 @@ import OneOnOneChatStatusTag from "@/components/chat/OneOnOneChatStatusTag";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import {
-  ChatType,
-  OneOnOneChatStatusType,
+  OneToOneChatStatusType,
   PartyStatusType,
-} from "@/types/chat";
+  RoomType,
+} from "@/types/chat.types";
 import { router, useLocalSearchParams } from "expo-router";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -15,14 +15,8 @@ const CHEVRON_LEFT_ICON = require("@/assets/images/chevron/chevron-left-36-gray.
 const MEMBER_COUNT = require("@/assets/images/chat/member-count.png");
 
 const ChatRoomHeader = () => {
-  const {
-    id,
-    type, // "oneOnOne" | "party"
-    // name
-  } = useLocalSearchParams<{
-    id: string;
-    type: ChatType;
-    name?: string;
+  const { roomType } = useLocalSearchParams<{
+    roomType: RoomType;
   }>();
 
   return (
@@ -32,7 +26,7 @@ const ChatRoomHeader = () => {
           <Image style={styles.imageChevron} source={CHEVRON_LEFT_ICON} />
         </TouchableOpacity>
 
-        {type === "oneOnOne" ? (
+        {roomType === "ONE_TO_ONE" ? (
           <View style={styles.headerContent}>
             <View style={styles.infoWrapper}>
               <Text
@@ -40,14 +34,14 @@ const ChatRoomHeader = () => {
                 numberOfLines={1}
                 ellipsizeMode="tail"
               >
-                츄비
+                .임시 타켓 이름.
               </Text>
               <OneOnOneChatStatusTag
-                status={"승인 요청" as OneOnOneChatStatusType}
+                status={"PENDING" as OneToOneChatStatusType} /* // 임시 상태 */
               />
             </View>
             <Text style={[styles.subTitle, textStyles.body15_SB135]}>
-              후문에서 엽떡 나누실 분 구해요
+              .임시 파티 제목.
             </Text>
           </View>
         ) : (
@@ -58,15 +52,17 @@ const ChatRoomHeader = () => {
                 numberOfLines={1}
                 ellipsizeMode="tail"
               >
-                후문 엽떡 나누실 분 ㅃㄹ
+                .임시 파티 제목.
               </Text>
             </View>
             <View style={styles.infoWrapper}>
-              <PartyStatusTag status={"모집 중" as PartyStatusType} />
+              <PartyStatusTag
+                status={"모집 중" as PartyStatusType} /* // 임시 상태 */
+              />
               <View style={styles.members}>
                 <Image style={styles.imageUser} source={MEMBER_COUNT} />
                 <Text style={[styles.userCount, textStyles.body15_SB135]}>
-                  3
+                  .임시 명수.
                 </Text>
               </View>
             </View>

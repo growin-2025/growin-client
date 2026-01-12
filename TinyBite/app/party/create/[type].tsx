@@ -1,4 +1,4 @@
-import { postCreateParty, postFile } from "@/api/partyApi";
+import { postCreateParty } from "@/api/partyApi";
 import AddPhotoButton from "@/components/create-party/AddPhotoButton";
 import NumberOfPeopleBox from "@/components/create-party/NumberOfPeopleBox";
 import PhotoItem from "@/components/create-party/PhotoItem";
@@ -6,10 +6,11 @@ import SubTitle from "@/components/create-party/SubTitle";
 import TextInputBox from "@/components/create-party/TextInputBox";
 import CreatePartyPageHeader from "@/components/CreatePartyPageHeader";
 import GlobalButton from "@/components/GlobalButton";
+import { useUploadFileMutation } from "@/hooks/mutations/useFile";
 import { Photo, useCreatingPartyStore } from "@/stores/creatingPartyStore";
 import { colors } from "@/styles/colors";
-import { ApiError } from "@/types/api";
-import { CreatingPartyBody } from "@/types/party";
+import { ApiError } from "@/types/api.types";
+import { CreatingPartyBody } from "@/types/party.types";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -82,12 +83,7 @@ export default function PartyCreateScreen() {
     }))
   );
 
-  const UploadFileMutation = useMutation({
-    mutationFn: postFile,
-    onSuccess: (data) => {
-      return data;
-    },
-  });
+  const { mutateAsync: UploadFileMutation } = useUploadFileMutation();
 
   const CreatePartyMutation = useMutation({
     mutationFn: postCreateParty,
@@ -149,18 +145,7 @@ export default function PartyCreateScreen() {
     let photoStringList: string[] | undefined;
 
     if (photos.length) {
-      try {
-        photoStringList = await UploadFileMutation.mutateAsync(photos);
-      } catch (error) {
-        Toast.show({
-          type: "basicToast",
-          props: { text: "사진 업로드에 실패했습니다. 다시 시도해주세요." },
-          position: "bottom",
-          bottomOffset: 133,
-          visibilityTime: 2000,
-        });
-        return;
-      }
+      photoStringList = await UploadFileMutation(photos);
     }
 
     const newPartyValue: CreatingPartyBody = {

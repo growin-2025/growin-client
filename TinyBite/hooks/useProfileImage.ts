@@ -1,6 +1,6 @@
 import { postFile } from "@/api/partyApi";
 import { deleteProfileImage, updateProfileImage } from "@/api/userApi";
-import { ApiError } from "@/types/api";
+import { ApiError } from "@/types/api.types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import * as ImageManipulator from "expo-image-manipulator";

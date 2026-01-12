@@ -1,17 +1,20 @@
 import { colors } from "@/styles/colors";
+import { TextMessage } from "@/types/chat.types";
+import { formatTimeToHHMM } from "@/utils/formatTime";
 import { StyleSheet, Text, View } from "react-native";
 import { MessageTime } from "./MessageTime";
 
 interface OutgoingMessageProps {
-  message: string;
-  time: string;
+  message: TextMessage;
 }
 
-export function OutgoingMessage({ message, time }: OutgoingMessageProps) {
+export function OutgoingMessage({ message }: OutgoingMessageProps) {
+  const time = formatTimeToHHMM(message.createdAt);
+
   return (
     <View style={styles.wrapper}>
       <View style={styles.bubble}>
-        <Text style={styles.text}>{message}</Text>
+        <Text style={styles.text}>{message.text}</Text>
       </View>
       <MessageTime time={time} />
     </View>

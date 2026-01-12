@@ -1,6 +1,9 @@
+import { useUserQuery } from "@/hooks/queries/useUser";
+import { useAuthStore } from "@/stores/authStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { Tabs } from "expo-router";
+import { useEffect } from "react";
 import { Image } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -9,6 +12,17 @@ const INACTIVE_COLOR = colors.gray[2];
 
 export default function TabsLayout() {
   const insets = useSafeAreaInsets();
+  const { setUser } = useAuthStore();
+
+  const { data: user } = useUserQuery({
+    enabled: true,
+  });
+
+  useEffect(() => {
+    if (user) {
+      setUser(user);
+    }
+  }, [user, setUser]);
 
   return (
     <Tabs

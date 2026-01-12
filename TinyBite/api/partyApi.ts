@@ -1,4 +1,5 @@
 import { Photo } from "@/stores/creatingPartyStore";
+import { ApiSuccess } from "@/types/api.types";
 import {
   CreatingPartyBody,
   EditedPartyInfo,
@@ -7,10 +8,7 @@ import {
   PartyItem,
   PartyListParams,
   PartyListResponse,
-  SearchPartyParams,
-  SearchPartyResponse,
-  SearchPartyResponseData,
-} from "@/types/party";
+} from "@/types/party.types";
 import { parseProfileImage } from "@/utils/parseProfileImage";
 import { Platform } from "react-native";
 import { privateAxios } from "./axios";
@@ -190,70 +188,13 @@ export const getHostingParties = async (): Promise<PartyItem[]> => {
 };
 
 /**
- * 파티 검색 API
- * @param params 검색 파라미터 (q, category, page, size)
- * @returns 검색된 파티 리스트 응답
+ * 파티 참여 신청
+ * @returns 1대1 대화방 ID
  */
-export const searchParties = async (
-  params: SearchPartyParams
-): Promise<SearchPartyResponseData> => {
-  try {
-    const res = await privateAxios.get<SearchPartyResponse>(
-      ENDPOINT.PARTY.SEARCH,
-      {
-        params: {
-          q: params.q,
-          category: params.category || "ALL",
-          lat: params.lat,
-          lon: params.lon,
-          page: params.page ?? 0,
-          size: params.size ?? 20,
-        },
-      }
-    );
-    return res.data.data;
-  } catch (error) {
-    console.error("파티 검색 실패:", error);
-    throw error;
-  }
-};
+export const postRequestJoinParty = async (partyId: number) => {
+  const res = await privateAxios.post<ApiSuccess<number>>(
+    ENDPOINT.PARTY.REQUEST_JOIN_PARTY(partyId)
+  );
 
-/**
- * 최근 검색 로그 조회 API
- * @returns 최근 검색어 리스트
- */
-export const getSearchLog = async (): Promise<string[]> => {
-  try {
-    const res = await privateAxios.get(ENDPOINT.PARTY.SEARCH_LOG);
-    return res.data?.data || [];
-  } catch (error) {
-    console.error("최근 검색 로그 조회 실패:", error);
-    return [];
-  }
-};
-
-/**
- * 최근 검색 로그 삭제 API
- * @param keyword 삭제할 검색어
- */
-export const deleteSearchLog = async (keyword: string): Promise<void> => {
-  try {
-    await privateAxios.delete(ENDPOINT.PARTY.SEARCH_LOG_DELETE(keyword));
-  } catch (error) {
-    console.error("최근 검색 로그 삭제 실패:", error);
-    throw error;
-  }
-};
-
-/**
- * 모든 최근 검색 로그 삭제 API
- * @returns 삭제 성공 여부
- */
-export const deleteAllSearchLog = async (): Promise<void> => {
-  try {
-    await privateAxios.delete(ENDPOINT.PARTY.SEARCH_LOG);
-  } catch (error) {
-    console.error("모든 최근 검색 로그 삭제 실패:", error);
-    throw error;
-  }
+  return res.data.data;
 };

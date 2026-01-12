@@ -3,7 +3,7 @@ import { usePartyList } from "@/hooks/usePartyList";
 import { useUserCoords } from "@/hooks/useUserCoords";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { PartyItem } from "@/types/party";
+import { PartyItem } from "@/types/party.types";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
 import { FlatList, Image, StyleSheet, Text, View } from "react-native";

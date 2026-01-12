@@ -1,3 +1,4 @@
+import { useChatStore } from "@/stores/chatStore";
 import { colors } from "@/styles/colors";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import {
@@ -17,6 +18,7 @@ export default function GalleryPreviewScreen() {
     fileName: string;
     mimeType: string;
   }>();
+  const setSelectedImage = useChatStore((state) => state.setSelectedImage);
 
   const handleCancel = () => {
     router.back();
@@ -33,9 +35,8 @@ export default function GalleryPreviewScreen() {
       fileName: params.fileName || `photo_${Date.now()}.jpg`,
     };
 
-    console.log("갤러리에서 선택한 사진 데이터:", photoData);
+    setSelectedImage(photoData);
 
-    // TODO: 채팅 화면으로 데이터 전달
     router.back();
   };
 

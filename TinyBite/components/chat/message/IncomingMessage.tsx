@@ -1,25 +1,23 @@
 import { colors } from "@/styles/colors";
+import { TextMessage } from "@/types/chat.types";
+import { formatTimeToHHMM } from "@/utils/formatTime";
 import { StyleSheet, Text, View } from "react-native";
 import { MessageOwner } from "./MessageOwner";
 import { MessageTime } from "./MessageTime";
 
 interface IncomingMessageProps {
-  nickname: string;
-  message: string;
-  time: string;
+  message: TextMessage;
 }
 
-export function IncomingMessage({
-  nickname,
-  message,
-  time,
-}: IncomingMessageProps) {
+export function IncomingMessage({ message }: IncomingMessageProps) {
+  const time = formatTimeToHHMM(message.createdAt);
+
   return (
     <View style={styles.container}>
-      <MessageOwner nickname={nickname} />
+      <MessageOwner nickname={message.nickname} />
       <View style={styles.wrapper}>
         <View style={styles.bubble}>
-          <Text style={styles.text}>{message}</Text>
+          <Text style={styles.text}>{message.text}</Text>
         </View>
         <MessageTime time={time} />
       </View>

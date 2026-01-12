@@ -1,21 +1,21 @@
 import { colors } from "@/styles/colors";
+import { ImageUrlMessage } from "@/types/chat.types";
+import { formatTimeToHHMM } from "@/utils/formatTime";
 import { Image, StyleSheet, View } from "react-native";
 import { MessageTime } from "./MessageTime";
 
 interface OutgoingImageMessageProps {
-  imageUrl: string;
-  time: string;
+  message: ImageUrlMessage;
 }
 
-export function OutgoingImageMessage({
-  imageUrl,
-  time,
-}: OutgoingImageMessageProps) {
+export function OutgoingImageMessage({ message }: OutgoingImageMessageProps) {
+  const time = formatTimeToHHMM(message.createdAt);
+
   return (
     <View style={styles.wrapper}>
       <View style={styles.imageWrapper}>
         <Image
-          source={{ uri: imageUrl }}
+          source={{ uri: message.imageUrl }}
           style={styles.image}
           resizeMode="cover"
         />
