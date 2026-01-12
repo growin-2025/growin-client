@@ -1,4 +1,8 @@
-import { PickupLocation, useEditPartyStore } from "@/stores/editPartyStore";
+import {
+  PickupLocation,
+  useCreatingPartyStore,
+} from "@/stores/creatingPartyStore";
+import { useEditPartyStore } from "@/stores/editPartyStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { router, useLocalSearchParams } from "expo-router";
@@ -32,7 +36,12 @@ export default function PartyPlaceSearch() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<PlaceItem[]>([]);
   const [selectedItem, setSelectedItem] = useState<PlaceItem | null>(null);
-  const { setPickUpLocation } = useEditPartyStore();
+  const createStore = useCreatingPartyStore();
+  const editStore = useEditPartyStore();
+  const setPickUpLocation =
+    mode === "edit"
+      ? editStore.setPickUpLocation
+      : createStore.setPickUpLocation;
 
   useEffect(() => {
     if (!query) return setResults([]);
@@ -73,9 +82,9 @@ export default function PartyPlaceSearch() {
 
   const onPressDone = () => {
     const locationData: PickupLocation = {
-      name: selectedItem?.place_name!,
-      latitude: parseFloat(selectedItem?.y!),
-      longitude: parseFloat(selectedItem?.x!),
+      place: selectedItem?.place_name!,
+      pickupLatitude: parseFloat(selectedItem?.y!),
+      pickupLongitude: parseFloat(selectedItem?.x!),
     };
     setPickUpLocation(locationData);
     router.back();

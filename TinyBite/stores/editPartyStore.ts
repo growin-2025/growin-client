@@ -1,16 +1,10 @@
-import { Photo } from "@/stores/creatingPartyStore";
+import { Photo, PickupLocation } from "@/stores/creatingPartyStore";
 import { PartyDetail } from "@/types/party";
 import { create } from "zustand";
 
 export interface PhotoUrl {
   id: number;
   imageUri: string;
-}
-
-export interface PickupLocation {
-  name: string;
-  latitude: number;
-  longitude: number;
 }
 
 export interface editPartyState {
@@ -75,8 +69,8 @@ export const useEditPartyStore = create<editPartyState>((set) => ({
   pickupLocation: {
     isEdited: false,
     place: "",
-    pickupLatitude: 37.569,
-    pickupLongitude: 126.991,
+    pickupLatitude: 0,
+    pickupLongitude: 0,
   },
   description: "",
   productLink: {
@@ -176,9 +170,9 @@ export const useEditPartyStore = create<editPartyState>((set) => ({
     set(() => ({
       pickupLocation: {
         isEdited: true,
-        place: location.name,
-        pickupLatitude: location.latitude,
-        pickupLongitude: location.longitude,
+        place: location.place,
+        pickupLatitude: location.pickupLatitude,
+        pickupLongitude: location.pickupLongitude,
       },
     }));
   },
