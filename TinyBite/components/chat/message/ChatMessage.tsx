@@ -6,13 +6,6 @@ import { MessageSystem } from "./MessageSystem";
 import { OutgoingImageMessage } from "./OutgoingImageMessage";
 import { OutgoingMessage } from "./OutgoingMessage";
 
-export function formatTime(iso: string) {
-  const date = new Date(iso);
-  const hours = date.getHours().toString().padStart(2, "0");
-  const minutes = date.getMinutes().toString().padStart(2, "0");
-  return `${hours}:${minutes}`;
-}
-
 interface ChatMessageProps {
   message: ChatMessageSchema;
 }

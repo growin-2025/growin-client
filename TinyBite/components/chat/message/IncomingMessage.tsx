@@ -1,7 +1,7 @@
 import { colors } from "@/styles/colors";
 import { TextMessage } from "@/types/chat.types";
+import { formatTimeToHHMM } from "@/utils/formatTime";
 import { StyleSheet, Text, View } from "react-native";
-import { formatTime } from "./ChatMessage";
 import { MessageOwner } from "./MessageOwner";
 import { MessageTime } from "./MessageTime";
 
@@ -10,7 +10,7 @@ interface IncomingMessageProps {
 }
 
 export function IncomingMessage({ message }: IncomingMessageProps) {
-  const time = formatTime(message.createdAt);
+  const time = formatTimeToHHMM(message.createdAt);
 
   return (
     <View style={styles.container}>
