@@ -3,7 +3,8 @@ import { useGetOnetoOneRoomListQuery } from "@/hooks/queries/useChatRoom";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { OneToOneChatCardSchema } from "@/types/chat.types";
-import { useState } from "react";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
 import {
   FlatList,
   Image,
@@ -26,7 +27,14 @@ type FilterTab = "전체" | "참여중인 파티" | "1:1 채팅";
  * - 채팅 리스트: 사용자별 채팅 아이템 표시
  */
 export default function ChatScreen() {
-  const { data: onetoOneRoomList = [] } = useGetOnetoOneRoomListQuery();
+  const { data: onetoOneRoomList = [], refetch } =
+    useGetOnetoOneRoomListQuery();
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
 
   // 선택된 필터 탭 상태
   const [selectedFilter, setSelectedFilter] = useState<FilterTab>("전체");

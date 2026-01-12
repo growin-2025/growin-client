@@ -1,17 +1,19 @@
 import { postRequestJoinParty } from "@/api/partyApi";
 import { ApiError } from "@/types/api.types";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "expo-router";
 import Toast from "react-native-toast-message";
 
 export const useRequestJoinParty = () => {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: postRequestJoinParty,
     onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["getOnetoOneRoomList"] });
       router.push({
         pathname: "/chat/[id]",
         params: {

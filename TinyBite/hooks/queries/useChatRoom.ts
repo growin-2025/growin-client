@@ -5,6 +5,6 @@ export const useGetOnetoOneRoomListQuery = () => {
   return useQuery({
     queryKey: ["getOnetoOneRoomList"],
     queryFn: getOnetoOneRoomList,
-    staleTime: 5000,
+    staleTime: 0,
   });
 };
