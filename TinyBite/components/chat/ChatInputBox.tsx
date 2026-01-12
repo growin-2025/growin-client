@@ -15,9 +15,14 @@ const SEND_ICON = require("@/assets/images/chat/send.png");
 interface ChatInputBoxProps {
   onPlusPress: () => void;
   isPanelVisible: boolean;
+  onSend: (message: string) => void;
 }
 
-const ChatInputBox = ({ onPlusPress, isPanelVisible }: ChatInputBoxProps) => {
+const ChatInputBox = ({
+  onPlusPress,
+  isPanelVisible,
+  onSend,
+}: ChatInputBoxProps) => {
   const [message, setMessage] = useState("");
 
   const handleMessageChange = useCallback((text: string) => {
@@ -29,39 +34,48 @@ const ChatInputBox = ({ onPlusPress, isPanelVisible }: ChatInputBoxProps) => {
     onPlusPress();
   };
 
+  const handleSend = () => {
+    if (message.trim()) {
+      onSend(message.trim());
+      setMessage("");
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <View style={styles.containerWrapper}>
-        <Pressable onPress={handlePlusPress}>
-          <Image style={styles.iconPlus} source={PLUS_ICON} />
-        </Pressable>
+    <View style={styles.containerWrapper}>
+      <Pressable onPress={handlePlusPress}>
+        <Image style={styles.iconPlus} source={PLUS_ICON} />
+      </Pressable>
 
-        <View style={styles.inputWrapper}>
-          <TextInput
-            style={[styles.inputArea, textStyles.body16_SB135]}
-            placeholder="메시지를 입력하세요"
-            placeholderTextColor={colors.gray[2]}
-            multiline={true}
-            keyboardType={"default"}
-            onChangeText={handleMessageChange}
-            value={message}
-            numberOfLines={3}
-            onFocus={() => {
-              if (isPanelVisible) {
-                onPlusPress();
-              }
-            }}
-          />
-        </View>
-
-        <Image style={styles.iconSend} source={SEND_ICON} />
+      <View style={styles.inputWrapper}>
+        <TextInput
+          style={[styles.inputArea, textStyles.body16_SB135]}
+          placeholder="메시지를 입력하세요"
+          placeholderTextColor={colors.gray[2]}
+          multiline={true}
+          keyboardType={"default"}
+          onChangeText={handleMessageChange}
+          value={message}
+          numberOfLines={3}
+          onFocus={() => {
+            if (isPanelVisible) {
+              onPlusPress();
+            }
+          }}
+        />
       </View>
+
+      <Pressable onPress={handleSend} disabled={!message.trim()}>
+        <Image
+          style={[styles.iconSend, !message.trim() && { opacity: 0.3 }]}
+          source={SEND_ICON}
+        />
+      </Pressable>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {},
   containerWrapper: {
     alignItems: "center",
     gap: 8,
@@ -78,7 +92,7 @@ const styles = StyleSheet.create({
   },
 
   inputWrapper: {
-    flexGrow: 1,
+    flex: 1,
     padding: 12,
     borderRadius: 16,
     backgroundColor: colors.background,
