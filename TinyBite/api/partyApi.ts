@@ -1,4 +1,5 @@
 import { Photo } from "@/stores/creatingPartyStore";
+import { ApiSuccess } from "@/types/api.types";
 import {
   CreatingPartyBody,
   EditedPartyInfo,
@@ -7,7 +8,7 @@ import {
   PartyItem,
   PartyListParams,
   PartyListResponse,
-} from "@/types/party";
+} from "@/types/party.types";
 import { parseProfileImage } from "@/utils/parseProfileImage";
 import { Platform } from "react-native";
 import { privateAxios } from "./axios";
@@ -180,4 +181,16 @@ export const getHostingParties = async (): Promise<PartyItem[]> => {
     console.error("호스팅 중인 파티 리스트 로딩 실패:", error);
     return [];
   }
+};
+
+/**
+ * 파티 참여 신청
+ * @returns 1대1 대화방 ID
+ */
+export const postRequestJoinParty = async (partyId: number) => {
+  const res = await privateAxios.post<ApiSuccess<number>>(
+    ENDPOINT.PARTY.REQUEST_JOIN_PARTY(partyId)
+  );
+
+  return res.data.data;
 };
