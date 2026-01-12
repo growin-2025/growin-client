@@ -1,5 +1,5 @@
 import { signOut } from "@/hooks/useGoogleAuth";
-import { LoginRespone, UserProfile } from "@/types/auth";
+import { LoginResponse, UserProfile } from "@/types/auth.types";
 import { router } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import { create } from "zustand";
@@ -7,14 +7,18 @@ import { create } from "zustand";
 export interface AuthState {
   isAuthenticated: boolean;
   user: UserProfile | null;
-  login: (res: LoginRespone) => void;
+  setUser: (user: UserProfile) => void;
+  login: (res: LoginResponse) => void;
   logout: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
   isAuthenticated: false,
   user: null,
-  login: async (res: LoginRespone) => {
+  setUser: (user: UserProfile) => {
+    set({ user });
+  },
+  login: async (res: LoginResponse) => {
     await SecureStore.setItemAsync("accessToken", res.authResponse.accessToken);
     await SecureStore.setItemAsync(
       "refreshToken",
