@@ -1,3 +1,4 @@
+import { useChatStore } from "@/stores/chatStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { CameraType, CameraView, useCameraPermissions } from "expo-camera";
@@ -22,24 +23,10 @@ export default function CameraScreen() {
   const [isProcessing, setIsProcessing] = useState(false);
   const cameraRef = useRef<CameraView>(null);
   const router = useRouter();
+  const setSelectedImage = useChatStore((state) => state.setSelectedImage);
 
   if (!permission) {
     return <View style={styles.container} />;
-  }
-
-  if (!permission.granted) {
-    return (
-      <View style={styles.permissionContainer}>
-        <Text style={[textStyles.body16_M135, styles.permissionText]}>
-          카메라 권한이 필요합니다
-        </Text>
-        <Pressable style={styles.permissionButton} onPress={requestPermission}>
-          <Text style={[textStyles.body16_M135, { color: colors.white }]}>
-            권한 허용
-          </Text>
-        </Pressable>
-      </View>
-    );
   }
 
   const toggleCameraFacing = () => {
@@ -81,7 +68,7 @@ export default function CameraScreen() {
       fileName: fileName,
     };
 
-    console.log("촬영한 사진 데이터:", photoData);
+    setSelectedImage(photoData);
 
     router.back();
   };
