@@ -1,4 +1,4 @@
-import { Photo } from "@/stores/creatingPartyStore";
+import { Photo, PickupLocation } from "@/stores/creatingPartyStore";
 import { PartyDetail } from "@/types/party.types";
 import { create } from "zustand";
 
@@ -42,7 +42,7 @@ export interface editPartyState {
   setRepresentativePhoto: (id: number) => void;
   setPartyTitle: (title: string) => void;
   setTotalAmount: (amount: string) => void;
-  setPickUpLocation: (location: string) => void;
+  setPickUpLocation: (location: PickupLocation) => void;
   setDetailedDescription: (description: string) => void;
   setProductLink: (link: string) => void;
   setMaxParticipants: (number: number) => void;
@@ -69,8 +69,8 @@ export const useEditPartyStore = create<editPartyState>((set) => ({
   pickupLocation: {
     isEdited: false,
     place: "",
-    pickupLatitude: 37.569,
-    pickupLongitude: 126.991,
+    pickupLatitude: 0,
+    pickupLongitude: 0,
   },
   description: "",
   productLink: {
@@ -166,13 +166,13 @@ export const useEditPartyStore = create<editPartyState>((set) => ({
       },
     }));
   },
-  setPickUpLocation: (location: string) => {
+  setPickUpLocation: (location: PickupLocation) => {
     set(() => ({
       pickupLocation: {
         isEdited: true,
-        place: "중구 명동",
-        pickupLatitude: 37.55103512680912,
-        pickupLongitude: 126.9254146711746,
+        place: location.place,
+        pickupLatitude: location.pickupLatitude,
+        pickupLongitude: location.pickupLongitude,
       },
     }));
   },

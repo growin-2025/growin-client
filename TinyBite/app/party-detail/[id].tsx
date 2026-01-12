@@ -201,7 +201,7 @@ export default function PartyDetailScreen() {
             <PartyDetailHost
               profileImage={partyDetail?.host.profileImage}
               name={partyDetail?.host.nickname || "로딩 중..."}
-              location={partyDetail?.pickupLocation.place || "로딩 중..."}
+              location={partyDetail?.host.hostLocation || "로딩 중..."}
             />
             {/* 구분선 */}
             <View style={styles.divider} />

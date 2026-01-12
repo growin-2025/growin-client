@@ -12,7 +12,7 @@ interface TextInputBoxProps {
   isAmount?: boolean;
   maxLength?: number;
   placeholder: string;
-  onChangeText: (text: string) => void;
+  onChangeText?: (text: string) => void;
   value: string;
   isEditable?: boolean;
 }
@@ -51,10 +51,10 @@ const TextInputBox = ({
           multiline={!isAmount}
           keyboardType={isAmount ? "number-pad" : "default"}
           onChangeText={(text) => {
-            onChangeText(isAmount ? text.replace(/[^0-9]/g, "") : text);
+            onChangeText && onChangeText(isAmount ? text.replace(/[^0-9]/g, "") : text);
           }}
           value={value}
-          editable={isEditable}
+          editable={iconType === "location" ? false : isEditable}
         />
 
         {isAmount && (

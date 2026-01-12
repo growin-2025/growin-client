@@ -7,6 +7,12 @@ export type Photo = {
   fileName: string;
 };
 
+export interface PickupLocation {
+  place: string;
+  pickupLatitude: number;
+  pickupLongitude: number;
+}
+
 export interface CreatingPartyState {
   seq: number;
   photos: Photo[];
@@ -14,11 +20,7 @@ export interface CreatingPartyState {
   partyTitle: string;
   totalAmount: string;
   numberOfPeople: number;
-  pickUpLocation: {
-    place: string;
-    pickupLatitude: number;
-    pickupLongitude: number;
-  };
+  pickUpLocation: PickupLocation;
   detailedDescription: string;
   productLink: string;
   addPhoto: (uri: string, mimeType: string, fileName: string) => void;
@@ -27,7 +29,7 @@ export interface CreatingPartyState {
   setPartyTitle: (title: string) => void;
   setTotalAmount: (amount: string) => void;
   setNumberOfPeople: (number: number) => void;
-  setPickUpLocation: (location: string) => void;
+  setPickUpLocation: (location: PickupLocation) => void;
   setDetailedDescription: (description: string) => void;
   setProductLink: (link: string) => void;
   resetCreateParty: () => void;
@@ -41,9 +43,9 @@ export const useCreatingPartyStore = create<CreatingPartyState>((set, get) => ({
   totalAmount: "",
   numberOfPeople: 2,
   pickUpLocation: {
-    place: "중구 명동",
-    pickupLatitude: 37.55103512680912,
-    pickupLongitude: 126.9254146711746,
+    place: "",
+    pickupLatitude: 0,
+    pickupLongitude: 0,
   },
   detailedDescription: "",
   productLink: "",
@@ -101,12 +103,12 @@ export const useCreatingPartyStore = create<CreatingPartyState>((set, get) => ({
       numberOfPeople: number,
     }));
   },
-  setPickUpLocation: (location: string) => {
+  setPickUpLocation: (location: PickupLocation) => {
     set(() => ({
       pickUpLocation: {
-        place: "중구 명동",
-        pickupLatitude: 37.55103512680912,
-        pickupLongitude: 126.9254146711746,
+        place: location.place,
+        pickupLatitude: location.pickupLatitude,
+        pickupLongitude: location.pickupLongitude,
       },
     }));
   },
