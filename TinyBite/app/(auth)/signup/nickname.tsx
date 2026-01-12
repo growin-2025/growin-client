@@ -3,7 +3,7 @@ import PaginationIndecatorHeader from "@/components/PaginationIndecatorHeader";
 import { useSignupStore } from "@/stores/signupStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { ApiError } from "@/types/api";
+import { ApiError } from "@/types/api.types";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import { validateAndFilterNickname } from "@/utils/validateAndFilterText";
 import { useMutation } from "@tanstack/react-query";

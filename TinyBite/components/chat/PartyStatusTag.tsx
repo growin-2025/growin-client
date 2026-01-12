@@ -1,6 +1,6 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { PartyStatusType } from "@/types/chat";
+import { PartyStatusType } from "@/types/chat.types";
 import { StyleSheet, Text, View } from "react-native";
 
 export interface PartyStatusTagProps {

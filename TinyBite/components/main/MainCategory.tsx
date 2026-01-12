@@ -1,7 +1,7 @@
 import { usePartyStore } from "@/stores/partyStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { PartyCategory } from "@/types/party";
+import { PartyCategory } from "@/types/party.types";
 import {
   Image,
   ScrollView,

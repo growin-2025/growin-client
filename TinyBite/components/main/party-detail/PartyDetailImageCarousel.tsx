@@ -1,5 +1,5 @@
 import { textStyles } from "@/styles/typography/textStyles";
-import { PartyCategory } from "@/types/party";
+import { PartyCategory } from "@/types/party.types";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useMemo, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";

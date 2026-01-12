@@ -2,7 +2,7 @@ import { getActiveParties, getHostingParties } from "@/api/partyApi";
 import MainCard from "@/components/main/MainCard";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { PartyItem } from "@/types/party";
+import { PartyItem } from "@/types/party.types";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useState } from "react";
