@@ -1,46 +1,49 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { OneOnOneChatStatusType } from "@/types/chat";
+import {
+  OneToOneChatStatusLabelMap,
+  OneToOneChatStatusType,
+} from "@/types/chat.types";
 import { StyleSheet, Text, View } from "react-native";
 
-export interface OneOnOneChatStatusTagProps {
-  status: OneOnOneChatStatusType;
+export interface OneToOneChatStatusTagProps {
+  status: OneToOneChatStatusType;
 }
 
 /**
  * 1:1 채팅 상태 태그 컴포넌트
- * - 승인 대기: 오렌지 배경, 오렌지 텍스트
- * - 승인 거절: 빨간 배경, 빨간 텍스트
- * - 승인 완료: 초록 배경, 초록 텍스트
- * - 승인 요청: 오렌지 배경, 오렌지 텍스트
- * - 파티 종료: 회색 배경, 회색 텍스트
+ * - 승인 대기(PENDING): 오렌지 배경, 오렌지 텍스트
+ * - 승인 거절(REJECTED): 빨간 배경, 빨간 텍스트
+ * - 승인 완료(APPROVED): 초록 배경, 초록 텍스트
+ * - 승인 요청(REQUESTED): 오렌지 배경, 오렌지 텍스트
+ * - 파티 종료(ENDED): 회색 배경, 회색 텍스트
  */
-const OneOnOneChatStatusTag = ({ status }: OneOnOneChatStatusTagProps) => {
+const OneOnOneChatStatusTag = ({ status }: OneToOneChatStatusTagProps) => {
   // 상태별 스타일을 객체로 정의
   const statusStyles = {
-    "승인 대기": {
+    PENDING: {
       container: styles.statusTagPending,
       text: styles.statusTagTextPending,
     },
-    "승인 거절": {
+    REJECTED: {
       container: styles.statusTagRejected,
       text: styles.statusTagTextRejected,
     },
-    "승인 완료": {
+    APPROVED: {
       container: styles.statusTagCompleted,
       text: styles.statusTagTextCompleted,
     },
-    "승인 요청": {
+    REQUESTED: {
       container: styles.statusTagRequest,
       text: styles.statusTagTextRequest,
     },
-    "파티 종료": {
+    ENDED: {
       container: styles.statusTagEnded,
       text: styles.statusTagTextEnded,
     },
   };
 
-  const currentStyle = statusStyles[status] || statusStyles["승인 대기"];
+  const currentStyle = statusStyles[status] || statusStyles["PENDING"];
 
   return (
     <View style={[styles.statusTag, currentStyle.container]}>
@@ -51,7 +54,7 @@ const OneOnOneChatStatusTag = ({ status }: OneOnOneChatStatusTagProps) => {
           currentStyle.text,
         ]}
       >
-        {status}
+        {OneToOneChatStatusLabelMap[status]}
       </Text>
     </View>
   );
