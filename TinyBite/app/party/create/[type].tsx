@@ -232,7 +232,16 @@ export default function PartyCreateScreen() {
 
             <View style={styles.section}>
               <SubTitle subTitle="수령 장소" />
-              <Pressable onPress={() => router.push("/search/location")}>
+              <Pressable
+                onPress={() =>
+                  router.push({
+                    pathname: "/search/location",
+                    params: {
+                      mode: "create",
+                    },
+                  })
+                }
+              >
                 <TextInputBox
                   iconType="location"
                   placeholder="예) 역삼역 1번 출구"

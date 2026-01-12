@@ -1,7 +1,7 @@
 import { PickupLocation, useEditPartyStore } from "@/stores/editPartyStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   FlatList,
@@ -26,6 +26,9 @@ interface PlaceItem {
 }
 
 export default function PartyPlaceSearch() {
+  const { mode } = useLocalSearchParams<{
+    mode: "create" | "edit";
+  }>();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<PlaceItem[]>([]);
   const [selectedItem, setSelectedItem] = useState<PlaceItem | null>(null);
