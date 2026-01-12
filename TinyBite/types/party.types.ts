@@ -4,12 +4,18 @@
 export type PartyCategory = "ALL" | "DELIVERY" | "GROCERY" | "HOUSEHOLD";
 
 /**
+ * 파티 리스트 정렬 타입
+ */
+export type PartySortType = "LATEST" | "DISTANCE";
+
+/**
  * 파티 리스트 조회 요청 파라미터 타입
  */
 export type PartyListParams = {
   category?: PartyCategory;
   latitude: string;
   longitude: string;
+  sortType?: PartySortType;
 };
 
 /**
@@ -131,4 +137,31 @@ export type EditedPartyInfo = {
   productLink?: string;
   description?: string;
   images?: string[];
+};
+
+/**
+ * 검색 API 요청 파라미터 타입
+ */
+export type SearchPartyParams = {
+  q: string;
+  category?: PartyCategory;
+  lat: number;
+  lon: number;
+  page?: number;
+  size?: number;
+};
+
+/**
+ * 검색 API 응답 데이터 타입
+ */
+export type SearchPartyResponseData = {
+  parties: PartyItem[];
+  hasNext: boolean;
+};
+
+/**
+ * 검색 API 응답 타입
+ */
+export type SearchPartyResponse = {
+  data: SearchPartyResponseData;
 };

@@ -68,10 +68,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     zIndex: 10,
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
     boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
   },
   cta: {

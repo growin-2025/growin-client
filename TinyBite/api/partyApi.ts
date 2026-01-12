@@ -23,12 +23,16 @@ export const getPartyList = async (
   params: PartyListParams
 ): Promise<PartyListResponse> => {
   try {
+    const requestParams: any = {
+      category: params.category,
+      latitude: params.latitude,
+      longitude: params.longitude,
+    };
+    if (params.sortType) {
+      requestParams.sortType = params.sortType;
+    }
     const res = await privateAxios.get(ENDPOINT.PARTY.GET_PARTIES, {
-      params: {
-        category: params.category,
-        latitude: params.latitude,
-        longitude: params.longitude,
-      },
+      params: requestParams,
     });
 
     const responseData = res.data;
@@ -101,8 +105,8 @@ export const getPartyDetail = async (
   try {
     const res = await privateAxios.get(ENDPOINT.PARTY.DETAIL(params.partyId), {
       params: {
-        latitude: params.latitude,
-        longitude: params.longitude,
+        userLat: params.latitude,
+        userLon: params.longitude,
       },
     });
 

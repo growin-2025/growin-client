@@ -24,6 +24,10 @@ export const ENDPOINT = {
     CREATE_PARTIES: "/api/parties",
     EDIT_PARTIES: (partyId: number) => `/api/parties/${partyId}`,
     REQUEST_JOIN_PARTY: (partyId: number) => `/api/parties/${partyId}/join`,
+    SEARCH: "/api/parties/search",
+    SEARCH_LOG: "/api/parties/search/log",
+    SEARCH_LOG_DELETE: (keyword: string) =>
+      `/api/parties/search/log/${keyword}`,
   },
   FILE: {
     UPLOAD_FILE: "api/v1/file/upload",

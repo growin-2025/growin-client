@@ -1,8 +1,9 @@
 import { useAuthStore } from "@/stores/authStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MainHeaderCarousel, { CarouselItem } from "./MainHeaderCarousel";
 
@@ -16,6 +17,8 @@ interface MainHeaderProps {}
  * - 캐러셀을 통해 여러 인사말과 캐릭터 이미지를 순환 표시
  */
 const MainHeader = ({}: MainHeaderProps = {}) => {
+  const router = useRouter();
+
   // 유저 정보 조회
   const { user } = useAuthStore();
 
@@ -65,14 +68,23 @@ const MainHeader = ({}: MainHeaderProps = {}) => {
       >
         {/* 로고와 현재 위치 정보 (고정 영역) */}
         <View style={styles.mainLogoWrapper}>
-          <Image
-            source={require("@/assets/images/main/mainlogo.png")}
-            style={styles.mainLogo}
-            resizeMode="contain"
-          />
-          <Text style={[styles.location, textStyles.title20_B135]}>
-            {location}
-          </Text>
+          <View style={styles.logoAndLocation}>
+            <Image
+              source={require("@/assets/images/main/mainlogo.png")}
+              style={styles.mainLogo}
+              resizeMode="contain"
+            />
+            <Text style={[styles.location, textStyles.title20_B135]}>
+              {location}
+            </Text>
+          </View>
+          <Pressable onPress={() => router.push("/search/search")}>
+            <Image
+              source={require("@/assets/images/search/search-32.png")}
+              style={styles.searchIcon}
+              resizeMode="contain"
+            />
+          </Pressable>
         </View>
 
         {/* 인사말과 캐릭터 이미지 캐러셀 (스와이프 가능) */}
@@ -106,6 +118,12 @@ const styles = StyleSheet.create({
   mainLogoWrapper: {
     flexDirection: "row",
     alignItems: "flex-end",
+    justifyContent: "space-between",
+  },
+  // 로고와 위치를 묶는 컨테이너
+  logoAndLocation: {
+    flexDirection: "row",
+    alignItems: "flex-end",
     gap: 8,
   },
   // 메인 로고 이미지 크기
@@ -116,5 +134,11 @@ const styles = StyleSheet.create({
   // 위치 텍스트 색상
   location: {
     color: colors.white,
+  },
+  // 검색 아이콘 스타일
+  searchIcon: {
+    width: 32,
+    height: 32,
+    paddingLeft: 1.23,
   },
 });

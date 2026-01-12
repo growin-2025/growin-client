@@ -105,8 +105,7 @@ const MainCard = ({ item, onPress, containerStyle }: MainCardProps) => {
             </Text>
           </View>
           <Text style={[styles.meta, textStyles.body13_SB135]}>
-            {/* {item.distance}  |*/}
-            {item.timeAgo}
+            {item.distanceKm} | {item.timeAgo}
           </Text>
         </View>
       </View>
@@ -127,10 +126,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
     boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
   },
   thumbnailContainer: {

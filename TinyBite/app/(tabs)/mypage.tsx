@@ -149,10 +149,6 @@ const styles = StyleSheet.create({
   },
   mypageCard: {
     borderRadius: 0,
-    shadowColor: "transparent",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0,
-    shadowRadius: 0,
     borderBottomWidth: 1,
     borderBottomColor: colors.gray[4],
   },
