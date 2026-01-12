@@ -70,6 +70,7 @@ export type HostInfo = {
   userId: number;
   nickname: string;
   profileImage: string;
+  hostLocation: string;
 };
 
 /**
