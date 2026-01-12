@@ -122,11 +122,6 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     paddingBottom: 30,
     zIndex: 101,
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 8,
   },
   // 드래그 핸들
   bottomSheetHandle: {

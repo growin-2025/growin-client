@@ -58,10 +58,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     borderRadius: 16,
     padding: 12,
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
     boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
   },
   linkHeader: {

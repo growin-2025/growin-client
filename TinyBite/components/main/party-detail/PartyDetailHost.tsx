@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
+    boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
   },
   hostName: {
     color: colors.black,

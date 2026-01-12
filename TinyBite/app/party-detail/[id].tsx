@@ -249,10 +249,6 @@ const styles = StyleSheet.create({
     right: 0,
     backgroundColor: colors.white,
     zIndex: 10, // 콘텐츠 위에 표시
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
     boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.1)",
   },
   // 스크롤 가능한 콘텐츠 컨테이너
