@@ -237,7 +237,6 @@ export default function PartyCreateScreen() {
                   iconType="location"
                   placeholder="예) 역삼역 1번 출구"
                   maxLength={30}
-                  onChangeText={setPickUpLocation}
                   value={pickUpLocation.place}
                 />
               </Pressable>
