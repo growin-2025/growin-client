@@ -1,4 +1,4 @@
-export type SignupGoogle = {
+export type SignupGoogleRequest = {
   idToken: string;
   phone: string;
   nickname: string;
@@ -7,7 +7,7 @@ export type SignupGoogle = {
   agreedTerms: string[];
 };
 
-export type LoginGoogle = {
+export type LoginGoogleRequest = {
   idToken: string;
   platformType: "ANDROID" | "IOS";
 };
@@ -29,7 +29,7 @@ export type SignupRespone = {
   user: UserProfile;
 };
 
-export type LoginRespone = {
+export type LoginResponse = {
   signup: boolean;
   authResponse: {
     accessToken: string;
@@ -42,12 +42,7 @@ export type LoginRespone = {
 
 export type UserProfile = {
   userId: number;
-  email: string;
   nickname: string;
-  type: string;
-  status: string;
   location: string;
-  phone: string;
-  createdAt: string;
-  isNewUser: boolean;
+  userProfileImage?: string;
 };
