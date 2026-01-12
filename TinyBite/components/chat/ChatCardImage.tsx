@@ -1,5 +1,5 @@
 import { colors } from "@/styles/colors";
-import { ChatItemType, PartyCategoryType } from "@/types/chat";
+import { OneToOneChatCardSchema, PartyCategoryType } from "@/types/chat.types";
 import { Image, StyleSheet, View } from "react-native";
 
 /**
@@ -12,7 +12,7 @@ const categoryIcons: Record<PartyCategoryType, any> = {
 };
 
 interface ChatItemImageProps {
-  item: ChatItemType;
+  item: OneToOneChatCardSchema;
 }
 
 /**
@@ -21,16 +21,16 @@ interface ChatItemImageProps {
  * - 파티 채팅: 네모 형식 파티 이미지
  */
 const ChatItemImage = ({ item }: ChatItemImageProps) => {
-  const isOneOnOne = item.chatType === "oneOnOne";
+  const isOneOnOne = item.roomType === "ONE_TO_ONE";
 
   if (isOneOnOne) {
     return (
       <View style={styles.overlappingProfilesContainer}>
         {/* 상대방 프로필 이미지 (왼쪽) */}
         <View style={styles.opponentProfileWrapper}>
-          {item.opponentProfileImage ? (
+          {item.targetProfileImage ? (
             <Image
-              source={item.opponentProfileImage}
+              source={{ uri: item.targetProfileImage }}
               style={styles.profileImageCircle}
               resizeMode="cover"
             />
@@ -42,7 +42,7 @@ const ChatItemImage = ({ item }: ChatItemImageProps) => {
         <View style={styles.myProfileWrapper}>
           {item.myProfileImage ? (
             <Image
-              source={item.myProfileImage}
+              source={{ uri: item.myProfileImage }}
               style={styles.profileImageCircle}
               resizeMode="cover"
             />
@@ -54,27 +54,27 @@ const ChatItemImage = ({ item }: ChatItemImageProps) => {
     );
   }
 
-  return (
-    <View style={styles.partyImageWrapper}>
-      {item.partyImage ? (
-        <Image
-          source={item.partyImage}
-          style={styles.partyImage}
-          resizeMode="cover"
-        />
-      ) : (
-        <View style={styles.partyImagePlaceholder}>
-          {item.category && categoryIcons[item.category] ? (
-            <Image
-              source={categoryIcons[item.category]}
-              style={styles.categoryIcon}
-              resizeMode="contain"
-            />
-          ) : null}
-        </View>
-      )}
-    </View>
-  );
+  // return (
+  //   <View style={styles.partyImageWrapper}>
+  //     {item.partyImage ? (
+  //       <Image
+  //         source={{ uri: item.partyImage }}
+  //         style={styles.partyImage}
+  //         resizeMode="cover"
+  //       />
+  //     ) : (
+  //       <View style={styles.partyImagePlaceholder}>
+  //         {item.category && categoryIcons[item.category] ? (
+  //           <Image
+  //             source={categoryIcons[item.category]}
+  //             style={styles.categoryIcon}
+  //             resizeMode="contain"
+  //           />
+  //         ) : null}
+  //       </View>
+  //     )}
+  //   </View>
+  // );
 };
 
 export default ChatItemImage;
@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
     width: 54,
     height: 54,
     borderRadius: 27,
+    backgroundColor: colors.gray[4],
   },
   // 파티 이미지 래퍼 (네모) - 파티 채팅용
   partyImageWrapper: {

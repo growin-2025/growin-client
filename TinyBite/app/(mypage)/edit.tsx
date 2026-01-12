@@ -1,12 +1,13 @@
-import { checkNickname, getUserMe, updateNickname } from "@/api/userApi";
+import { checkNickname, updateNickname } from "@/api/userApi";
 import NicknameInputCard from "@/components/mypage/NicknameInputCard";
 import ProfileEditHeader from "@/components/mypage/ProfileEditHeader";
 import ProfileImageBottomSheet from "@/components/mypage/ProfileImageBottomSheet";
+import { useAuthStore } from "@/stores/authStore";
 import { colors } from "@/styles/colors";
-import { ApiError } from "@/types/api";
+import { ApiError } from "@/types/api.types";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import { getProfileSource } from "@/utils/image";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -23,10 +24,7 @@ export default function EditProfileScreen() {
   const minLength = 2;
 
   // 현재 사용자 정보 조회
-  const { data: userMe } = useQuery({
-    queryKey: ["getUserMe"],
-    queryFn: getUserMe,
-  });
+  const { user } = useAuthStore();
 
   // 닉네임 상태 관리
   const [nickname, setNickname] = useState("");
@@ -34,10 +32,10 @@ export default function EditProfileScreen() {
 
   // 사용자 정보가 로드되면 닉네임 초기화
   useEffect(() => {
-    if (userMe?.name) {
-      setNickname(userMe.name);
+    if (user?.nickname) {
+      setNickname(user.nickname);
     }
-  }, [userMe]);
+  }, [user]);
 
   // 닉네임 수정 mutation
   const updateNicknameMutation = useMutation({
@@ -129,11 +127,11 @@ export default function EditProfileScreen() {
 
   // 1. 이미지 존재 여부를 판단하는 변수를 상단에 선언
   const hasProfileImage = !!(
-    userMe?.userProfileImage && userMe.userProfileImage.startsWith("http")
+    user?.userProfileImage && user?.userProfileImage?.startsWith("http")
   );
 
   // 2. 닉네임 변경 여부
-  const isNicknameChanged = nickname !== userMe?.name;
+  const isNicknameChanged = nickname !== user?.nickname;
 
   // 3. 유효성 검사
   const isNicknameValid =
@@ -175,7 +173,7 @@ export default function EditProfileScreen() {
         {/* Profile Picture */}
         <View style={styles.profileImageWrapper}>
           <Image
-            source={getProfileSource(userMe?.userProfileImage)}
+            source={getProfileSource(user?.userProfileImage)}
             style={styles.profileImage}
             resizeMode="cover"
           />

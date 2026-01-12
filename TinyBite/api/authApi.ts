@@ -1,13 +1,18 @@
 import { privateAxios, publicAxios } from "@/api/axios";
 import { ENDPOINT } from "@/api/urls";
-import { CheckSms, LoginGoogle, SignupGoogle, UserCoords } from "@/types/auth";
+import {
+  CheckSms,
+  LoginGoogleRequest,
+  SignupGoogleRequest,
+  UserCoords,
+} from "@/types/auth.types";
 
-export const postLoginGoogle = async (loginData: LoginGoogle) => {
+export const postLoginGoogle = async (loginData: LoginGoogleRequest) => {
   const res = await publicAxios.post(ENDPOINT.AUTH.LOGIN_GOOGLE, loginData);
   return res.data.data;
 };
 
-export const postSignupGoogle = async (signupData: SignupGoogle) => {
+export const postSignupGoogle = async (signupData: SignupGoogleRequest) => {
   const res = await publicAxios.post(ENDPOINT.AUTH.SIGNUP_GOOGLE, signupData);
   console.log("1차 확인 필요 postSignupGoogle >>", res.data);
   return res.data.data;

@@ -1,5 +1,5 @@
 import { getPartyDetail } from "@/api/partyApi";
-import { PartyDetail, PartyDetailParams } from "@/types/party";
+import { PartyDetail, PartyDetailParams } from "@/types/party.types";
 import { useQuery } from "@tanstack/react-query";
 
 /**

@@ -1,6 +1,6 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { PartyCategory } from "@/types/party";
+import { PartyCategory } from "@/types/party.types";
 import { Image, StyleSheet, Text, View } from "react-native";
 
 type PillType = PartyCategory | "time";

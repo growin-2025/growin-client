@@ -3,7 +3,7 @@ import { signIn, signOut } from "@/hooks/useGoogleAuth";
 import { useAuthStore } from "@/stores/authStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { ApiError } from "@/types/api";
+import { ApiError } from "@/types/api.types";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -32,7 +32,9 @@ export default function LoginScreen() {
 
   const loginMutation = useMutation({
     mutationFn: postLoginGoogle,
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
+      await SecureStore.deleteItemAsync("googleIdToken");
+
       if (data.signup) {
         login(data);
         router.dismissTo("/(tabs)");
@@ -40,9 +42,9 @@ export default function LoginScreen() {
         router.push("/(auth)/signup/terms");
       }
     },
-    onError: (error: AxiosError<ApiError>) => {
+    onError: async (error: AxiosError<ApiError>) => {
       if (error.response?.data.code === "INVALID_TOKEN") {
-        SecureStore.deleteItemAsync("googleIdToken");
+        await SecureStore.deleteItemAsync("googleIdToken");
         return;
       }
 

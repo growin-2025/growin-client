@@ -1,5 +1,5 @@
 import { Photo } from "@/stores/creatingPartyStore";
-import { PartyDetail } from "@/types/party";
+import { PartyDetail } from "@/types/party.types";
 import { create } from "zustand";
 
 export interface PhotoUrl {

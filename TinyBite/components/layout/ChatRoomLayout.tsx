@@ -7,13 +7,18 @@ import { StyleSheet, View } from "react-native";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ChatBottomPanel from "../chat/ChatBottomPanel";
-import { ChatJoinRequestCard } from "../chat/host/ChatJoinRequestCard";
 
 interface ChatRoomLayoutProps {
   children: ReactNode;
+  onSendText: (message: string) => void;
+  onSendImage: (message: string) => void;
 }
 
-const ChatRoomLayout = ({ children }: ChatRoomLayoutProps) => {
+const ChatRoomLayout = ({
+  children,
+  onSendText,
+  onSendImage,
+}: ChatRoomLayoutProps) => {
   const [isPanelVisible, setIsPanelVisible] = useState(false);
 
   const togglePanel = () => {
@@ -32,14 +37,14 @@ const ChatRoomLayout = ({ children }: ChatRoomLayoutProps) => {
         >
           <View style={{ flex: 1, paddingHorizontal: 20 }}>
             {/* 1:1 파티장 - 수락, 거절 */}
-            <ChatJoinRequestCard
+            {/* <ChatJoinRequestCard
               avatarUrl="https://picsum.photos/50/50"
               nickname="츄비"
               location="역삼동"
               message="파티에 참여하고 싶어요!"
               onApprove={() => console.log("승인")}
               onReject={() => console.log("거절")}
-            />
+            /> */}
 
             {/* 1:1 참여자 - 대기 */}
             {/* <ChatJoinPendingCard /> */}
@@ -66,10 +71,12 @@ const ChatRoomLayout = ({ children }: ChatRoomLayoutProps) => {
             <ChatInputBox
               onPlusPress={togglePanel}
               isPanelVisible={isPanelVisible}
+              onSend={onSendText}
             />
             <ChatBottomPanel
               isVisible={isPanelVisible}
               setIsPanelVisible={setIsPanelVisible}
+              onSend={onSendImage}
             />
           </View>
         </KeyboardAvoidingView>

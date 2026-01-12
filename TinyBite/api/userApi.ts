@@ -1,22 +1,23 @@
 import { privateAxios } from "@/api/axios";
 import { ENDPOINT } from "@/api/urls";
-import { UserMeResponse } from "@/types/user";
+import { UserProfile } from "@/types/auth.types";
 import { parseProfileImage } from "@/utils/parseProfileImage";
 
 /**
  * 현재 로그인한 사용자 정보 조회 API
  * @returns 사용자 프로필 정보
  */
-export const getUserMe = async (): Promise<UserMeResponse> => {
+export const getUserMe = async (): Promise<UserProfile> => {
   const res = await privateAxios.get(ENDPOINT.USER.ME);
-  console.log("getUserMe API 응답:", res.data.data);
   const rawData = res.data.data;
 
   // 원본을 복사하면서 특정 필드만 가공해서 반환
-  return {
+  const parsedData: UserProfile = {
     ...rawData,
     userProfileImage: parseProfileImage(rawData.userProfileImage),
   };
+
+  return parsedData;
 };
 
 /**

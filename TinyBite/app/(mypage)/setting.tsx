@@ -1,12 +1,12 @@
 import { postLogout } from "@/api/authApi";
-import { deleteUserMe, getUserMe } from "@/api/userApi";
+import { deleteUserMe } from "@/api/userApi";
 import ConfirmModal from "@/components/ConfirmModal";
 import { useAuthStore } from "@/stores/authStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { ApiError } from "@/types/api";
+import { ApiError } from "@/types/api.types";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -20,16 +20,12 @@ export default function SettingScreen() {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
 
-  const { logout } = useAuthStore(
+  const { logout, user } = useAuthStore(
     useShallow((state) => ({
       logout: state.logout,
+      user: state.user,
     }))
   );
-
-  const { data: userMe } = useQuery({
-    queryKey: ["getUserMe"],
-    queryFn: getUserMe,
-  });
 
   const logoutMutation = useMutation({
     mutationFn: postLogout,
@@ -132,7 +128,7 @@ export default function SettingScreen() {
           </View>
           <View style={styles.settingItemRight}>
             <Text style={[styles.neighborhoodText, textStyles.body16_SB135]}>
-              {userMe?.location || "로딩 중..."}
+              {user?.location || "로딩 중..."}
             </Text>
             <Image
               source={require("@/assets/images/chevron/chevron-right-24.png")}

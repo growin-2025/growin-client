@@ -1,6 +1,6 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { PartyDetail } from "@/types/party";
+import { PartyDetail } from "@/types/party.types";
 import { Image, StyleSheet, Text, View } from "react-native";
 
 type InfoType = "location" | "group" | "money";

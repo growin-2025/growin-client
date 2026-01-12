@@ -1,4 +1,4 @@
-import { PartyCategory } from "@/types/party";
+import { PartyCategory } from "@/types/party.types";
 import { create } from "zustand";
 
 export interface PartyState {

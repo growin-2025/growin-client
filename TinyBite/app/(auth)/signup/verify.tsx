@@ -4,7 +4,7 @@ import { useSignupStore } from "@/stores/signupStore";
 import { useTimerStore } from "@/stores/timerStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { ApiError } from "@/types/api";
+import { ApiError } from "@/types/api.types";
 import { formatSeconds } from "@/utils/formatSeconds";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import { useMutation } from "@tanstack/react-query";

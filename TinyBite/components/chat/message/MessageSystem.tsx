@@ -1,13 +1,18 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { SystemMessage } from "@/types/chat.types";
 import { StyleSheet, Text } from "react-native";
 
 interface MessageSystemProps {
-  system: string;
+  message: SystemMessage;
 }
 
-export function MessageSystem({ system }: MessageSystemProps) {
-  return <Text style={[styles.text, textStyles.body12_M135]}>{system}</Text>;
+export function MessageSystem({ message }: MessageSystemProps) {
+  return (
+    <Text style={[styles.text, textStyles.body12_M135]}>
+      {message.systemMessage}
+    </Text>
+  );
 }
 
 const styles = StyleSheet.create({

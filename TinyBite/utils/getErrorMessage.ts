@@ -1,4 +1,4 @@
-import { ApiError } from "@/types/api";
+import { ApiError } from "@/types/api.types";
 
 export const getErrorMessage = (error: ApiError): string => {
   // 특정 에러 코드에 대한 커스텀 메시지

@@ -15,29 +15,30 @@ export const signIn = async () => {
   try {
     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
     const response = await GoogleSignin.signIn();
+
     if (isSuccessResponse(response)) {
-      // use signInResponse.data
-      const { idToken } = await GoogleSignin.getTokens();
-      return idToken;
+      // response.data에서 직접 idToken 추출
+      return response.data.idToken ?? null;
     } else {
-      // sign in was cancelled by user
+      // 사용자가 로그인을 취소한 경우
+      return null;
     }
   } catch (error) {
     if (isErrorWithCode(error)) {
       switch (error.code) {
         case statusCodes.IN_PROGRESS:
-          // operation (eg. sign in) already in progress
+          console.log("Sign in already in progress");
           break;
         case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
-          // Android only, play services not available or outdated
+          console.error("Play services not available");
           break;
         default:
-        // some other error happened
+          console.error("Sign in error:", error);
       }
-      console.error(error);
     } else {
-      // an error that's not related to google sign in occurred
+      console.error("Unexpected error:", error);
     }
+    return null;
   }
 };
 
