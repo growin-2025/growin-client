@@ -54,7 +54,7 @@ const TextInputBox = ({
             onChangeText(isAmount ? text.replace(/[^0-9]/g, "") : text);
           }}
           value={value}
-          editable={isEditable}
+          editable={iconType === "location" ? false : isEditable}
         />
 
         {isAmount && (
