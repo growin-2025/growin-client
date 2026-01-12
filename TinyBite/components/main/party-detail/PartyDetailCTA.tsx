@@ -1,21 +1,24 @@
+import { useRequestJoinParty } from "@/hooks/mutations/useParty";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 interface PartyDetailCTAProps {
+  detailPartyId: number;
   isClosed?: boolean;
   isParticipating?: boolean;
   pricePerPerson?: number;
-  onPress?: () => void;
 }
 
 const PartyDetailCTA = ({
+  detailPartyId,
   isClosed,
   isParticipating,
   pricePerPerson,
-  onPress,
 }: PartyDetailCTAProps) => {
+  const { mutate } = useRequestJoinParty();
+
   const getButtonText = () => {
     if (isClosed) {
       return "마감된 파티예요";
@@ -29,12 +32,16 @@ const PartyDetailCTA = ({
     return "로딩 중...";
   };
 
+  const handleGoToChatPress = () => {
+    mutate(detailPartyId);
+  };
+
   return (
     <SafeAreaView style={styles.ctaContainer} edges={["bottom"]}>
       <TouchableOpacity
         style={[styles.cta, isClosed && styles.ctaDisabled]}
         disabled={isClosed}
-        onPress={onPress}
+        onPress={handleGoToChatPress}
       >
         <Text
           style={[

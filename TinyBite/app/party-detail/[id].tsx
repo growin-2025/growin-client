@@ -222,6 +222,7 @@ export default function PartyDetailScreen() {
         </Animated.ScrollView>
         {/* 하단 고정 CTA 버튼 */}
         <PartyDetailCTA
+          detailPartyId={partyId}
           isClosed={partyDetail?.isClosed}
           isParticipating={partyDetail?.isParticipating}
           pricePerPerson={partyDetail?.pricePerPerson}
