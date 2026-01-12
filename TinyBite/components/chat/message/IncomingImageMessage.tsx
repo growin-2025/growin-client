@@ -1,26 +1,24 @@
 import { colors } from "@/styles/colors";
+import { ImageUrlMessage } from "@/types/chat.types";
 import { Image, StyleSheet, View } from "react-native";
+import { formatTime } from "./ChatMessage";
 import { MessageOwner } from "./MessageOwner";
 import { MessageTime } from "./MessageTime";
 
 interface IncomingImageMessageProps {
-  nickname: string;
-  imageUrl: string;
-  time: string;
+  message: ImageUrlMessage;
 }
 
-export function IncomingImageMessage({
-  nickname,
-  imageUrl,
-  time,
-}: IncomingImageMessageProps) {
+export function IncomingImageMessage({ message }: IncomingImageMessageProps) {
+  const time = formatTime(message.createdAt);
+
   return (
     <View style={styles.container}>
-      <MessageOwner nickname={nickname} />
+      <MessageOwner nickname={message.nickname} />
       <View style={styles.wrapper}>
         <View style={styles.imageWrapper}>
           <Image
-            source={{ uri: imageUrl }}
+            source={{ uri: message.imageUrl }}
             style={styles.image}
             resizeMode="cover"
           />

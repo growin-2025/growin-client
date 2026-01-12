@@ -1,4 +1,4 @@
-import { ChatMessage } from "@/types/chat";
+import { ChatMessageSchema } from "@/types/chat.types";
 import { IncomingImageMessage } from "./IncomingImageMessage";
 import { IncomingMessage } from "./IncomingMessage";
 import { MessageDate } from "./MessageDate";
@@ -13,51 +13,35 @@ export function formatTime(iso: string) {
   return `${hours}:${minutes}`;
 }
 
-interface ChatMessageComponentProps {
-  message: ChatMessage;
-  myUserId: number;
+interface ChatMessageProps {
+  message: ChatMessageSchema;
 }
 
-const ChatMessageComponent = ({
-  message,
-  myUserId,
-}: ChatMessageComponentProps) => {
-  const isMine = message.senderId === myUserId;
-  const time = formatTime(message.createdAt);
+const ChatMessage = ({ message }: ChatMessageProps) => {
+  switch (message.messageType) {
+    case "DATE":
+      return <MessageDate message={message} />;
 
-  if (message.type === "date") {
-    return <MessageDate date={message.systemMessage || message.createdAt} />;
+    case "SYSTEM":
+      return <MessageSystem message={message} />;
+
+    case "TEXT":
+      return message.isMine ? (
+        <OutgoingMessage message={message} />
+      ) : (
+        <IncomingMessage message={message} />
+      );
+
+    case "IMAGE":
+      return message.isMine ? (
+        <OutgoingImageMessage message={message} />
+      ) : (
+        <IncomingImageMessage message={message} />
+      );
+
+    default:
+      return null;
   }
-
-  if (message.type === "system") {
-    return (
-      <MessageSystem
-        system={message.systemMessage || "오류 발생. 관리자에게 문의하세요."}
-      />
-    );
-  }
-
-  if (message.type === "image") {
-    return isMine ? (
-      <OutgoingImageMessage imageUrl={message.imageUrl!} time={time} />
-    ) : (
-      <IncomingImageMessage
-        nickname={message.nickname || "(알수없음)"}
-        imageUrl={message.imageUrl!}
-        time={time}
-      />
-    );
-  }
-
-  return isMine ? (
-    <OutgoingMessage message={message.text!} time={time} />
-  ) : (
-    <IncomingMessage
-      nickname={message.nickname || "(알수없음)"}
-      message={message.text!}
-      time={time}
-    />
-  );
 };
 
-export default ChatMessageComponent;
+export default ChatMessage;

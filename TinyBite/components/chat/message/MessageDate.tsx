@@ -1,12 +1,13 @@
 import { colors } from "@/styles/colors";
+import { DateMessage } from "@/types/chat.types";
 import { StyleSheet, Text } from "react-native";
 
 interface MessageDateProps {
-  date: string; // 2025.11.22
+  message: DateMessage;
 }
 
-export function MessageDate({ date }: MessageDateProps) {
-  return <Text style={styles.text}>{date}</Text>;
+export function MessageDate({ message }: MessageDateProps) {
+  return <Text style={styles.text}>{message.createdAt}</Text>;
 }
 
 const styles = StyleSheet.create({
