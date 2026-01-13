@@ -33,10 +33,9 @@ export default function LoginScreen() {
   const loginMutation = useMutation({
     mutationFn: postLoginGoogle,
     onSuccess: async (data) => {
-      await SecureStore.deleteItemAsync("googleIdToken");
-
       if (data.signup) {
         login(data);
+        await SecureStore.deleteItemAsync("googleIdToken");
         router.dismissTo("/(tabs)");
       } else {
         router.push("/(auth)/signup/terms");

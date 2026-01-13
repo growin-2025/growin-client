@@ -26,6 +26,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Toast } from "react-native-toast-message/lib/src/Toast";
 import { useShallow } from "zustand/shallow";
 
 const KAKAO_REST_API_KEY = process.env.EXPO_PUBLIC_KAKAO_REST_API_KEY;
@@ -43,16 +44,16 @@ export default function RegionScreen() {
     phoneNumber,
     terms,
     nickname,
-    locationName,
-    setLocationName,
+    location,
+    setLocation,
     resetSignupStore,
   } = useSignupStore(
     useShallow((state) => ({
       phoneNumber: state.phoneNumber,
       terms: state.terms,
       nickname: state.nickname,
-      locationName: state.locationName,
-      setLocationName: state.setLocationName,
+      location: state.location,
+      setLocation: state.setLocation,
       resetSignupStore: state.resetSignupStore,
     }))
   );
@@ -72,6 +73,21 @@ export default function RegionScreen() {
 
     return () => clearTimeout(timeout);
   }, [query]);
+
+  useEffect(() => {
+    const getLocationName = async () => {
+      Toast.show({
+        type: "basicToast",
+        props: { text: `${location?.place}(으)로 설정되었습니다.` },
+        position: "bottom",
+        bottomOffset: 98,
+        visibilityTime: 2000,
+      });
+    };
+    if (location) {
+      getLocationName();
+    }
+  }, [location]);
 
   const fetchKakaoPlaces = async (text: string) => {
     try {
@@ -108,12 +124,14 @@ export default function RegionScreen() {
 
   const SignupMutation = useMutation({
     mutationFn: postSignupGoogle,
-    onSuccess: (data: SignupRespone) => {
+    onSuccess: async (data: SignupRespone) => {
       resetSignupStore();
       login({ signup: true, authResponse: data });
+      await SecureStore.deleteItemAsync("googleIdToken");
       router.replace("/(auth)/signup/complete");
     },
-    onError: (error: AxiosError<ApiError>) => {
+    onError: async (error: AxiosError<ApiError>) => {
+      await SecureStore.deleteItemAsync("googleIdToken");
       if (error.response?.data) {
         const message = getErrorMessage(error.response.data);
         alert(message);
@@ -124,23 +142,22 @@ export default function RegionScreen() {
     },
   });
 
-  // const handleTextChange = useCallback((text: string) => {
-  //   setText(text);
-  //   setVerified(true);
-  // }, []);
-
   const handleClickFindLocation = async () => {
     const latestCoords = await refresh();
-    console.log("latestCoords >>", latestCoords);
+    // console.log("latestCoords >>", latestCoords);
 
     if (latestCoords) {
-      const data = await GetLocationNameMutation.mutateAsync({
+      const regionName = await GetLocationNameMutation.mutateAsync({
         latitude: latestCoords.latitude.toString(),
         longitude: latestCoords.longitude.toString(),
       });
-      console.log("data >>", data);
-      setLocationName(data);
+      setLocation({
+        place: regionName,
+        latitude: latestCoords.latitude,
+        longitude: latestCoords.longitude,
+      });
     }
+  };
 
   const onPressPlace = (item: PlaceItem) => {
     setSelectedItem(item);
@@ -152,6 +169,11 @@ export default function RegionScreen() {
   };
 
   const handleClickNextButton = async () => {
+    if (!location) {
+      alert("위치를 설정해주세요.");
+      return;
+    }
+
     const checkedTerms = (Object.keys(terms) as TermCode[]).filter(
       (term) => terms[term]
     );
@@ -163,7 +185,10 @@ export default function RegionScreen() {
         idToken: googleIdToken,
         phone: phoneNumber,
         nickname: nickname,
-        location: locationName,
+        location: {
+          latitude: location.latitude,
+          longitude: location.longitude,
+        },
         platform: Platform.OS.toUpperCase() as "ANDROID" | "IOS",
         agreedTerms: checkedTerms,
       });

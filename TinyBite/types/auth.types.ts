@@ -2,7 +2,10 @@ export type SignupGoogleRequest = {
   idToken: string;
   phone: string;
   nickname: string;
-  location: string;
+  location: {
+    latitude: number;
+    longitude: number;
+  };
   platform: "ANDROID" | "IOS";
   agreedTerms: string[];
 };
