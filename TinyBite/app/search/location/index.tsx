@@ -22,7 +22,7 @@ const KAKAO_REST_API_KEY = process.env.EXPO_PUBLIC_KAKAO_REST_API_KEY;
 const CHEVRON_LEFT_ICON = require("@/assets/images/chevron/chevron-left-36-gray.png");
 const LOCATION_ICON = require("@/assets/images/location.png");
 
-interface PlaceItem {
+export interface PlaceItem {
   id: string;
   place_name: string;
   x: string; // longitude
