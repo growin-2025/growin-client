@@ -124,12 +124,14 @@ export default function RegionScreen() {
 
   const SignupMutation = useMutation({
     mutationFn: postSignupGoogle,
-    onSuccess: (data: SignupRespone) => {
+    onSuccess: async (data: SignupRespone) => {
       resetSignupStore();
       login({ signup: true, authResponse: data });
+      await SecureStore.deleteItemAsync("googleIdToken");
       router.replace("/(auth)/signup/complete");
     },
-    onError: (error: AxiosError<ApiError>) => {
+    onError: async (error: AxiosError<ApiError>) => {
+      await SecureStore.deleteItemAsync("googleIdToken");
       if (error.response?.data) {
         const message = getErrorMessage(error.response.data);
         alert(message);
