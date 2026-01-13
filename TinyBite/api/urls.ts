@@ -46,7 +46,13 @@ export const ENDPOINT = {
     WS_SEND: "/publish/send",
   },
   CHAT_ROOM: {
+    // 채팅방 리스트 조회
     ONE_TO_ONE: "/api/v1/chatroom/one-to-one",
     GROUP: "/api/v1/chatroom/group",
+    // 채팅방 정보 조회
+    DETAIL: {
+      ONE_TO_ONE: (chatroomId: number) =>
+        `/api/v1/chatroom/one-to-one/${chatroomId}`,
+    },
   },
 };

@@ -3,6 +3,11 @@
  */
 export type RoomType = "ONE_TO_ONE" | "Group";
 
+/**
+ * 채팅방 참여자 타입
+ */
+export type participantType = "HOST" | "PARTICIPANT";
+
 // ============================================
 
 /**
@@ -45,6 +50,25 @@ export interface OneToOneChatCardSchema {
   status: OneToOneChatStatusType;
   recentMessage: string;
   unreadMessageCnt: number;
+}
+
+/**
+ * 1:1 채팅방 내부 detail 스키마
+ */
+export interface OneToOneChatDetailSchema {
+  chatRoomId: number;
+  participantType: participantType;
+  participantStatus: OneToOneChatStatusType;
+  partyTitle: string;
+  targetName: string;
+
+  // HOST에게 포함되는 정보
+  targetProfileImage?: string;
+  targetLocation?: string;
+
+  // PARTICIPANT에게 포함되는 정보
+  // participantStatus가 APPROVED일 때만 한함
+  groupChatRoomId?: number;
 }
 
 // ============================================

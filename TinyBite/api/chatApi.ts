@@ -3,6 +3,7 @@ import {
   GetChatMessagesParams,
   GetChatMessagesResponse,
   OneToOneChatCardSchema,
+  OneToOneChatDetailSchema,
 } from "@/types/chat.types";
 import { privateAxios } from "./axios";
 import { ENDPOINT } from "./urls";
@@ -33,6 +34,16 @@ export const getPrevMessage = async ({
 export const getOnetoOneRoomList = async () => {
   const res = await privateAxios.get<ApiSuccess<OneToOneChatCardSchema[]>>(
     ENDPOINT.CHAT_ROOM.ONE_TO_ONE
+  );
+  return res.data.data;
+};
+
+/**
+ * 1:1 채팅방 디테일 조회
+ */
+export const getOnetoOneRoomDetail = async (chatroomId: number) => {
+  const res = await privateAxios.get<ApiSuccess<OneToOneChatDetailSchema>>(
+    ENDPOINT.CHAT_ROOM.DETAIL.ONE_TO_ONE(chatroomId)
   );
   return res.data.data;
 };
