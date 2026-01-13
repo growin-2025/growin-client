@@ -26,6 +26,7 @@ module.exports = {
     edgeToEdgeEnabled: true,
     predictiveBackGestureEnabled: false,
     package: "com.tinybite2025.TinyBite",
+    googleServicesFile: "./google-services.json",
     splash: {
       backgroundColor: "#FE870F",
       image: "./assets/images/splash-icon.png",
