@@ -20,6 +20,7 @@ module.exports = {
       backgroundColor: "#FE870F",
       image: "./assets/images/splash-icon-ios.png",
       resizeMode: "contain",
+      googleServicesFile: "./GoogleService-Info.plist",
     },
   },
   android: {
