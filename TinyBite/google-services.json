@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "748185101542",
+    "project_id": "tinybite-a7f3c",
+    "storage_bucket": "tinybite-a7f3c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:748185101542:android:a3e225373c65b25f28c727",
+        "android_client_info": {
+          "package_name": "com.tinybite2025.TinyBite"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWuDAIiVfblq9U3kCChqeLfIWUkHe6ZnM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
