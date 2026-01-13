@@ -13,6 +13,7 @@ module.exports = {
   ios: {
     supportsTablet: true,
     bundleIdentifier: "com.tinybite2025.TinyBite",
+    googleServicesFile: "./GoogleService-Info.plist",
     infoPlist: {
       ITSAppUsesNonExemptEncryption: false,
     },
@@ -20,7 +21,6 @@ module.exports = {
       backgroundColor: "#FE870F",
       image: "./assets/images/splash-icon-ios.png",
       resizeMode: "contain",
-      googleServicesFile: "./GoogleService-Info.plist",
     },
   },
   android: {
