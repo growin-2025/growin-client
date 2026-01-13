@@ -113,7 +113,7 @@ export default function SettingScreen() {
         {/* 구분선 */}
         <View style={styles.divider} />
         {/* 내 동네 설정 */}
-        <Pressable
+        {/* <Pressable
           style={styles.settingItem}
           onPress={() => router.push("../(mypage)/neighborhood")}
         >
@@ -135,7 +135,7 @@ export default function SettingScreen() {
               style={styles.chevronIcon}
             />
           </View>
-        </Pressable>
+        </Pressable> */}
         {/* 구분선 */}
         <View style={styles.divider} />
         {/* 로그아웃 */}
