@@ -49,4 +49,7 @@ export const ENDPOINT = {
     ONE_TO_ONE: "/api/v1/chatroom/one-to-one",
     GROUP: "/api/v1/chatroom/group",
   },
+  FCM: {
+    TOKEN: "/api/v1/fcm/token",
+  },
 };
