@@ -22,7 +22,7 @@ const KAKAO_REST_API_KEY = process.env.EXPO_PUBLIC_KAKAO_REST_API_KEY;
 const CHEVRON_LEFT_ICON = require("@/assets/images/chevron/chevron-left-36-gray.png");
 const LOCATION_ICON = require("@/assets/images/location.png");
 
-interface PlaceItem {
+export interface PlaceItem {
   id: string;
   place_name: string;
   x: string; // longitude
@@ -74,10 +74,6 @@ export default function PartyPlaceSearch() {
 
   const onPressPlace = (item: PlaceItem) => {
     setSelectedItem(item);
-
-    console.log("선택한 장소명:", item.place_name);
-    console.log("위도(latitude):", item.y);
-    console.log("경도(longitude):", item.x);
   };
 
   const onPressDone = () => {
@@ -197,9 +193,9 @@ const styles = StyleSheet.create({
     color: colors.gray[1],
   },
   itemText: {
-    color: colors.black, //222222
+    color: colors.black,
   },
   selectedItemText: {
-    color: colors.main, //FE870F
+    color: colors.main,
   },
 });
