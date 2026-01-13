@@ -137,7 +137,7 @@ export default function SettingScreen() {
           </View>
         </Pressable> */}
         {/* 구분선 */}
-        <View style={styles.divider} />
+        {/* <View style={styles.divider} /> */}
         {/* 로그아웃 */}
         <Pressable
           style={styles.settingItem}
