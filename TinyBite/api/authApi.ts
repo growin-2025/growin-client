@@ -14,7 +14,7 @@ export const postLoginGoogle = async (loginData: LoginGoogleRequest) => {
 
 export const postSignupGoogle = async (signupData: SignupGoogleRequest) => {
   const res = await publicAxios.post(ENDPOINT.AUTH.SIGNUP_GOOGLE, signupData);
-  console.log("1차 확인 필요 postSignupGoogle >>", res.data);
+  // console.log("1차 확인 필요 postSignupGoogle >>", res.data);
   return res.data.data;
 };
 
