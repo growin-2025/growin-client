@@ -34,6 +34,7 @@ export const ENDPOINT = {
   },
   USER: {
     ME: "/api/v1/user/me",
+    WITHDRAWAL_VALIDATE: "/api/v1/user/me/withdrawal/validate",
     NICKNAME_CHECK: "/api/v1/user/nickname/check",
     LOCATION: "/api/v1/user/me/location",
     ACTIVE_PARTIES: "/api/v1/user/parties/participating",
