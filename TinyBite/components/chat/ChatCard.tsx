@@ -33,9 +33,9 @@ const ChatItem = ({ item }: ChatItemProps) => {
       params: {
         id: item.chatRoomId,
         roomType: item.roomType,
-        status: item.status,
-        partyTitle: item.partyTitle,
-        targetName: item.targetName,
+        // status: item.status,
+        // partyTitle: item.partyTitle,
+        // targetName: item.targetName,
       },
     });
   };
