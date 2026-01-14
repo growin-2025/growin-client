@@ -1,4 +1,5 @@
 import { useUserQuery } from "@/hooks/queries/useUser";
+import { registerPushToken } from "@/hooks/usePushNotification";
 import { useAuthStore } from "@/stores/authStore";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
@@ -21,6 +22,8 @@ export default function TabsLayout() {
   useEffect(() => {
     if (user) {
       setUser(user);
+      // 푸시 알림 토큰 등록
+      registerPushToken(user.userId);
     }
   }, [user, setUser]);
 
