@@ -1,5 +1,4 @@
 import { registerFcmToken } from "@/api/notificationApi";
-import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 
 /**
@@ -8,11 +7,12 @@ import * as Notifications from "expo-notifications";
  */
 export const registerPushToken = async (userId: number): Promise<void> => {
   try {
+    //개발 환경에서 테스트 할 때 주석 처리
     // 실제 기기에서만 작동
-    if (!Device.isDevice) {
-      console.log("실제 기기에서만 작동합니다.");
-      return;
-    }
+    //if (!Device.isDevice) {
+    //  console.log("실제 기기에서만 작동합니다.");
+    //  return;
+    //}
 
     // 1. 권한 확인 및 요청
     const { status: existingStatus } =
