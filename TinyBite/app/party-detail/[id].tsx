@@ -97,17 +97,8 @@ export default function PartyDetailScreen() {
     }
   }, [isSuccess, partyDetail, setInitialPartyInfo]);
 
-  // 로딩 중일 때
-  if (isLoading || !partyDetail) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={colors.main} />
-      </View>
-    );
-  }
-
   // 에러 발생 시
-  if (error) {
+  if (error && !isLoading) {
     return (
       <ConfirmModal
         visible={true}
@@ -115,6 +106,15 @@ export default function PartyDetailScreen() {
         singleButtonText="닫기"
         onClose={() => router.back()}
       />
+    );
+  }
+
+  // 로딩 중일 때
+  if (isLoading || !partyDetail) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={colors.main} />
+      </View>
     );
   }
 
