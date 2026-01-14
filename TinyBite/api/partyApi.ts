@@ -286,3 +286,29 @@ export const postRequestJoinParty = async (partyId: number) => {
 
   return res.data.data;
 };
+
+/**
+ * 파티 참여 승인
+ */
+export const postApproveJoinParty = async (
+  partyId: number,
+  participantId: number
+) => {
+  const res = await privateAxios.post<ApiSuccess<void>>(
+    ENDPOINT.PARTY.PARTICIPANTS.APPROVE(partyId, participantId)
+  );
+  console.log("postApproveJoinParty >>", res);
+};
+
+/**
+ * 파티 참여 거절
+ */
+export const postRejectJoinParty = async (
+  partyId: number,
+  participantId: number
+) => {
+  const res = await privateAxios.post<ApiSuccess<void>>(
+    ENDPOINT.PARTY.PARTICIPANTS.REJECT(partyId, participantId)
+  );
+  console.log("postRejectJoinParty >>", res);
+};

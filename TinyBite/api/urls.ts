@@ -28,6 +28,12 @@ export const ENDPOINT = {
     SEARCH_LOG: "/api/parties/search/log",
     SEARCH_LOG_DELETE: (keyword: string) =>
       `/api/parties/search/log/${keyword}`,
+    PARTICIPANTS: {
+      APPROVE: (partyId: number, participantId: number) =>
+        `/api/parties/${partyId}/participants/${participantId}/approve`,
+      REJECT: (partyId: number, participantId: number) =>
+        `/api/parties/${partyId}/participants/${participantId}/reject`,
+    },
   },
   FILE: {
     UPLOAD_FILE: "api/v1/file/upload",
