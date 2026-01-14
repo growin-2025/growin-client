@@ -33,7 +33,9 @@ const ChatRoomLayout = ({
     data: oneToOneData,
     isLoading: oneToOneIsLoading,
     isError: oneToOneIsError,
-  } = useGetOnetoOneRoomDetailQuery(parseInt(chatRoomId));
+  } = useGetOnetoOneRoomDetailQuery(parseInt(chatRoomId), {
+    enabled: roomType === "ONE_TO_ONE",
+  });
 
   // 통합된 데이터 사용
   // const roomDetailData = roomType === 'ONE_TO_ONE' ? oneToOneData : groupData;

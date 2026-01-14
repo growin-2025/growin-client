@@ -9,9 +9,13 @@ export const useGetOnetoOneRoomListQuery = () => {
   });
 };
 
-export const useGetOnetoOneRoomDetailQuery = (chatroomId: number) => {
+export const useGetOnetoOneRoomDetailQuery = (
+  chatroomId: number,
+  options?: { enabled?: boolean }
+) => {
   return useQuery({
     queryKey: ["getOnetoOneRoomDetail", chatroomId],
     queryFn: () => getOnetoOneRoomDetail(chatroomId),
+    ...options,
   });
 };
