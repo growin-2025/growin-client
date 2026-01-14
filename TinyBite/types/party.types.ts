@@ -28,7 +28,7 @@ export type PartyItem = {
   pricePerPerson: number;
   participantStatus: string;
   distance: string;
-  distanceKm: number;
+  distanceKm: string;
   timeAgo: string;
   isClosed: boolean;
   category: PartyCategory;

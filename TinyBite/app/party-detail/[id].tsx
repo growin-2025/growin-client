@@ -98,7 +98,7 @@ export default function PartyDetailScreen() {
   }, [isSuccess, partyDetail, setInitialPartyInfo]);
 
   // 로딩 중일 때
-  if (isLoading) {
+  if (isLoading || !partyDetail) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={colors.main} />
@@ -107,7 +107,7 @@ export default function PartyDetailScreen() {
   }
 
   // 에러 발생 시
-  if (error || !partyDetail) {
+  if (error) {
     return (
       <ConfirmModal
         visible={true}
