@@ -91,7 +91,7 @@ export default function SettingScreen() {
       </View>
       {/* Content */}
       <View style={styles.contentWrapper}>
-        {/* 알림 설정 */}
+        {/* 알림 설정 
         <Pressable
           style={styles.settingItem}
           onPress={() => router.push("../(mypage)/notification")}
@@ -110,8 +110,8 @@ export default function SettingScreen() {
             style={styles.chevronIcon}
           />
         </Pressable>
-        {/* 구분선 */}
         <View style={styles.divider} />
+        */}
         {/* 내 동네 설정 */}
         <Pressable
           style={styles.settingItem}
