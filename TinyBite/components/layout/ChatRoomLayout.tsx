@@ -1,9 +1,11 @@
 import ChatInputBox from "@/components/chat/ChatInputBox";
 import ChatRoomHeader from "@/components/ChatRoomHeader";
+import { useGetOnetoOneRoomDetailQuery } from "@/hooks/queries/useChatRoom";
 import { colors } from "@/styles/colors";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { ReactNode, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { ActivityIndicator, Alert, StyleSheet, View } from "react-native";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ChatBottomPanel from "../chat/ChatBottomPanel";
@@ -19,17 +21,78 @@ const ChatRoomLayout = ({
   onSendText,
   onSendImage,
 }: ChatRoomLayoutProps) => {
+  const { id: chatRoomId, roomType } = useLocalSearchParams<{
+    id: string;
+    roomType: string;
+  }>();
+  const router = useRouter();
   const [isPanelVisible, setIsPanelVisible] = useState(false);
+
+  // 1:1 채팅방 디테일 정보 관리
+  const {
+    data: oneToOneData,
+    isLoading: oneToOneIsLoading,
+    isError: oneToOneIsError,
+  } = useGetOnetoOneRoomDetailQuery(parseInt(chatRoomId));
+
+  // 통합된 데이터 사용
+  // const roomDetailData = roomType === 'ONE_TO_ONE' ? oneToOneData : groupData;
+  // const roomDetailIsLoading = oneToOneIsLoading || groupIsLoading;
+  // const roomDetailIsError = oneToOneIsError || groupIsError;
+  const roomDetailData = roomType === "ONE_TO_ONE" ? oneToOneData : null;
+  const roomDetailIsLoading = oneToOneIsLoading || null;
+  const roomDetailIsError = oneToOneIsError || null;
 
   const togglePanel = () => {
     setIsPanelVisible((prev) => !prev);
   };
 
+  if (roomDetailIsLoading) {
+    return (
+      <View
+        style={[
+          styles.container,
+          { justifyContent: "center", alignItems: "center" },
+        ]}
+      >
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  if (roomDetailIsError) {
+    Alert.alert(
+      "오류",
+      "채팅방 정보를 불러올 수 없습니다.",
+      [
+        {
+          text: "확인",
+          onPress: () => router.back(),
+        },
+      ],
+      { cancelable: false }
+    );
+    return (
+      <View
+        style={[
+          styles.container,
+          { justifyContent: "center", alignItems: "center" },
+        ]}
+      >
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  if (!roomDetailData) {
+    return null;
+  }
+
   return (
     <>
       <StatusBar style="dark" />
       <View style={styles.container}>
-        <ChatRoomHeader />
+        <ChatRoomHeader roomDetail={roomDetailData} />
         <KeyboardAvoidingView
           style={{ flex: 1 }}
           behavior="padding"

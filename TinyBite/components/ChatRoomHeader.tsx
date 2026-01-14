@@ -2,6 +2,7 @@ import OneOnOneChatStatusTag from "@/components/chat/OneOnOneChatStatusTag";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import {
+  OneToOneChatDetailSchema,
   OneToOneChatStatusType,
   PartyStatusType,
   RoomType,
@@ -14,7 +15,11 @@ import PartyStatusTag from "./chat/PartyStatusTag";
 const CHEVRON_LEFT_ICON = require("@/assets/images/chevron/chevron-left-36-gray.png");
 const MEMBER_COUNT = require("@/assets/images/chat/member-count.png");
 
-const ChatRoomHeader = () => {
+interface ChatRoomHeaderProps {
+  roomDetail: OneToOneChatDetailSchema;
+}
+
+const ChatRoomHeader = ({ roomDetail }: ChatRoomHeaderProps) => {
   const { roomType } = useLocalSearchParams<{
     roomType: RoomType;
   }>();
@@ -34,14 +39,16 @@ const ChatRoomHeader = () => {
                 numberOfLines={1}
                 ellipsizeMode="tail"
               >
-                .임시 타켓 이름.
+                {roomDetail.targetName}
               </Text>
               <OneOnOneChatStatusTag
-                status={"PENDING" as OneToOneChatStatusType} /* // 임시 상태 */
+                status={
+                  `${roomDetail.participantStatus}` as OneToOneChatStatusType
+                }
               />
             </View>
             <Text style={[styles.subTitle, textStyles.body15_SB135]}>
-              .임시 파티 제목.
+              {roomDetail.partyTitle}
             </Text>
           </View>
         ) : (
