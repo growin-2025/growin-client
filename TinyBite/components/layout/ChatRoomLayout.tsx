@@ -23,7 +23,7 @@ const ChatRoomLayout = ({
 }: ChatRoomLayoutProps) => {
   const { id: chatRoomId, roomType } = useLocalSearchParams<{
     id: string;
-    roomType: string;
+    roomType: RoomType;
   }>();
   const router = useRouter();
   const [isPanelVisible, setIsPanelVisible] = useState(false);
