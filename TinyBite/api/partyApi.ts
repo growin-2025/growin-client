@@ -166,9 +166,17 @@ export const patchParty = async ({
 /* 참여중인 파티 리스트 조회 API
  * @returns 참여중인 파티 리스트
  */
-export const getActiveParties = async (): Promise<PartyItem[]> => {
+export const getActiveParties = async (
+  latitude: number | undefined,
+  longitude: number | undefined
+): Promise<PartyItem[]> => {
   try {
-    const res = await privateAxios.get(ENDPOINT.USER.ACTIVE_PARTIES);
+    const res = await privateAxios.get(ENDPOINT.USER.ACTIVE_PARTIES, {
+      params: {
+        latitude,
+        longitude,
+      },
+    });
     return res.data || [];
   } catch (error) {
     console.error("참여중인 파티 리스트 로딩 실패:", error);
@@ -180,9 +188,17 @@ export const getActiveParties = async (): Promise<PartyItem[]> => {
  * 호스팅 중인 파티 리스트 조회 API
  * @returns 호스팅 중인 파티 리스트
  */
-export const getHostingParties = async (): Promise<PartyItem[]> => {
+export const getHostingParties = async (
+  latitude: number | undefined,
+  longitude: number | undefined
+): Promise<PartyItem[]> => {
   try {
-    const res = await privateAxios.get(ENDPOINT.USER.HOSTING_PARTIES);
+    const res = await privateAxios.get(ENDPOINT.USER.HOSTING_PARTIES, {
+      params: {
+        latitude,
+        longitude,
+      },
+    });
     return res.data || [];
   } catch (error) {
     console.error("호스팅 중인 파티 리스트 로딩 실패:", error);
