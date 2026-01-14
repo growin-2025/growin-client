@@ -49,7 +49,7 @@ export default function ChatScreen() {
     (item) => {
       if (selectedFilter === "전체") return true;
       if (selectedFilter === "1:1 채팅") return item.roomType === "ONE_TO_ONE";
-      if (selectedFilter === "참여중인 파티") return item.roomType === "Group";
+      if (selectedFilter === "참여중인 파티") return item.roomType === "GROUP";
       return true;
     }
   );
