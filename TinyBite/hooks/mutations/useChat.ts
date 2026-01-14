@@ -1,15 +1,20 @@
 import { postApproveJoinParty, postRejectJoinParty } from "@/api/partyApi";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
 
 export const useApproveJoinPartyMutation = (
   partyId: number,
-  participantId: number
+  participantId: number,
+  chatroomId: number
 ) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: () => postApproveJoinParty(partyId, participantId),
-    onSuccess: (data) => {
-      return data;
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["getOnetoOneRoomDetail", chatroomId],
+      });
     },
     onError: () => {
       Toast.show({
@@ -25,12 +30,17 @@ export const useApproveJoinPartyMutation = (
 
 export const useRejectJoinPartyMutation = (
   partyId: number,
-  participantId: number
+  participantId: number,
+  chatroomId: number
 ) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: () => postRejectJoinParty(partyId, participantId),
-    onSuccess: (data) => {
-      return data;
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["getOnetoOneRoomDetail", chatroomId],
+      });
     },
     onError: () => {
       Toast.show({

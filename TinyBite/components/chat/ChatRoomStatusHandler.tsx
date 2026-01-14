@@ -21,11 +21,13 @@ const ChatRoomStatusHandler = ({
 }: ChatRoomStatusHandlerProps) => {
   const { mutate: approveMutate } = useApproveJoinPartyMutation(
     chatDetail.partyId,
-    chatDetail.participantId
+    chatDetail.participantId,
+    chatDetail.chatRoomId
   );
   const { mutate: rejectMutate } = useRejectJoinPartyMutation(
     chatDetail.partyId,
-    chatDetail.participantId
+    chatDetail.participantId,
+    chatDetail.chatRoomId
   );
 
   const { participantType, participantStatus } = chatDetail;
