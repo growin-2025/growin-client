@@ -19,15 +19,3 @@ export const registerFcmToken = async (
     }
   );
 };
-
-/**
- * FCM 테스트 알림 전송 API
- * @param userId 유저 ID
- */
-export const sendFcmTest = async (userId: number): Promise<void> => {
-  await privateAxios.post(ENDPOINT.FCM.TEST, null, {
-    params: {
-      userId: userId,
-    },
-  });
-};

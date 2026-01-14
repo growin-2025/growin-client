@@ -52,6 +52,5 @@ export const ENDPOINT = {
   },
   FCM: {
     TOKEN: "/api/v1/fcm/token",
-    TEST: "/api/v1/fcm/test",
   },
 };
