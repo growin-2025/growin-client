@@ -157,7 +157,7 @@ export interface TextMessage extends BaseMessage {
 
   senderId: number;
   nickname: string;
-  isMine: boolean;
+  // isMine: boolean;
 
   text: string;
 }
@@ -172,7 +172,7 @@ export interface ImageUrlMessage extends BaseMessage {
 
   senderId: number;
   nickname: string;
-  isMine: boolean;
+  // isMine: boolean;
 
   imageUrl: string;
 }

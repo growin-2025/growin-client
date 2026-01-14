@@ -1,5 +1,5 @@
 import { getPrevMessage } from "@/api/chatApi";
-import ChatMessageComponent from "@/components/chat/message/ChatMessage";
+import ChatMessage from "@/components/chat/message/ChatMessage";
 import ChatRoomLayout from "@/components/layout/ChatRoomLayout";
 import { useChatMessages } from "@/hooks/useChatMessages";
 import { websocketClient } from "@/lib/websocket/websocketClient";
@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import { useEffect } from "react";
-import { FlatList } from "react-native";
+import { FlatList, Text } from "react-native";
 
 export default function ChatRoomScreen() {
   const { id: chatRoomId } = useLocalSearchParams<{
@@ -16,8 +16,6 @@ export default function ChatRoomScreen() {
   }>();
 
   const user = useAuthStore((state) => state.user);
-  const userId = user?.userId;
-  const nickname = user?.nickname;
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["chatMessages", chatRoomId],
@@ -48,9 +46,11 @@ export default function ChatRoomScreen() {
     useChatMessages({
       chatRoomId: chatRoomId ? parseInt(chatRoomId) : 0,
       initialMessages: data?.messages,
-      userId: userId || 0,
-      nickname: nickname || "",
+      userId: user?.userId || 0,
+      nickname: user?.nickname || "",
     });
+
+  if (!user) return <Text>Loading...</Text>;
 
   return (
     <ChatRoomLayout onSendText={sendTextMessage} onSendImage={sendImageMessage}>
@@ -65,7 +65,9 @@ export default function ChatRoomScreen() {
           paddingVertical: 8,
         }}
         keyExtractor={(item) => item.messageId.toString()}
-        renderItem={({ item }) => <ChatMessageComponent message={item} />}
+        renderItem={({ item }) => (
+          <ChatMessage message={item} userId={user.userId} />
+        )}
       />
     </ChatRoomLayout>
   );

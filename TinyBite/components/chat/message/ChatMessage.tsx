@@ -8,9 +8,10 @@ import { OutgoingMessage } from "./OutgoingMessage";
 
 interface ChatMessageProps {
   message: ChatMessageSchema;
+  userId: number;
 }
 
-const ChatMessage = ({ message }: ChatMessageProps) => {
+const ChatMessage = ({ message, userId }: ChatMessageProps) => {
   switch (message.messageType) {
     case "DATE":
       return <MessageDate message={message} />;
@@ -19,14 +20,14 @@ const ChatMessage = ({ message }: ChatMessageProps) => {
       return <MessageSystem message={message} />;
 
     case "TEXT":
-      return message.isMine ? (
+      return message.senderId === userId ? (
         <OutgoingMessage message={message} />
       ) : (
         <IncomingMessage message={message} />
       );
 
     case "IMAGE":
-      return message.isMine ? (
+      return message.senderId === userId ? (
         <OutgoingImageMessage message={message} />
       ) : (
         <IncomingImageMessage message={message} />
