@@ -1,3 +1,7 @@
+import {
+  useApproveJoinPartyMutation,
+  useRejectJoinPartyMutation,
+} from "@/hooks/mutations/useChat";
 import { OneToOneChatDetailSchema, RoomType } from "@/types/chat.types";
 import { ChatJoinRequestCard } from "./host/ChatJoinRequestCard";
 import { ChatJoinAcceptedCard } from "./participant/ChatJoinAcceptedCard";
@@ -15,12 +19,21 @@ const ChatRoomStatusHandler = ({
   roomType,
   chatDetail,
 }: ChatRoomStatusHandlerProps) => {
+  const { mutate: approveMutate } = useApproveJoinPartyMutation(
+    chatDetail.partyId,
+    chatDetail.participantId
+  );
+  const { mutate: rejectMutate } = useRejectJoinPartyMutation(
+    chatDetail.partyId,
+    chatDetail.participantId
+  );
+
+  const { participantType, participantStatus } = chatDetail;
+
   // ONE_TO_ONE이 아니면 아무것도 렌더링하지 않음
   if (roomType !== "ONE_TO_ONE") {
     return null;
   }
-
-  const { participantType, participantStatus } = chatDetail;
 
   // HOST 분기
   if (participantType === "HOST") {
@@ -32,8 +45,8 @@ const ChatRoomStatusHandler = ({
           nickname={chatDetail.targetName}
           location={chatDetail.targetLocation || ""}
           message="파티에 참여하고 싶어요!"
-          onApprove={() => console.log("승인")}
-          onReject={() => console.log("거절")}
+          onApprove={approveMutate}
+          onReject={rejectMutate}
         />
       );
     }
