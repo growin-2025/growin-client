@@ -1,4 +1,4 @@
-import { getOnetoOneRoomList } from "@/api/chatApi";
+import { getOnetoOneRoomDetail, getOnetoOneRoomList } from "@/api/chatApi";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetOnetoOneRoomListQuery = () => {
@@ -6,5 +6,12 @@ export const useGetOnetoOneRoomListQuery = () => {
     queryKey: ["getOnetoOneRoomList"],
     queryFn: getOnetoOneRoomList,
     staleTime: 0,
+  });
+};
+
+export const useGetOnetoOneRoomDetailQuery = (chatroomId: number) => {
+  return useQuery({
+    queryKey: ["getOnetoOneRoomDetail", chatroomId],
+    queryFn: () => getOnetoOneRoomDetail(chatroomId),
   });
 };
