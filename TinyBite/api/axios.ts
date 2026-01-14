@@ -90,11 +90,7 @@ privateAxios.interceptors.response.use(
     const originalRequest = error.config;
 
     // 401 에러이고 재시도하지 않은 요청인지 확인
-    if (
-      error.response?.status === 401 &&
-      !originalRequest._retry &&
-      !originalRequest.url?.includes("/refresh")
-    ) {
+    if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
