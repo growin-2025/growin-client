@@ -57,8 +57,10 @@ export interface OneToOneChatCardSchema {
  */
 export interface OneToOneChatDetailSchema {
   chatRoomId: number;
+  participantId: number;
   participantType: participantType;
   participantStatus: OneToOneChatStatusType;
+  partyId: number;
   partyTitle: string;
   targetName: string;
 
