@@ -294,10 +294,9 @@ export const postApproveJoinParty = async (
   partyId: number,
   participantId: number
 ) => {
-  const res = await privateAxios.post<ApiSuccess<void>>(
+  await privateAxios.post<ApiSuccess<void>>(
     ENDPOINT.PARTY.PARTICIPANTS.APPROVE(partyId, participantId)
   );
-  console.log("postApproveJoinParty >>", res);
 };
 
 /**
@@ -307,8 +306,7 @@ export const postRejectJoinParty = async (
   partyId: number,
   participantId: number
 ) => {
-  const res = await privateAxios.post<ApiSuccess<void>>(
+  await privateAxios.post<ApiSuccess<void>>(
     ENDPOINT.PARTY.PARTICIPANTS.REJECT(partyId, participantId)
   );
-  console.log("postRejectJoinParty >>", res);
 };
