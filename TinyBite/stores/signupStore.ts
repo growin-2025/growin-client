@@ -9,27 +9,33 @@ export enum TermCode {
   MARKETING_RECEIVE = "MARKETING_RECEIVE",
 }
 
+export interface Coords {
+  place: string;
+  latitude: number;
+  longitude: number;
+}
+
 export interface SignupStoreState {
   phoneNumber: string;
   terms: {
     [key in TermCode]: boolean;
   };
   nickname: string;
-  locationName: string;
+  location: Coords | null;
   setPhoneNumber: (number: string) => void;
   toggleTerm: (term: TermCode) => void;
   checkAllEssentialsOnly: () => void;
   getIsCheckedAllEssentialsOnly: () => boolean;
   getIsNextButtonEnabled: () => boolean;
   setNickname: (nickname: string) => void;
-  setLocationName: (locationName: string) => void;
+  setLocation: (coords: Coords) => void;
   resetSignupStore: () => void;
 }
 
 export const useSignupStore = create<SignupStoreState>((set, get) => ({
   phoneNumber: "",
   nickname: "",
-  locationName: "",
+  location: null,
   terms: {
     AGE_OVER_14: false,
     SERVICE_USE: false,
@@ -95,16 +101,16 @@ export const useSignupStore = create<SignupStoreState>((set, get) => ({
       nickname,
     }));
   },
-  setLocationName: (locationName: string) => {
+  setLocation: (coords: Coords) => {
     set(() => ({
-      locationName,
+      location: coords,
     }));
   },
   resetSignupStore: () => {
     set(() => ({
       phoneNumber: "",
       nickname: "",
-      locationName: "",
+      location: null,
       terms: {
         AGE_OVER_14: false,
         SERVICE_USE: false,

@@ -1,4 +1,5 @@
 import { getLocationName, postSignupGoogle } from "@/api/authApi";
+import { PlaceItem } from "@/app/search/location";
 import PaginationIndecatorHeader from "@/components/PaginationIndecatorHeader";
 import { useUserCoords } from "@/hooks/useUserCoords";
 import { useAuthStore } from "@/stores/authStore";
@@ -13,7 +14,9 @@ import { AxiosError } from "axios";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import { StatusBar } from "expo-status-bar";
+import { useEffect, useState } from "react";
 import {
+  FlatList,
   Image,
   Platform,
   StyleSheet,
@@ -23,26 +26,34 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Toast } from "react-native-toast-message/lib/src/Toast";
 import { useShallow } from "zustand/shallow";
+
+const KAKAO_REST_API_KEY = process.env.EXPO_PUBLIC_KAKAO_REST_API_KEY;
+const LOCATION_ICON = require("@/assets/images/location.png");
 
 export default function RegionScreen() {
   const router = useRouter();
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<PlaceItem[]>([]);
+  const [selectedItem, setSelectedItem] = useState<PlaceItem | null>(null);
+
   const { loading, refresh } = useUserCoords();
 
   const {
     phoneNumber,
     terms,
     nickname,
-    locationName,
-    setLocationName,
+    location,
+    setLocation,
     resetSignupStore,
   } = useSignupStore(
     useShallow((state) => ({
       phoneNumber: state.phoneNumber,
       terms: state.terms,
       nickname: state.nickname,
-      locationName: state.locationName,
-      setLocationName: state.setLocationName,
+      location: state.location,
+      setLocation: state.setLocation,
       resetSignupStore: state.resetSignupStore,
     }))
   );
@@ -52,6 +63,50 @@ export default function RegionScreen() {
       login: state.login,
     }))
   );
+
+  useEffect(() => {
+    if (!query) return setResults([]);
+
+    const timeout = setTimeout(() => {
+      fetchKakaoPlaces(query);
+    }, 300);
+
+    return () => clearTimeout(timeout);
+  }, [query]);
+
+  useEffect(() => {
+    const getLocationName = async () => {
+      Toast.show({
+        type: "basicToast",
+        props: { text: `${location?.place}(으)로 설정되었습니다.` },
+        position: "bottom",
+        bottomOffset: 98,
+        visibilityTime: 2000,
+      });
+    };
+    if (location) {
+      getLocationName();
+    }
+  }, [location]);
+
+  const fetchKakaoPlaces = async (text: string) => {
+    try {
+      const url =
+        `https://dapi.kakao.com/v2/local/search/keyword.json?` +
+        `query=${encodeURIComponent(text)}`;
+
+      const res = await fetch(url, {
+        headers: {
+          Authorization: `KakaoAK ${KAKAO_REST_API_KEY}`,
+        },
+      });
+
+      const json = await res.json();
+      setResults(json.documents || []);
+    } catch (error) {
+      console.error("Kakao place search error:", error);
+    }
+  };
 
   const GetLocationNameMutation = useMutation({
     mutationFn: getLocationName,
@@ -69,12 +124,14 @@ export default function RegionScreen() {
 
   const SignupMutation = useMutation({
     mutationFn: postSignupGoogle,
-    onSuccess: (data: SignupRespone) => {
+    onSuccess: async (data: SignupRespone) => {
       resetSignupStore();
       login({ signup: true, authResponse: data });
+      await SecureStore.deleteItemAsync("googleIdToken");
       router.replace("/(auth)/signup/complete");
     },
-    onError: (error: AxiosError<ApiError>) => {
+    onError: async (error: AxiosError<ApiError>) => {
+      await SecureStore.deleteItemAsync("googleIdToken");
       if (error.response?.data) {
         const message = getErrorMessage(error.response.data);
         alert(message);
@@ -85,26 +142,38 @@ export default function RegionScreen() {
     },
   });
 
-  // const handleTextChange = useCallback((text: string) => {
-  //   setText(text);
-  //   setVerified(true);
-  // }, []);
-
   const handleClickFindLocation = async () => {
     const latestCoords = await refresh();
-    console.log("latestCoords >>", latestCoords);
+    // console.log("latestCoords >>", latestCoords);
 
     if (latestCoords) {
-      const data = await GetLocationNameMutation.mutateAsync({
+      const regionName = await GetLocationNameMutation.mutateAsync({
         latitude: latestCoords.latitude.toString(),
         longitude: latestCoords.longitude.toString(),
       });
-      console.log("data >>", data);
-      setLocationName(data);
+      setLocation({
+        place: regionName,
+        latitude: latestCoords.latitude,
+        longitude: latestCoords.longitude,
+      });
     }
   };
 
+  const onPressPlace = (item: PlaceItem) => {
+    setSelectedItem(item);
+    setLocation({
+      place: item.place_name,
+      latitude: parseFloat(item.y),
+      longitude: parseFloat(item.x),
+    });
+  };
+
   const handleClickNextButton = async () => {
+    if (!location) {
+      alert("위치를 설정해주세요.");
+      return;
+    }
+
     const checkedTerms = (Object.keys(terms) as TermCode[]).filter(
       (term) => terms[term]
     );
@@ -116,7 +185,10 @@ export default function RegionScreen() {
         idToken: googleIdToken,
         phone: phoneNumber,
         nickname: nickname,
-        location: locationName,
+        location: {
+          latitude: location.latitude,
+          longitude: location.longitude,
+        },
         platform: Platform.OS.toUpperCase() as "ANDROID" | "IOS",
         agreedTerms: checkedTerms,
       });
@@ -126,34 +198,32 @@ export default function RegionScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <>
       <StatusBar style="dark" />
 
-      <View style={styles.inner}>
+      <View style={styles.container}>
         {/* 헤더 */}
-        <View style={{ marginBottom: 24 }}>
+        <SafeAreaView style={{ marginBottom: 24 }} edges={["top"]}>
           <PaginationIndecatorHeader page={3} />
-        </View>
+        </SafeAreaView>
 
         {/* 동네 설정 */}
-        <View style={{ marginBottom: 10 }}>
-          <Text
-            style={[styles.title, textStyles.title24_SB135]}
-          >{`내 동네를 설정하고 \n근처 이웃과 딱 필요한 만큼 나눠요!`}</Text>
+        <View style={{ paddingVertical: 12, gap: 12, flex: 1 }}>
+          <Text style={[styles.title, textStyles.title24_SB135]}>
+            {`내 동네를 설정하고 \n근처 이웃과 딱 필요한 만큼 나눠요!`}
+          </Text>
 
           <View style={styles.inputContainer}>
             <Image
-              source={require("@/assets/images/location.png")}
+              source={LOCATION_ICON}
               style={{ width: 24, height: 24, aspectRatio: 1 / 1 }}
             />
             <TextInput
-              style={[styles.input, textStyles.title18_SB135]}
-              // onChangeText={handleTextChange}
-              value={locationName}
+              style={[styles.inputText, textStyles.title18_SB135]}
+              value={query}
               placeholder="동명(읍,면)으로 검색 (ex.역삼동)"
               placeholderTextColor={colors.gray[1]}
-              keyboardType="default"
-              editable={false}
+              onChangeText={setQuery}
             />
           </View>
 
@@ -170,29 +240,60 @@ export default function RegionScreen() {
               {loading ? "위치 확인 중..." : "현재 위치로 주소 찾기"}
             </Text>
           </TouchableOpacity>
+
+          {query.length > 0 && results.length > 0 && (
+            <Text style={[styles.resultTitle, textStyles.body15_SB135]}>
+              ‘{query}’ 검색 결과
+            </Text>
+          )}
+
+          <FlatList
+            data={results}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={{ gap: 12 }}
+            renderItem={({ item }) => {
+              const isSelected = item.id === selectedItem?.id;
+
+              return (
+                <TouchableOpacity onPress={() => onPressPlace(item)}>
+                  <Text
+                    style={[
+                      textStyles.body16_M135,
+                      isSelected
+                        ? [styles.selectedItemText, textStyles.body16_SB135]
+                        : styles.itemText,
+                    ]}
+                  >
+                    {item.place_name}
+                  </Text>
+                </TouchableOpacity>
+              );
+            }}
+          />
         </View>
 
-        {/* <LocationSearchResult /> */}
-
         {/* 다음 버튼 */}
-        <TouchableOpacity
-          style={[styles.nextBtn, !locationName && styles.disabled]}
-          disabled={!locationName}
-          onPress={handleClickNextButton}
-        >
-          <Text style={[styles.nextText, textStyles.title18_SB135]}>다음</Text>
-        </TouchableOpacity>
+        <SafeAreaView edges={["bottom"]}>
+          <TouchableOpacity
+            style={[styles.nextBtn, !location && styles.disabled]}
+            disabled={!location}
+            onPress={handleClickNextButton}
+          >
+            <Text style={[styles.nextText, textStyles.title18_SB135]}>
+              다음
+            </Text>
+          </TouchableOpacity>
+        </SafeAreaView>
       </View>
-    </SafeAreaView>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, paddingHorizontal: 20 },
-  inner: { flex: 1, position: "relative" },
 
   title: {
-    marginBottom: 28,
+    marginBottom: 14,
     color: colors.main,
   },
 
@@ -206,16 +307,10 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
   },
-  input: {
-    flex: 1,
-    alignSelf: "stretch",
-    color: "#000",
-    padding: 0,
-    margin: 0,
-  },
   findBtn: {
     flexDirection: "row",
     paddingVertical: 10,
+    marginBottom: 10,
     justifyContent: "center",
     alignItems: "center",
     gap: 4,
@@ -225,12 +320,33 @@ const styles = StyleSheet.create({
   findText: {
     color: colors.white,
   },
+  searchBox: {
+    flexDirection: "row",
+    padding: 12,
+    gap: 4,
+    alignItems: "flex-end",
+    borderRadius: 16,
+    backgroundColor: colors.white,
+    boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.25)",
+  },
+
+  inputText: {
+    flex: 1,
+    padding: 0,
+    color: colors.black,
+  },
+  resultTitle: {
+    marginBottom: 12,
+    color: colors.gray[1],
+  },
+  itemText: {
+    color: colors.black,
+  },
+  selectedItemText: {
+    color: colors.main,
+  },
 
   nextBtn: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
     backgroundColor: colors.main,
     justifyContent: "center",
     alignItems: "center",
