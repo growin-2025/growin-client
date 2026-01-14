@@ -1,7 +1,7 @@
 /**
  * 채팅방 타입
  */
-export type RoomType = "ONE_TO_ONE" | "Group";
+export type RoomType = "ONE_TO_ONE" | "GROUP";
 
 /**
  * 채팅방 참여자 타입
