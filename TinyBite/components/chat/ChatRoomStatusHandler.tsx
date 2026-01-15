@@ -2,40 +2,51 @@ import {
   useApproveJoinPartyMutation,
   useRejectJoinPartyMutation,
 } from "@/hooks/mutations/useChat";
-import { OneToOneChatDetailSchema, RoomType } from "@/types/chat.types";
+import {
+  GroupChatDetailSchema,
+  OneToOneChatDetailSchema,
+} from "@/types/chat.types";
 import { ChatJoinRequestCard } from "./host/ChatJoinRequestCard";
 import { ChatJoinAcceptedCard } from "./participant/ChatJoinAcceptedCard";
 import { ChatJoinPendingCard } from "./participant/ChatJoinPendingCard";
 
 // type participantType = 'HOST' | 'PARTICIPANT';
 // type OneToOneChatStatusType = 'PENDING' | 'REJECTED' | 'APPROVED' | 'REQUESTED' | 'ENDED';
+// type GroupChatStatusType = "RECRUITING" | "COMPLETED" | "CLOSED" | "CANCELLED";
 
 interface ChatRoomStatusHandlerProps {
-  roomType: RoomType;
-  chatDetail: OneToOneChatDetailSchema;
+  chatDetail: OneToOneChatDetailSchema | GroupChatDetailSchema;
 }
 
-const ChatRoomStatusHandler = ({
-  roomType,
-  chatDetail,
-}: ChatRoomStatusHandlerProps) => {
-  const { mutate: approveMutate } = useApproveJoinPartyMutation(
-    chatDetail.partyId,
-    chatDetail.participantId,
-    chatDetail.chatRoomId
+const ChatRoomStatusHandler = ({ chatDetail }: ChatRoomStatusHandlerProps) => {
+  const approveMutation = useApproveJoinPartyMutation(
+    chatDetail.roomType === "ONE_TO_ONE" ? chatDetail.partyId : undefined,
+    chatDetail.roomType === "ONE_TO_ONE" ? chatDetail.participantId : undefined,
+    chatDetail.roomType === "ONE_TO_ONE" ? chatDetail.chatRoomId : undefined
   );
-  const { mutate: rejectMutate } = useRejectJoinPartyMutation(
-    chatDetail.partyId,
-    chatDetail.participantId,
-    chatDetail.chatRoomId
+
+  const rejectMutation = useRejectJoinPartyMutation(
+    chatDetail.roomType === "ONE_TO_ONE" ? chatDetail.partyId : undefined,
+    chatDetail.roomType === "ONE_TO_ONE" ? chatDetail.participantId : undefined,
+    chatDetail.roomType === "ONE_TO_ONE" ? chatDetail.chatRoomId : undefined
   );
+
+  // ONE_TO_ONE이 아니면 아무것도 렌더링하지 않음
+  if (chatDetail.roomType !== "ONE_TO_ONE") {
+    return null;
+  }
 
   const { participantType, participantStatus } = chatDetail;
 
-  // ONE_TO_ONE이 아니면 아무것도 렌더링하지 않음
-  if (roomType !== "ONE_TO_ONE") {
-    return null;
-  }
+  const handleApprove = () => {
+    if (chatDetail.roomType !== "ONE_TO_ONE") return;
+    approveMutation.mutate();
+  };
+
+  const handleReject = () => {
+    if (chatDetail.roomType !== "ONE_TO_ONE") return;
+    rejectMutation.mutate();
+  };
 
   // HOST 분기
   if (participantType === "HOST") {
@@ -47,8 +58,8 @@ const ChatRoomStatusHandler = ({
           nickname={chatDetail.targetName}
           location={chatDetail.targetLocation || ""}
           message="파티에 참여하고 싶어요!"
-          onApprove={approveMutate}
-          onReject={rejectMutate}
+          onApprove={handleApprove}
+          onReject={handleReject}
         />
       );
     }
