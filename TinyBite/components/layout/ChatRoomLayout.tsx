@@ -43,12 +43,10 @@ const ChatRoomLayout = ({
   });
 
   // 통합된 데이터 사용
-  // const roomDetailData = roomType === 'ONE_TO_ONE' ? oneToOneData : groupData;
-  // const roomDetailIsLoading = oneToOneQuery.isLoading || groupIsLoading;
-  // const roomDetailIsError = oneToOneQuery.isError || groupIsError;
-  const roomDetailData = roomType === "ONE_TO_ONE" ? oneToOneQuery.data : null;
-  const roomDetailIsLoading = oneToOneQuery.isLoading || null;
-  const roomDetailIsError = oneToOneQuery.isError || null;
+  const roomDetailData =
+    roomType === "ONE_TO_ONE" ? oneToOneQuery.data : GroupQuery.data;
+  const roomDetailIsLoading = oneToOneQuery.isLoading || GroupQuery.data;
+  const roomDetailIsError = oneToOneQuery.isError || GroupQuery.data;
 
   const togglePanel = () => {
     setIsPanelVisible((prev) => !prev);
@@ -106,10 +104,7 @@ const ChatRoomLayout = ({
           keyboardVerticalOffset={0}
         >
           <View style={{ flex: 1, paddingHorizontal: 20 }}>
-            <ChatRoomStatusHandler
-              roomType={roomType}
-              chatDetail={roomDetailData}
-            />
+            <ChatRoomStatusHandler chatDetail={roomDetailData} />
 
             {/* group 파티장 - 정산하기 */}
             {/* <ChatRecruitmentCloseCard /> */}
