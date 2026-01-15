@@ -50,7 +50,12 @@ const ChatRoomStatusHandler = ({ chatDetail }: ChatRoomStatusHandlerProps) => {
       }
 
       if (chatDetail.status === "COMPLETED") {
-        return <ChatPartyClosureCard />;
+        return (
+          <ChatPartyClosureCard
+            groupChatRoomId={chatDetail.groupChatRoomId}
+            partyId={chatDetail.partyId}
+          />
+        );
       }
 
       if (chatDetail.status === "CLOSED" || chatDetail.status === "CANCELLED") {
