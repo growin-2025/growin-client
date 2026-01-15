@@ -30,23 +30,26 @@ const ChatRoomLayout = ({
     id: string;
     roomType: RoomType;
   }>();
+  const numericChatRoomId = Number(chatRoomId);
   const router = useRouter();
   const [isPanelVisible, setIsPanelVisible] = useState(false);
 
-  // 1:1 채팅방 디테일 정보 관리
-  const oneToOneQuery = useGetOnetoOneRoomDetailQuery(parseInt(chatRoomId), {
+  const oneToOneQuery = useGetOnetoOneRoomDetailQuery(numericChatRoomId, {
     enabled: roomType === "ONE_TO_ONE",
   });
-  // 그룹 채팅방 디테일 정보 관리
-  const GroupQuery = useGetGroupRoomDetailQuery(parseInt(chatRoomId), {
+  const groupQuery = useGetGroupRoomDetailQuery(numericChatRoomId, {
     enabled: roomType === "GROUP",
   });
 
-  // 통합된 데이터 사용
-  const roomDetailData =
-    roomType === "ONE_TO_ONE" ? oneToOneQuery.data : GroupQuery.data;
-  const roomDetailIsLoading = oneToOneQuery.isLoading || GroupQuery.data;
-  const roomDetailIsError = oneToOneQuery.isError || GroupQuery.data;
+  const isOneToOne = roomType === "ONE_TO_ONE";
+
+  const roomDetailData = isOneToOne ? oneToOneQuery.data : groupQuery.data;
+  const roomDetailIsLoading = isOneToOne
+    ? oneToOneQuery.isLoading
+    : groupQuery.isLoading;
+  const roomDetailIsError = isOneToOne
+    ? oneToOneQuery.isError
+    : groupQuery.isError;
 
   const togglePanel = () => {
     setIsPanelVisible((prev) => !prev);
