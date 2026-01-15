@@ -2,7 +2,7 @@ import ChatCard from "@/components/chat/ChatCard";
 import { useGetOnetoOneRoomListQuery } from "@/hooks/queries/useChatRoom";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { OneToOneChatCardSchema } from "@/types/chat.types";
+import { FilterTab, OneToOneChatCardSchema } from "@/types/chat.types";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import {
@@ -15,10 +15,20 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+// 필터 탭 목록
+const filters: FilterTab[] = ["전체", "참여중인 파티", "1:1 채팅"];
+
 /**
- * 필터 탭 타입 정의
+ * 채팅 아이템 렌더링 함수
  */
-type FilterTab = "전체" | "참여중인 파티" | "1:1 채팅";
+const renderChatItem = ({ item }: { item: OneToOneChatCardSchema }) => {
+  return <ChatCard item={item} />;
+};
+
+/**
+ * 아이템 구분선 컴포넌트 (80% 너비)
+ */
+const ItemSeparator = () => <View style={styles.separator} />;
 
 /**
  * 채팅 화면 컴포넌트
@@ -39,9 +49,6 @@ export default function ChatScreen() {
   // 선택된 필터 탭 상태
   const [selectedFilter, setSelectedFilter] = useState<FilterTab>("전체");
 
-  // 필터 탭 목록
-  const filters: FilterTab[] = ["전체", "참여중인 파티", "1:1 채팅"];
-
   /**
    * 필터에 맞는 데이터 필터링
    */
@@ -60,18 +67,6 @@ export default function ChatScreen() {
   //   targetName: item.partyTitle || "", // Add missing required property
   //   ...item,
   // }));
-
-  /**
-   * 채팅 아이템 렌더링 함수
-   */
-  const renderChatItem = ({ item }: { item: OneToOneChatCardSchema }) => {
-    return <ChatCard item={item} />;
-  };
-
-  /**
-   * 아이템 구분선 컴포넌트 (80% 너비)
-   */
-  const ItemSeparator = () => <View style={styles.separator} />;
 
   return (
     <View style={styles.container}>

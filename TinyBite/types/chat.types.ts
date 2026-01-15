@@ -1,4 +1,9 @@
 /**
+ * 필터 탭 타입 정의
+ */
+export type FilterTab = "전체" | "참여중인 파티" | "1:1 채팅";
+
+/**
  * 채팅방 타입
  */
 export type RoomType = "ONE_TO_ONE" | "GROUP";
