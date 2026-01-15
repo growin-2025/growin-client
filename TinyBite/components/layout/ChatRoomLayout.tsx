@@ -31,11 +31,7 @@ const ChatRoomLayout = ({
   const [isPanelVisible, setIsPanelVisible] = useState(false);
 
   // 1:1 채팅방 디테일 정보 관리
-  const {
-    data: oneToOneData,
-    isLoading: oneToOneIsLoading,
-    isError: oneToOneIsError,
-  } = useGetOnetoOneRoomDetailQuery(parseInt(chatRoomId), {
+  const oneToOneQuery = useGetOnetoOneRoomDetailQuery(parseInt(chatRoomId), {
     enabled: roomType === "ONE_TO_ONE",
   });
 
@@ -43,9 +39,9 @@ const ChatRoomLayout = ({
   // const roomDetailData = roomType === 'ONE_TO_ONE' ? oneToOneData : groupData;
   // const roomDetailIsLoading = oneToOneIsLoading || groupIsLoading;
   // const roomDetailIsError = oneToOneIsError || groupIsError;
-  const roomDetailData = roomType === "ONE_TO_ONE" ? oneToOneData : null;
-  const roomDetailIsLoading = oneToOneIsLoading || null;
-  const roomDetailIsError = oneToOneIsError || null;
+  const roomDetailData = roomType === "ONE_TO_ONE" ? oneToOneQuery.data : null;
+  const roomDetailIsLoading = oneToOneQuery.isLoading || null;
+  const roomDetailIsError = oneToOneQuery.isError || null;
 
   const togglePanel = () => {
     setIsPanelVisible((prev) => !prev);
