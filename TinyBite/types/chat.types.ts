@@ -67,6 +67,7 @@ export interface OneToOneChatCardSchema {
  */
 export interface OneToOneChatDetailSchema {
   chatRoomId: number;
+  roomType: RoomType;
   participantId: number;
   participantType: participantType;
   participantStatus: OneToOneChatStatusType;
@@ -113,7 +114,7 @@ export interface GroupChatCardSchema {
   recentTime: string; // "2026-01-10T23:40:00"
   partyTitle: string;
   partyImage: string;
-  partyStatus: OneToOneChatStatusType;
+  partyStatus: GroupChatStatusType;
   recentMessage: string;
   unreadMessageCnt: number;
   currentParticipantCnt: number;
@@ -124,6 +125,7 @@ export interface GroupChatCardSchema {
  */
 export type GroupChatDetailSchema = {
   groupChatRoomId: number;
+  roomType: RoomType;
   partyId: number;
   partyTitle: string;
   status: GroupChatStatusType;
