@@ -3,14 +3,20 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
 
 export const useApproveJoinPartyMutation = (
-  partyId: number,
-  participantId: number,
-  chatroomId: number
+  partyId?: number,
+  participantId?: number,
+  chatroomId?: number
 ) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: () => postApproveJoinParty(partyId, participantId),
+    mutationFn: async () => {
+      if (!partyId || !participantId) {
+        throw new Error("필수 파라미터 누락: approve join party");
+      }
+
+      return postApproveJoinParty(partyId, participantId);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["getOnetoOneRoomDetail", chatroomId],
@@ -29,14 +35,20 @@ export const useApproveJoinPartyMutation = (
 };
 
 export const useRejectJoinPartyMutation = (
-  partyId: number,
-  participantId: number,
-  chatroomId: number
+  partyId?: number,
+  participantId?: number,
+  chatroomId?: number
 ) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: () => postRejectJoinParty(partyId, participantId),
+    mutationFn: async () => {
+      if (!partyId || !participantId) {
+        throw new Error("필수 파라미터 누락: approve join party");
+      }
+
+      return postRejectJoinParty(partyId, participantId);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["getOnetoOneRoomDetail", chatroomId],
