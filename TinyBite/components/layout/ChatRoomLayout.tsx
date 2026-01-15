@@ -44,8 +44,8 @@ const ChatRoomLayout = ({
 
   // 통합된 데이터 사용
   // const roomDetailData = roomType === 'ONE_TO_ONE' ? oneToOneData : groupData;
-  // const roomDetailIsLoading = oneToOneIsLoading || groupIsLoading;
-  // const roomDetailIsError = oneToOneIsError || groupIsError;
+  // const roomDetailIsLoading = oneToOneQuery.isLoading || groupIsLoading;
+  // const roomDetailIsError = oneToOneQuery.isError || groupIsError;
   const roomDetailData = roomType === "ONE_TO_ONE" ? oneToOneQuery.data : null;
   const roomDetailIsLoading = oneToOneQuery.isLoading || null;
   const roomDetailIsError = oneToOneQuery.isError || null;
