@@ -72,13 +72,19 @@ export const useRejectJoinPartyMutation = (
 };
 
 export const useCompletePartyMutation = (
-  partyId: number,
-  chatroomId: number
+  partyId?: number,
+  chatroomId?: number
 ) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: () => postCompleteParty(partyId),
+    mutationFn: async () => {
+      if (!partyId) {
+        throw new Error("필수 파라미터 누락: approve join party");
+      }
+
+      return postCompleteParty(partyId);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["getOnetoOneRoomDetail", chatroomId],
@@ -96,11 +102,20 @@ export const useCompletePartyMutation = (
   });
 };
 
-export const useSettlePartyMutation = (partyId: number, chatroomId: number) => {
+export const useSettlePartyMutation = (
+  partyId?: number,
+  chatroomId?: number
+) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: () => postSettleParty(partyId),
+    mutationFn: async () => {
+      if (!partyId) {
+        throw new Error("필수 파라미터 누락: approve join party");
+      }
+
+      return postSettleParty(partyId);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["getOnetoOneRoomDetail", chatroomId],
