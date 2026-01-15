@@ -1,16 +1,17 @@
 import {
   useApproveJoinPartyMutation,
-  useCompletePartyMutation,
   useRejectJoinPartyMutation,
-  useSettlePartyMutation,
 } from "@/hooks/mutations/useChat";
 import {
   GroupChatDetailSchema,
   OneToOneChatDetailSchema,
 } from "@/types/chat.types";
 import { ChatJoinRequestCard } from "./host/ChatJoinRequestCard";
+import ChatPartyClosureCard from "./host/ChatPartyClosureCard";
+import { ChatRecruitmentCloseCard } from "./host/ChatRecruitmentCloseCard";
 import { ChatJoinAcceptedCard } from "./participant/ChatJoinAcceptedCard";
 import { ChatJoinPendingCard } from "./participant/ChatJoinPendingCard";
+import ChatPartyProgressCard from "./participant/ChatPartyProgressCard";
 
 // type participantType = 'HOST' | 'PARTICIPANT';
 // type OneToOneChatStatusType = 'PENDING' | 'REJECTED' | 'APPROVED' | 'REQUESTED' | 'ENDED';
@@ -33,21 +34,44 @@ const ChatRoomStatusHandler = ({ chatDetail }: ChatRoomStatusHandlerProps) => {
     chatDetail.roomType === "ONE_TO_ONE" ? chatDetail.chatRoomId : undefined
   );
 
-  const completeMutation = useCompletePartyMutation(
-    chatDetail.roomType === "GROUP" ? chatDetail.partyId : undefined,
-    chatDetail.roomType === "GROUP" ? chatDetail.groupChatRoomId : undefined
-  );
+  // GROUP인 경우
+  if (chatDetail.roomType === "GROUP") {
+    // HOST 분기
+    if (chatDetail.participantType === "HOST") {
+      if (chatDetail.status === "RECRUITING") {
+        return <ChatRecruitmentCloseCard />;
+      }
 
-  const settleMutation = useSettlePartyMutation(
-    chatDetail.roomType === "GROUP" ? chatDetail.partyId : undefined,
-    chatDetail.roomType === "GROUP" ? chatDetail.groupChatRoomId : undefined
-  );
+      if (chatDetail.status === "COMPLETED") {
+        return <ChatPartyClosureCard />;
+      }
 
-  // ONE_TO_ONE이 아니면 아무것도 렌더링하지 않음
-  if (chatDetail.roomType !== "ONE_TO_ONE") {
+      if (chatDetail.status === "CLOSED" || chatDetail.status === "CANCELLED") {
+        return null;
+      }
+
+      // 예상치 못한 status
+      alert(`HOST에게 예상치 못한 status: ${chatDetail.status}`);
+      return null;
+    }
+
+    // PARTICIPANT 분기
+    if (chatDetail.participantType === "PARTICIPANT") {
+      return (
+        <ChatPartyProgressCard
+          status={chatDetail.status}
+          currentMembers={chatDetail.currentParticipantCnt}
+          maxMembers={chatDetail.maxParticipantCnt}
+        />
+      );
+    }
+
+    // 예상치 못한 participantType
+    alert(`예상치 못한 participantType: ${chatDetail.participantType}`);
     return null;
   }
 
+  // ONE_TO_ONE인 경우
   const { participantType, participantStatus } = chatDetail;
 
   const handleApprove = () => {
