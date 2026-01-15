@@ -67,7 +67,7 @@ export interface OneToOneChatCardSchema {
  */
 export interface OneToOneChatDetailSchema {
   chatRoomId: number;
-  roomType: RoomType;
+  roomType: "ONE_TO_ONE";
   participantId: number;
   participantType: participantType;
   participantStatus: OneToOneChatStatusType;
@@ -125,7 +125,7 @@ export interface GroupChatCardSchema {
  */
 export type GroupChatDetailSchema = {
   groupChatRoomId: number;
-  roomType: RoomType;
+  roomType: "GROUP";
   partyId: number;
   partyTitle: string;
   status: GroupChatStatusType;
