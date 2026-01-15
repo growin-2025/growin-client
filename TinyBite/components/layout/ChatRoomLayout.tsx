@@ -108,20 +108,6 @@ const ChatRoomLayout = ({
         >
           <View style={{ flex: 1, paddingHorizontal: 20 }}>
             <ChatRoomStatusHandler chatDetail={roomDetailData} />
-
-            {/* group 파티장 - 정산하기 */}
-            {/* <ChatRecruitmentCloseCard /> */}
-
-            {/* group 파티장 - 모집 완료 */}
-            {/* <ChatPartyClosureCard /> */}
-
-            {/* group 참여자 - 진행상황 */}
-            {/* <ChatPartyProgressCard
-              status="진행 중"
-              currentMembers={1}
-              maxMembers={3}
-            /> */}
-
             <View style={{ flex: 1 }}>{children}</View>
           </View>
           <View style={styles.bottomContainer}>
