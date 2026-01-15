@@ -59,6 +59,7 @@ export const ENDPOINT = {
     DETAIL: {
       ONE_TO_ONE: (chatroomId: number) =>
         `/api/v1/chatroom/one-to-one/${chatroomId}`,
+      GROUP: (chatroomId: number) => `/api/v1/chatroom/group/${chatroomId}`,
     },
   },
 };
