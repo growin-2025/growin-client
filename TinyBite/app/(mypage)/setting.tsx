@@ -1,5 +1,5 @@
 import { postLogout } from "@/api/authApi";
-import { deleteUserMe } from "@/api/userApi";
+import { deleteUserMe, validateWithdrawal } from "@/api/userApi";
 import ConfirmModal from "@/components/ConfirmModal";
 import { useAuthStore } from "@/stores/authStore";
 import { colors } from "@/styles/colors";
@@ -91,7 +91,7 @@ export default function SettingScreen() {
       </View>
       {/* Content */}
       <View style={styles.contentWrapper}>
-        {/* 알림 설정 */}
+        {/* 알림 설정 
         <Pressable
           style={styles.settingItem}
           onPress={() => router.push("../(mypage)/notification")}
@@ -110,8 +110,8 @@ export default function SettingScreen() {
             style={styles.chevronIcon}
           />
         </Pressable>
-        {/* 구분선 */}
         <View style={styles.divider} />
+        */}
         {/* 내 동네 설정 */}
         {/* <Pressable
           style={styles.settingItem}
@@ -160,7 +160,46 @@ export default function SettingScreen() {
         <View style={styles.divider} />
         <Pressable
           style={styles.settingItem}
-          onPress={() => setShowWithdrawModal(true)}
+          onPress={async () => {
+            try {
+              const canWithdraw = await validateWithdrawal();
+              if (canWithdraw) {
+                setShowWithdrawModal(true);
+              } else {
+                Toast.show({
+                  type: "basicToast",
+                  props: { text: "진행 중인 파티가 있어 탈퇴할 수 없습니다." },
+                  position: "bottom",
+                  bottomOffset: 98,
+                  visibilityTime: 2000,
+                });
+              }
+            } catch (error: any) {
+              const status = error?.response?.status;
+              if (status === 500) {
+                Toast.show({
+                  type: "basicToast",
+                  props: {
+                    text: "진행 중인 파티가 있어 탈퇴할 수 없습니다.",
+                  },
+                  position: "bottom",
+                  bottomOffset: 98,
+                  visibilityTime: 2000,
+                });
+              } else {
+                // 기타 서버 오류
+                Toast.show({
+                  type: "basicToast",
+                  props: {
+                    text: "잠시 후 다시 시도해주세요.",
+                  },
+                  position: "bottom",
+                  bottomOffset: 98,
+                  visibilityTime: 2000,
+                });
+              }
+            }
+          }}
         >
           <View style={styles.settingItemLeft}>
             <Image

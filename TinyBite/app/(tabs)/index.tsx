@@ -10,7 +10,6 @@ import { StyleSheet, View } from "react-native";
 
 export default function HomeScreen() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   return (
     <View style={styles.container}>
       <MainHeader />

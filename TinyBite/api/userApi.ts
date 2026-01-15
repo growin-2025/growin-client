@@ -59,6 +59,15 @@ export const checkNickname = async (nickname: string): Promise<void> => {
 };
 
 /**
+ * 탈퇴 가능 여부 확인 API
+ * @returns canWithdraw 값 (true: 탈퇴 가능, false: 탈퇴 불가능)
+ */
+export const validateWithdrawal = async (): Promise<boolean> => {
+  const res = await privateAxios.get(ENDPOINT.USER.WITHDRAWAL_VALIDATE);
+  return res.data.data.canWithdraw;
+};
+
+/**
  * 회원 탈퇴 API
  */
 export const deleteUserMe = async (): Promise<void> => {
