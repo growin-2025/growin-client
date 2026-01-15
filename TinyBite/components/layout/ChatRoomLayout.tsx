@@ -1,6 +1,9 @@
 import ChatInputBox from "@/components/chat/ChatInputBox";
 import ChatRoomHeader from "@/components/ChatRoomHeader";
-import { useGetOnetoOneRoomDetailQuery } from "@/hooks/queries/useChatRoom";
+import {
+  useGetGroupRoomDetailQuery,
+  useGetOnetoOneRoomDetailQuery,
+} from "@/hooks/queries/useChatRoom";
 import { colors } from "@/styles/colors";
 import { RoomType } from "@/types/chat.types";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -33,6 +36,10 @@ const ChatRoomLayout = ({
   // 1:1 채팅방 디테일 정보 관리
   const oneToOneQuery = useGetOnetoOneRoomDetailQuery(parseInt(chatRoomId), {
     enabled: roomType === "ONE_TO_ONE",
+  });
+  // 그룹 채팅방 디테일 정보 관리
+  const GroupQuery = useGetGroupRoomDetailQuery(parseInt(chatRoomId), {
+    enabled: roomType === "GROUP",
   });
 
   // 통합된 데이터 사용
