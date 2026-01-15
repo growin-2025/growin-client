@@ -1,10 +1,13 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { PartyStatusType } from "@/types/chat.types";
+import {
+  GroupChatStatusLabelMap,
+  GroupChatStatusType,
+} from "@/types/chat.types";
 import { StyleSheet, Text, View } from "react-native";
 
 export interface PartyStatusTagProps {
-  status: PartyStatusType;
+  status: GroupChatStatusType;
 }
 
 /**
@@ -16,21 +19,29 @@ export interface PartyStatusTagProps {
 const PartyStatusTag = ({ status }: PartyStatusTagProps) => {
   // 상태별 스타일을 객체로 정의
   const statusStyles = {
-    "모집 중": {
+    RECRUITING: {
+      // 모집 중
       container: styles.statusTagRecruiting,
       text: styles.statusTagTextRecruiting,
     },
-    "진행 중": {
+    COMPLETED: {
+      // 진행 중
       container: styles.statusTagOngoing,
       text: styles.statusTagTextOngoing,
     },
-    "파티 종료": {
+    CLOSED: {
+      // 파티 종료
+      container: styles.statusTagEnded,
+      text: styles.statusTagTextEnded,
+    },
+    CANCELLED: {
+      // ??
       container: styles.statusTagEnded,
       text: styles.statusTagTextEnded,
     },
   };
 
-  const currentStyle = statusStyles[status] || statusStyles["모집 중"];
+  const currentStyle = statusStyles[status] || statusStyles["RECRUITING"];
 
   return (
     <View style={[styles.statusTag, currentStyle.container]}>
@@ -41,7 +52,7 @@ const PartyStatusTag = ({ status }: PartyStatusTagProps) => {
           currentStyle.text,
         ]}
       >
-        {status}
+        {GroupChatStatusLabelMap[status]}
       </Text>
     </View>
   );
