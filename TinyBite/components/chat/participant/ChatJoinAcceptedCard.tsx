@@ -1,13 +1,29 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { router } from "expo-router";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const GROUP_ICON = require("@/assets/images/chat/group-icon.png");
 
-export const ChatJoinAcceptedCard = () => {
+interface ChatJoinAcceptedCardProps {
+  chatRoomId: number
+}
+
+export const ChatJoinAcceptedCard = ({chatRoomId} : ChatJoinAcceptedCardProps) => {
+  
   const handleNavigateToChatRoom = () => {
     console.log("파티 채팅방 가기");
+    router.dismissTo({
+      pathname: "/chat/[id]",
+      params: {
+        id: chatRoomId,
+        roomType: "GROUP",
+        // status: item.status,
+        // partyTitle: item.partyTitle,
+        // targetName: item.targetName,
+      },
+    })
   };
 
   return (

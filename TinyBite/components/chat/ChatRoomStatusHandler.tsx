@@ -71,7 +71,10 @@ const ChatRoomStatusHandler = ({
 
     if (participantStatus === "APPROVED") {
       // 1:1 참여자 - 수락됨
-      return <ChatJoinAcceptedCard />;
+      if (chatDetail.groupChatRoomId === undefined) {
+        return null;
+      }
+      return <ChatJoinAcceptedCard chatRoomId={chatDetail.groupChatRoomId} />;
     }
 
     if (participantStatus === "REJECTED") {
