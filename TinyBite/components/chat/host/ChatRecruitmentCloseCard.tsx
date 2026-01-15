@@ -1,17 +1,44 @@
 import ConfirmModal from "@/components/ConfirmModal";
+import { useCompletePartyMutation } from "@/hooks/mutations/useChat";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const GROUP_ICON = require("@/assets/images/chat/group-icon.png");
 const FIRESORKS_ICON = require("@/assets/images/chat/fireworks.png");
 
-export const ChatRecruitmentCloseCard = () => {
+interface ChatRecruitmentCloseCardProps {
+  currentMembers: number;
+  maxMembers: number;
+  partyId: number;
+  groupChatRoomId: number;
+}
+
+export const ChatRecruitmentCloseCard = ({
+  currentMembers,
+  maxMembers,
+  partyId,
+  groupChatRoomId,
+}: ChatRecruitmentCloseCardProps) => {
+  const queryClient = useQueryClient();
   const [showModal, setShowModal] = useState(false);
 
+  const completeMutation = useCompletePartyMutation(partyId, groupChatRoomId);
+
+  const handleCompleteParty = async () => {
+    await completeMutation.mutateAsync();
+    if (completeMutation.isSuccess) {
+      setShowModal(true);
+    }
+  };
+
   const handleNavigateToChatRoom = () => {
-    console.log("파티 채팅방 가기");
+    setShowModal(false);
+    queryClient.invalidateQueries({
+      queryKey: ["useGetGroupRoomDetailQuery", groupChatRoomId],
+    });
   };
 
   return (
@@ -23,15 +50,12 @@ export const ChatRecruitmentCloseCard = () => {
             <Image source={GROUP_ICON} style={styles.personIcon} />
           </View>
           <Text style={[styles.headerText, textStyles.body16_SB135]}>
-            모집 중 (3/3명)
+            모집 중 ({currentMembers}/{maxMembers}명)
           </Text>
         </View>
 
         {/* 하단 버튼 영역 */}
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => setShowModal(true)}
-        >
+        <TouchableOpacity style={styles.button} onPress={handleCompleteParty}>
           <Text style={[styles.buttonText, textStyles.body16_B150]}>
             모집을 마감하고 정산하기
           </Text>

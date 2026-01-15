@@ -39,7 +39,14 @@ const ChatRoomStatusHandler = ({ chatDetail }: ChatRoomStatusHandlerProps) => {
     // HOST 분기
     if (chatDetail.participantType === "HOST") {
       if (chatDetail.status === "RECRUITING") {
-        return <ChatRecruitmentCloseCard />;
+        return (
+          <ChatRecruitmentCloseCard
+            currentMembers={chatDetail.currentParticipantCnt}
+            maxMembers={chatDetail.maxParticipantCnt}
+            partyId={chatDetail.partyId}
+            groupChatRoomId={chatDetail.groupChatRoomId}
+          />
+        );
       }
 
       if (chatDetail.status === "COMPLETED") {
