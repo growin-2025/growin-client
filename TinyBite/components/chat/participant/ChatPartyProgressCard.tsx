@@ -1,5 +1,6 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { GroupChatStatusType } from "@/types/chat.types";
 import React, { useEffect } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import Animated, {
@@ -13,10 +14,8 @@ const MEGAPHONE_ICON = require("@/assets/images/chat/notice.png");
 const COIN_ICON = require("@/assets/images/chat/coin.png");
 const BRAND_ICON = require("@/assets/images/chat/brand-logo-32.png");
 
-type PartyStatus = "모집 중" | "진행 중" | "파티 종료";
-
 interface ChatPartyProgressCardProps {
-  status: PartyStatus;
+  status: GroupChatStatusType;
   currentMembers: number;
   maxMembers: number;
 }
@@ -29,13 +28,13 @@ const ChatPartyProgressCard = ({
   const progress = useSharedValue(0);
 
   // 상태에 따른 진행도 설정
-  const getProgressValue = (status: PartyStatus) => {
+  const getProgressValue = (status: GroupChatStatusType) => {
     switch (status) {
-      case "모집 중":
+      case "RECRUITING":
         return 33.33;
-      case "진행 중":
+      case "COMPLETED":
         return 66.66;
-      case "파티 종료":
+      case "CLOSED":
         return 100;
       default:
         return 0;
@@ -43,23 +42,23 @@ const ChatPartyProgressCard = ({
   };
 
   // 상태에 따른 아이콘 및 텍스트 설정
-  const getStatusConfig = (status: PartyStatus) => {
+  const getStatusConfig = (status: GroupChatStatusType) => {
     switch (status) {
-      case "모집 중":
+      case "RECRUITING":
         return {
           icon: MEGAPHONE_ICON,
           title: "파티 참여 완료!",
           description: "인원을 모집 중입니다.",
           activeStep: 2,
         };
-      case "진행 중":
+      case "COMPLETED":
         return {
           icon: COIN_ICON,
           title: "인원 모집 완료!",
           description: "파티장이 정산을 준비하고 있어요.",
           activeStep: 3,
         };
-      case "파티 종료":
+      case "CLOSED":
         return {
           icon: BRAND_ICON,
           title: "수령 완료!",
