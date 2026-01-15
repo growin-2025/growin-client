@@ -128,6 +128,7 @@ export type GroupChatDetailSchema = {
   roomType: "GROUP";
   partyId: number;
   partyTitle: string;
+  participantType: participantType;
   status: GroupChatStatusType;
   currentParticipantCnt: number;
   maxParticipantCnt: number;
