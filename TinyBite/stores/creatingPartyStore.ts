@@ -131,7 +131,7 @@ export const useCreatingPartyStore = create<CreatingPartyState>((set, get) => ({
       totalAmount: "",
       numberOfPeople: 2,
       pickUpLocation: {
-        place: "중구 명동",
+        place: "",
         pickupLatitude: 37.55103512680912,
         pickupLongitude: 126.9254146711746,
       },
