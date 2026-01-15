@@ -1,6 +1,8 @@
 import {
   useApproveJoinPartyMutation,
+  useCompletePartyMutation,
   useRejectJoinPartyMutation,
+  useSettlePartyMutation,
 } from "@/hooks/mutations/useChat";
 import {
   GroupChatDetailSchema,
@@ -29,6 +31,16 @@ const ChatRoomStatusHandler = ({ chatDetail }: ChatRoomStatusHandlerProps) => {
     chatDetail.roomType === "ONE_TO_ONE" ? chatDetail.partyId : undefined,
     chatDetail.roomType === "ONE_TO_ONE" ? chatDetail.participantId : undefined,
     chatDetail.roomType === "ONE_TO_ONE" ? chatDetail.chatRoomId : undefined
+  );
+
+  const completeMutation = useCompletePartyMutation(
+    chatDetail.roomType === "GROUP" ? chatDetail.partyId : undefined,
+    chatDetail.roomType === "GROUP" ? chatDetail.groupChatRoomId : undefined
+  );
+
+  const settleMutation = useSettlePartyMutation(
+    chatDetail.roomType === "GROUP" ? chatDetail.partyId : undefined,
+    chatDetail.roomType === "GROUP" ? chatDetail.groupChatRoomId : undefined
   );
 
   // ONE_TO_ONE이 아니면 아무것도 렌더링하지 않음
