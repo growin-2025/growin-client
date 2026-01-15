@@ -310,3 +310,16 @@ export const postRejectJoinParty = async (
     ENDPOINT.PARTY.PARTICIPANTS.REJECT(partyId, participantId)
   );
 };
+
+/**
+ * 파티 인원 모집 완료
+ */
+export const postCompleteParty = async (partyId: number) => {
+  await privateAxios.post<ApiSuccess<void>>(ENDPOINT.PARTY.COMPLETE(partyId));
+};
+/**
+ * 파티 종료
+ */
+export const postSettleParty = async (partyId: number) => {
+  await privateAxios.post<ApiSuccess<void>>(ENDPOINT.PARTY.SETTLE(partyId));
+};

@@ -34,6 +34,8 @@ export const ENDPOINT = {
       REJECT: (partyId: number, participantId: number) =>
         `/api/parties/${partyId}/participants/${participantId}/reject`,
     },
+    COMPLETE: (partyId: number) => `/api/parties/${partyId}/complete`,
+    SETTLE: (partyId: number) => `/api/parties/${partyId}/settle`,
   },
   FILE: {
     UPLOAD_FILE: "api/v1/file/upload",
