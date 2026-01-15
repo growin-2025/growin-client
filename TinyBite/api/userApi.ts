@@ -64,7 +64,7 @@ export const checkNickname = async (nickname: string): Promise<void> => {
  */
 export const validateWithdrawal = async (): Promise<boolean> => {
   const res = await privateAxios.get(ENDPOINT.USER.WITHDRAWAL_VALIDATE);
-  return res.data?.data?.canWithdraw;
+  return res.data.data.canWithdraw;
 };
 
 /**
