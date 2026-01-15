@@ -35,9 +35,9 @@ const PartyStatusTag = ({ status }: PartyStatusTagProps) => {
       text: styles.statusTagTextEnded,
     },
     CANCELLED: {
-      // ??
-      container: styles.statusTagEnded,
-      text: styles.statusTagTextEnded,
+      // 파티 취소
+      container: styles.statusTagCancelled,
+      text: styles.statusTagTextCancelled,
     },
   };
 
@@ -79,6 +79,10 @@ const styles = StyleSheet.create({
   statusTagEnded: {
     backgroundColor: colors.gray[4],
   },
+  // 파티 취소 상태 태그
+  statusTagCancelled: {
+    backgroundColor: colors.red[1],
+  },
   // 상태 태그 텍스트 기본 스타일
   statusTagText: {},
   // 모집 중 상태 태그 텍스트
@@ -92,5 +96,9 @@ const styles = StyleSheet.create({
   // 파티 종료 상태 태그 텍스트
   statusTagTextEnded: {
     color: colors.gray[1],
+  },
+  // 파티 취소 상태 태그 텍스트
+  statusTagTextCancelled: {
+    color: colors.red[1],
   },
 });
