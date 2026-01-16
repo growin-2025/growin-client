@@ -10,7 +10,8 @@ import {
   GroupChatCardSchema,
   OneToOneChatCardSchema,
 } from "@/types/chat.types";
-import { useEffect, useState } from "react";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useMemo, useState } from "react";
 import {
   FlatList,
   Image,
@@ -48,38 +49,30 @@ const ItemSeparator = () => <View style={styles.separator} />;
  */
 export default function ChatScreen() {
   const [selectedFilter, setSelectedFilter] = useState<FilterTab>("전체");
-  const [chatRoomList, setChatRoomList] = useState<
-    (OneToOneChatCardSchema | GroupChatCardSchema)[]
-  >([]);
 
-  const { data: groupRoomList, isLoading: groupIsLoading } =
-    useGetGroupRoomListQuery();
-  const { data: oneToOneRoomList, isLoading: oneToOneIsLoading } =
-    useGetOnetoOneRoomListQuery();
+  const groupQuery = useGetGroupRoomListQuery();
+  const oneToOneQuery = useGetOnetoOneRoomListQuery();
 
-  useEffect(() => {
-    if (!groupIsLoading && !oneToOneIsLoading) {
-      const merged = [...(groupRoomList ?? []), ...(oneToOneRoomList ?? [])];
-      setChatRoomList(merged);
-    }
-  }, [groupIsLoading, oneToOneIsLoading, groupRoomList, oneToOneRoomList]);
+  useFocusEffect(
+    useCallback(() => {
+      groupQuery.refetch();
+      oneToOneQuery.refetch();
+    }, [])
+  );
+
+  const mergedData = useMemo(() => {
+    return [...(groupQuery.data ?? []), ...(oneToOneQuery.data ?? [])];
+  }, [groupQuery.data, oneToOneQuery.data]);
 
   /**
    * 필터에 맞는 데이터 필터링
    */
   const filteredData: (OneToOneChatCardSchema | GroupChatCardSchema)[] =
-    chatRoomList.filter((item) => {
+    mergedData.filter((item) => {
       if (selectedFilter === "전체") return true;
       if (selectedFilter === "참여중인 파티") return item.roomType === "GROUP";
       if (selectedFilter === "1:1 채팅") return item.roomType === "ONE_TO_ONE";
     });
-  // .map((item) => ({
-  //   id: item.chatRoomId,
-  //   lastMessage: item.recentMessage,
-  //   timestamp: item.recentTime,
-  //   targetName: item.partyTitle || "", // Add missing required property
-  //   ...item,
-  // }));
 
   return (
     <View style={styles.container}>
