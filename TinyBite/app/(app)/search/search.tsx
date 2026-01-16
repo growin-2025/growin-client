@@ -7,7 +7,7 @@ import SearchResultList from "@/components/search/SearchResultList";
 import { useUserCoords } from "@/hooks/useUserCoords";
 import { usePartyStore } from "@/stores/partyStore";
 import { colors } from "@/styles/colors";
-import { PartyItem } from "@/types/party";
+import { PartyItem } from "@/types/party.types";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";

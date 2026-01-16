@@ -12,8 +12,13 @@ export default function RootLayout() {
       <KeyboardProvider preload={false}>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="index" />
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="party-detail/[id]" />
+          <Stack.Screen name="(app)/(tabs)" />
+          <Stack.Screen name="(app)/party-detail/[id]" />
+          <Stack.Screen name="(app)/party/create/[type]" />
+          <Stack.Screen name="(app)/party/edit/[type]" />
+          <Stack.Screen name="(app)/chat/[id]" />
+          <Stack.Screen name="(app)/search/location/index" />
+          <Stack.Screen name="(app)/search/search" />
         </Stack>
         <Toast config={toastConfig} />
       </KeyboardProvider>

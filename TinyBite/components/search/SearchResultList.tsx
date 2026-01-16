@@ -1,7 +1,7 @@
 import MainCard from "@/components/main/MainCard";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { PartyItem } from "@/types/party";
+import { PartyItem } from "@/types/party.types";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 
 interface SearchResultListProps {

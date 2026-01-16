@@ -24,7 +24,7 @@ export default function CompleteScreen() {
         {/* 다음 버튼 */}
         <TouchableOpacity
           style={styles.nextBtn}
-          onPress={() => router.replace("/(tabs)")}
+          onPress={() => router.replace("/(app)/(tabs)")}
         >
           <Text style={[styles.nextText, textStyles.title18_SB135]}>
             내 동네 파티 목록 확인하기

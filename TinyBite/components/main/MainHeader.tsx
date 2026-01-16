@@ -78,7 +78,7 @@ const MainHeader = ({}: MainHeaderProps = {}) => {
               {location}
             </Text>
           </View>
-          <Pressable onPress={() => router.push("/search/search")}>
+          <Pressable onPress={() => router.push("/(app)/search/search")}>
             <Image
               source={require("@/assets/images/search/search-32.png")}
               style={styles.searchIcon}

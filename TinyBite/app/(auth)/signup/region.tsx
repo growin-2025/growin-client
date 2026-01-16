@@ -1,5 +1,5 @@
 import { getLocationName, postSignupGoogle } from "@/api/authApi";
-import { PlaceItem } from "@/app/search/location";
+import { PlaceItem } from "@/app/(app)/search/location";
 import PaginationIndecatorHeader from "@/components/PaginationIndecatorHeader";
 import { useUserCoords } from "@/hooks/useUserCoords";
 import { useAuthStore } from "@/stores/authStore";

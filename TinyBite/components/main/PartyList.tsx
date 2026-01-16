@@ -43,7 +43,7 @@ const PartyList = () => {
       item={item}
       onPress={() =>
         router.push({
-          pathname: "/party-detail/[id]" as any,
+          pathname: "/(app)/party-detail/[id]" as any,
           params: { id: item.partyId.toString() },
         })
       }

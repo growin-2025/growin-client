@@ -122,7 +122,7 @@ const MyPartyList = () => {
               containerStyle={styles.mypageCard}
               onPress={() =>
                 router.push({
-                  pathname: "/party-detail/[id]" as any,
+                  pathname: "/(app)/party-detail/[id]" as any,
                   params: { id: item.partyId.toString() },
                 })
               }

@@ -7,15 +7,16 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 const GROUP_ICON = require("@/assets/images/chat/group-icon.png");
 
 interface ChatJoinAcceptedCardProps {
-  chatRoomId: number
+  chatRoomId: number;
 }
 
-export const ChatJoinAcceptedCard = ({chatRoomId} : ChatJoinAcceptedCardProps) => {
-  
+export const ChatJoinAcceptedCard = ({
+  chatRoomId,
+}: ChatJoinAcceptedCardProps) => {
   const handleNavigateToChatRoom = () => {
     console.log("파티 채팅방 가기");
     router.dismissTo({
-      pathname: "/chat/[id]",
+      pathname: "/(app)/chat/[id]",
       params: {
         id: chatRoomId,
         roomType: "GROUP",
@@ -23,7 +24,7 @@ export const ChatJoinAcceptedCard = ({chatRoomId} : ChatJoinAcceptedCardProps) =
         // partyTitle: item.partyTitle,
         // targetName: item.targetName,
       },
-    })
+    });
   };
 
   return (

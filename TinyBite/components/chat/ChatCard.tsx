@@ -33,7 +33,7 @@ const ChatItem = ({ item }: ChatItemProps) => {
 
   const handleChatPress = () => {
     router.navigate({
-      pathname: "/chat/[id]",
+      pathname: "/(app)/chat/[id]",
       params: {
         id: item.chatRoomId,
         roomType: item.roomType,
