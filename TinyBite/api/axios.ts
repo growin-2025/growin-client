@@ -6,7 +6,6 @@ import * as SecureStore from "expo-secure-store";
 // 인증 필요 x
 export const publicAxios = axios.create({
   baseURL: BASE_URL,
-  withCredentials: true,
 });
 
 publicAxios.interceptors.request.use(
@@ -29,7 +28,6 @@ publicAxios.interceptors.request.use(
 // 인증 필요 o
 export const privateAxios = axios.create({
   baseURL: BASE_URL,
-  withCredentials: true,
 });
 
 privateAxios.interceptors.request.use(
@@ -89,14 +87,21 @@ privateAxios.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // 401 에러이고 재시도하지 않은 요청인지 확인
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // 401 | 403 에러이고 재시도하지 않은 요청인지 확인
+    if (
+      (error.response?.status === 401 || error.response?.status === 403) &&
+      !originalRequest._retry
+    ) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         })
           .then((token) => {
             originalRequest.headers.Authorization = `Bearer ${token}`;
+            if (originalRequest.url?.includes(ENDPOINT.AUTH.REFRESH)) {
+              useAuthStore.getState().logout();
+              return Promise.reject(error);
+            }
             return privateAxios(originalRequest);
           })
           .catch((err) => {
@@ -110,6 +115,12 @@ privateAxios.interceptors.response.use(
 
       try {
         const refreshToken = await SecureStore.getItemAsync("refreshToken");
+
+        if (!refreshToken) {
+          useAuthStore.getState().logout();
+          return Promise.reject(new Error("No refresh token"));
+        }
+
         const res = await publicAxios.post(ENDPOINT.AUTH.REFRESH, {
           refreshToken: refreshToken,
         });
@@ -125,6 +136,10 @@ privateAxios.interceptors.response.use(
         const newAccessToken = await SecureStore.getItemAsync("accessToken");
         processQueue(null, newAccessToken);
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        if (originalRequest.url?.includes(ENDPOINT.AUTH.REFRESH)) {
+          useAuthStore.getState().logout();
+          return Promise.reject(error);
+        }
         return privateAxios(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
