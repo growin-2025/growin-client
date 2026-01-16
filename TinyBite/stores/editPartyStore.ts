@@ -8,6 +8,8 @@ export interface PhotoUrl {
 }
 
 export interface editPartyState {
+  originalInfo: PartyDetail | null;
+
   seq: number;
   partyId: number;
   photos: (Photo | PhotoUrl)[];
@@ -26,9 +28,7 @@ export interface editPartyState {
   };
   pickupLocation: {
     isEdited: boolean;
-    place: string;
-    pickupLatitude: number;
-    pickupLongitude: number;
+    value: PickupLocation | null;
   };
   description: string;
   productLink: {
@@ -36,20 +36,23 @@ export interface editPartyState {
     value: string;
   };
 
-  setInitialPartyInfo: (info: PartyDetail) => void;
+  setOriginalInfo: (info: PartyDetail) => void;
+  setInitialPartyInfo: () => void;
   addPhoto: (uri: string, mimeType: string, fileName: string) => void;
   deletePhoto: (id: number) => void;
   setRepresentativePhoto: (id: number) => void;
   setPartyTitle: (title: string) => void;
   setTotalAmount: (amount: string) => void;
-  setPickUpLocation: (location: PickupLocation) => void;
+  setPickUpLocation: (location: PickupLocation | null) => void;
   setDetailedDescription: (description: string) => void;
   setProductLink: (link: string) => void;
   setMaxParticipants: (number: number) => void;
   resetEditParty: () => void;
 }
 
-export const useEditPartyStore = create<editPartyState>((set) => ({
+export const useEditPartyStore = create<editPartyState>((set, get) => ({
+  originalInfo: null,
+
   seq: 0,
   partyId: 0,
   photos: [],
@@ -68,9 +71,7 @@ export const useEditPartyStore = create<editPartyState>((set) => ({
   },
   pickupLocation: {
     isEdited: false,
-    place: "",
-    pickupLatitude: 0,
-    pickupLongitude: 0,
+    value: null,
   },
   description: "",
   productLink: {
@@ -78,7 +79,16 @@ export const useEditPartyStore = create<editPartyState>((set) => ({
     value: "",
   },
 
-  setInitialPartyInfo: (info: PartyDetail) =>
+  setOriginalInfo: (info: PartyDetail) =>
+    set({
+      originalInfo: info,
+    }),
+  setInitialPartyInfo: () => {
+    const info = get().originalInfo;
+    if (!info) {
+      return;
+    }
+
     set({
       seq: info.images?.length || 0,
       partyId: info.partyId,
@@ -101,16 +111,19 @@ export const useEditPartyStore = create<editPartyState>((set) => ({
       },
       pickupLocation: {
         isEdited: false,
-        place: info.pickupLocation.place,
-        pickupLatitude: info.pickupLocation.pickupLatitude,
-        pickupLongitude: info.pickupLocation.pickupLongitude,
+        value: {
+          place: info.pickupLocation.place,
+          pickupLatitude: info.pickupLocation.pickupLatitude,
+          pickupLongitude: info.pickupLocation.pickupLongitude,
+        },
       },
       description: info.description || "",
       productLink: {
         isEdited: false,
         value: info.productLink?.url || "",
       },
-    }),
+    });
+  },
   setPartyTitle: (title: string) => {
     set(() => ({
       title: {
@@ -166,16 +179,19 @@ export const useEditPartyStore = create<editPartyState>((set) => ({
       },
     }));
   },
-  setPickUpLocation: (location: PickupLocation) => {
+  setPickUpLocation: (location: PickupLocation | null) =>
     set(() => ({
-      pickupLocation: {
-        isEdited: true,
-        place: location.place,
-        pickupLatitude: location.pickupLatitude,
-        pickupLongitude: location.pickupLongitude,
-      },
-    }));
-  },
+      pickupLocation: location
+        ? {
+            isEdited: true,
+            value: {
+              place: location.place,
+              pickupLatitude: location.pickupLatitude,
+              pickupLongitude: location.pickupLongitude,
+            },
+          }
+        : { isEdited: true, value: null },
+    })),
   setDetailedDescription: (description: string) => {
     set(() => ({
       description: description,
@@ -199,6 +215,8 @@ export const useEditPartyStore = create<editPartyState>((set) => ({
   },
   resetEditParty: () =>
     set({
+      originalInfo: null,
+
       seq: 0,
       partyId: 0,
       photos: [],
@@ -217,9 +235,7 @@ export const useEditPartyStore = create<editPartyState>((set) => ({
       },
       pickupLocation: {
         isEdited: false,
-        place: "",
-        pickupLatitude: 37.569,
-        pickupLongitude: 126.991,
+        value: null,
       },
       description: "",
       productLink: {
