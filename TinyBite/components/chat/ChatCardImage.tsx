@@ -3,6 +3,7 @@ import {
   GroupChatCardSchema,
   OneToOneChatCardSchema,
 } from "@/types/chat.types";
+import { parseProfileImage } from "@/utils/parseProfileImage";
 import { Image, StyleSheet, View } from "react-native";
 
 /**
@@ -28,13 +29,16 @@ const ChatItemImage = ({ item }: ChatItemImageProps) => {
 
   if (isOneOnOne) {
     const oneToOneItem = item as OneToOneChatCardSchema;
+
     return (
       <View style={styles.overlappingProfilesContainer}>
         {/* 상대방 프로필 이미지 (왼쪽) */}
         <View style={styles.opponentProfileWrapper}>
           {oneToOneItem.targetProfileImage ? (
             <Image
-              source={{ uri: oneToOneItem.targetProfileImage }}
+              source={{
+                uri: parseProfileImage(oneToOneItem.targetProfileImage),
+              }}
               style={styles.profileImageCircle}
               resizeMode="cover"
             />
@@ -46,7 +50,9 @@ const ChatItemImage = ({ item }: ChatItemImageProps) => {
         <View style={styles.myProfileWrapper}>
           {oneToOneItem.myProfileImage ? (
             <Image
-              source={{ uri: oneToOneItem.myProfileImage }}
+              source={{
+                uri: parseProfileImage(oneToOneItem.myProfileImage),
+              }}
               style={styles.profileImageCircle}
               resizeMode="cover"
             />
