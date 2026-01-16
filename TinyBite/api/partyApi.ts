@@ -315,8 +315,9 @@ export const postRejectJoinParty = async (
  * 파티 인원 모집 완료
  */
 export const postCompleteParty = async (partyId: number) => {
-  await privateAxios.post<ApiSuccess<void>>(ENDPOINT.PARTY.COMPLETE(partyId));
+  await privateAxios.patch<ApiSuccess<void>>(ENDPOINT.PARTY.COMPLETE(partyId));
 };
+
 /**
  * 파티 종료
  */

@@ -11,6 +11,7 @@ export const useGetOnetoOneRoomListQuery = () => {
     queryKey: ["getOnetoOneRoomList"],
     queryFn: getOnetoOneRoomList,
     staleTime: 0,
+    refetchOnWindowFocus: true,
   });
 };
 
@@ -30,6 +31,7 @@ export const useGetGroupRoomListQuery = () => {
     queryKey: ["useGetGroupRoomListQuery"],
     queryFn: getGroupRoomList,
     staleTime: 0,
+    refetchOnWindowFocus: true,
   });
 };
 
