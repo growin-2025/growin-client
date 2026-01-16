@@ -24,10 +24,7 @@ const PartyDetailCTA = ({
     if (isParticipating) {
       return "채팅방으로 이동";
     }
-    if (pricePerPerson != null) {
-      return "채팅으로 참여하기";
-    }
-    return "로딩 중...";
+    return "채팅으로 참여하기";
   };
 
   const handleGoToChatPress = () => {
