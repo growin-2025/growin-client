@@ -4,7 +4,7 @@ module.exports = {
   name: "한입만",
   slug: "TinyBite",
   owner: "tinybite-2025",
-  version: "0.8.0",
+  version: "0.9.0",
   orientation: "portrait",
   icon: "./assets/images/icon.png",
   scheme: "tinybite",
