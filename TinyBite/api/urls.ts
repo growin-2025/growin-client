@@ -42,6 +42,7 @@ export const ENDPOINT = {
   },
   USER: {
     ME: "/api/v1/user/me",
+    WITHDRAWAL_VALIDATE: "/api/v1/user/me/withdrawal/validate",
     NICKNAME_CHECK: "/api/v1/user/nickname/check",
     LOCATION: "/api/v1/user/me/location",
     ACTIVE_PARTIES: "/api/v1/user/parties/participating",
@@ -63,5 +64,8 @@ export const ENDPOINT = {
         `/api/v1/chatroom/one-to-one/${chatroomId}`,
       GROUP: (chatroomId: number) => `/api/v1/chatroom/group/${chatroomId}`,
     },
+  },
+  FCM: {
+    TOKEN: "/api/v1/fcm/token",
   },
 };
