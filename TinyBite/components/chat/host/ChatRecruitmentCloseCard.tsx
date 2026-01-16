@@ -36,9 +36,10 @@ export const ChatRecruitmentCloseCard = ({
 
   const handleNavigateToChatRoom = () => {
     setShowModal(false);
-    queryClient.invalidateQueries({
-      queryKey: ["useGetGroupRoomDetailQuery", groupChatRoomId],
-    });
+    // queryClient.invalidateQueries({
+    //   queryKey: ["useGetGroupRoomDetailQuery", groupChatRoomId],
+    // });
+    queryClient.invalidateQueries();
   };
 
   return (

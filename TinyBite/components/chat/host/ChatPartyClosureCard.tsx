@@ -26,9 +26,10 @@ const ChatPartyClosureCard = ({
   const handleCloseChatRoom = async () => {
     await settleMutation.mutateAsync();
     if (settleMutation.isSuccess) {
-      queryClient.invalidateQueries({
-        queryKey: ["useGetGroupRoomDetailQuery", groupChatRoomId],
-      });
+      // queryClient.invalidateQueries({
+      //   queryKey: ["useGetGroupRoomDetailQuery", groupChatRoomId],
+      // });
+      queryClient.invalidateQueries();
     }
   };
 

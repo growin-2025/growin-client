@@ -23,9 +23,10 @@ export const useApproveJoinPartyMutation = (
       return postApproveJoinParty(partyId, participantId);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["getOnetoOneRoomDetail", chatroomId],
-      });
+      // queryClient.invalidateQueries({
+      //   queryKey: ["getOnetoOneRoomDetail", chatroomId],
+      // });
+      queryClient.invalidateQueries();
     },
     onError: () => {
       Toast.show({
@@ -55,9 +56,10 @@ export const useRejectJoinPartyMutation = (
       return postRejectJoinParty(partyId, participantId);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["getOnetoOneRoomDetail", chatroomId],
-      });
+      // queryClient.invalidateQueries({
+      //   queryKey: ["getOnetoOneRoomDetail", chatroomId],
+      // });
+      queryClient.invalidateQueries();
     },
     onError: () => {
       Toast.show({
@@ -86,9 +88,10 @@ export const useCompletePartyMutation = (
       return postCompleteParty(partyId);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["getOnetoOneRoomDetail", chatroomId],
-      });
+      // queryClient.invalidateQueries({
+      //   queryKey: ["useGetGroupRoomDetailQuery", chatroomId],
+      // });
+      queryClient.invalidateQueries();
     },
     onError: (error) => {
       Toast.show({
@@ -117,9 +120,10 @@ export const useSettlePartyMutation = (
       return postSettleParty(partyId);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["getOnetoOneRoomDetail", chatroomId],
-      });
+      // queryClient.invalidateQueries({
+      //   queryKey: ["useGetGroupRoomDetailQuery", chatroomId],
+      // });
+      queryClient.invalidateQueries();
     },
     onError: (error) => {
       Toast.show({
