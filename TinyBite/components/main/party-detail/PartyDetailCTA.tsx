@@ -1,6 +1,7 @@
 import { useRequestJoinParty } from "@/hooks/mutations/useParty";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { router } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -8,12 +9,14 @@ interface PartyDetailCTAProps {
   detailPartyId: number;
   isClosed?: boolean;
   isParticipating?: boolean;
+  groupChatRoomId?: number;
 }
 
 const PartyDetailCTA = ({
   detailPartyId,
   isClosed,
   isParticipating,
+  groupChatRoomId,
 }: PartyDetailCTAProps) => {
   const { mutate } = useRequestJoinParty();
 
@@ -28,7 +31,19 @@ const PartyDetailCTA = ({
   };
 
   const handleGoToChatPress = () => {
-    mutate(detailPartyId);
+    //groupChatRoomId가 있으면 그룹 채팅방으로 이동
+    if (groupChatRoomId) {
+      router.push({
+        pathname: "/(app)/chat/[id]",
+        params: {
+          id: groupChatRoomId.toString(),
+          roomType: "GROUP",
+        },
+      });
+    } else {
+      // 참여 요청
+      mutate(detailPartyId);
+    }
   };
 
   return (
