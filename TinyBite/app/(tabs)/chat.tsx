@@ -157,6 +157,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
+
   // 상단 SafeArea 배경색 (메인 색상)
   safeAreaTop: {
     backgroundColor: colors.main,
@@ -225,8 +226,7 @@ const styles = StyleSheet.create({
   separator: {
     height: 1,
     backgroundColor: colors.gray[4],
-    marginLeft: "10%",
-    marginRight: "10%",
+    marginHorizontal: 20,
   },
   // 빈 상태 컨테이너
   emptyContainer: {
