@@ -224,6 +224,8 @@ export default function PartyDetailScreen() {
           isClosed={partyDetail?.isClosed}
           isParticipating={partyDetail?.isParticipating}
           groupChatRoomId={partyDetail?.groupChatRoomId}
+          currentParticipants={partyDetail?.currentParticipants}
+          maxParticipants={partyDetail?.maxParticipants}
         />
       </View>
     </>

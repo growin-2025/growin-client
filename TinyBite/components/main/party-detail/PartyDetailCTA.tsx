@@ -4,12 +4,15 @@ import { textStyles } from "@/styles/typography/textStyles";
 import { router } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 
 interface PartyDetailCTAProps {
   detailPartyId: number;
   isClosed?: boolean;
   isParticipating?: boolean;
   groupChatRoomId?: number;
+  currentParticipants?: number;
+  maxParticipants?: number;
 }
 
 const PartyDetailCTA = ({
@@ -17,8 +20,16 @@ const PartyDetailCTA = ({
   isClosed,
   isParticipating,
   groupChatRoomId,
+  currentParticipants,
+  maxParticipants,
 }: PartyDetailCTAProps) => {
   const { mutate } = useRequestJoinParty();
+
+  // 모집 완료 여부 확인
+  const isCompleted =
+    currentParticipants !== undefined &&
+    maxParticipants !== undefined &&
+    currentParticipants >= maxParticipants;
 
   const getButtonText = () => {
     if (isClosed) {
@@ -31,6 +42,18 @@ const PartyDetailCTA = ({
   };
 
   const handleGoToChatPress = () => {
+    // 모집 완료된 파티인 경우 토스트 표시
+    if (isCompleted && !isParticipating) {
+      Toast.show({
+        type: "basicToast",
+        props: { text: "모집 완료된 파티입니다." },
+        position: "bottom",
+        bottomOffset: 133,
+        visibilityTime: 2000,
+      });
+      return;
+    }
+
     //groupChatRoomId가 있으면 그룹 채팅방으로 이동
     if (groupChatRoomId) {
       router.push({
