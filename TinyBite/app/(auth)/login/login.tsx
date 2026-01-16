@@ -7,10 +7,12 @@ import { ApiError } from "@/types/api.types";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import { StatusBar } from "expo-status-bar";
+import { useCallback } from "react";
 import {
+  BackHandler,
   Image,
   Platform,
   StyleSheet,
@@ -36,7 +38,7 @@ export default function LoginScreen() {
       if (data.signup) {
         login(data);
         await SecureStore.deleteItemAsync("googleIdToken");
-        router.dismissTo("/(tabs)");
+        router.dismissTo("/(app)/(tabs)");
       } else {
         router.push("/(auth)/signup/terms");
       }
@@ -56,6 +58,22 @@ export default function LoginScreen() {
       }
     },
   });
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        BackHandler.exitApp(); // 앱 종료
+        return true; // 기본 동작 막기
+      };
+
+      const subscription = BackHandler.addEventListener(
+        "hardwareBackPress",
+        onBackPress
+      );
+
+      return () => subscription.remove();
+    }, [])
+  );
 
   const handleGoogleLogin = async () => {
     await signOut();

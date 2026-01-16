@@ -1,7 +1,22 @@
 /**
+ * 필터 탭 타입 정의
+ */
+export type FilterTab = "전체" | "참여중인 파티" | "1:1 채팅";
+
+/**
  * 채팅방 타입
  */
-export type RoomType = "ONE_TO_ONE" | "Group";
+export type RoomType = "ONE_TO_ONE" | "GROUP";
+
+/**
+ * 채팅방 참여자 타입
+ */
+export type participantType = "HOST" | "PARTICIPANT";
+
+/**
+ * 파티 카테고리 타입
+ */
+export type PartyCategoryType = "delivery" | "grocery" | "essentials";
 
 // ============================================
 
@@ -47,40 +62,77 @@ export interface OneToOneChatCardSchema {
   unreadMessageCnt: number;
 }
 
+/**
+ * 1:1 채팅방 내부 detail 스키마
+ */
+export interface OneToOneChatDetailSchema {
+  chatRoomId: number;
+  roomType: "ONE_TO_ONE";
+  participantId: number;
+  participantType: participantType;
+  participantStatus: OneToOneChatStatusType;
+  partyId: number;
+  partyTitle: string;
+  targetName: string;
+
+  // HOST에게 포함되는 정보
+  targetProfileImage?: string;
+  targetLocation?: string;
+
+  // PARTICIPANT에게 포함되는 정보
+  // participantStatus가 APPROVED일 때만 한함
+  groupChatRoomId?: number;
+}
+
 // ============================================
 
 /**
- * 참여중인 파티 상태 태그 타입
+ * 그룹 채팅 상태 (백엔드 기준)
  */
-export type PartyStatusType = "모집 중" | "진행 중" | "파티 종료";
+export type GroupChatStatusType =
+  | "RECRUITING"
+  | "COMPLETED"
+  | "CLOSED"
+  | "CANCELLED";
 
 /**
- * 파티 카테고리 타입
+ * 그룹 채팅 상태 : 한글 매핑 객체 (UI 전용)
  */
-export type PartyCategoryType = "delivery" | "grocery" | "essentials";
+export const GroupChatStatusLabelMap: Record<GroupChatStatusType, string> = {
+  RECRUITING: "모집 중",
+  COMPLETED: "진행 중",
+  CLOSED: "파티 종료",
+  CANCELLED: "파티 취소",
+};
 
 /**
- * 채팅 아이템 인터페이스 (공통 + 선택적 필드)
+ * 그룹 채팅 카드 스키마
  */
-export type ChatItemType = {
-  // 1. 공통 필드 (어떤 채팅이든 무조건 있음)
-  id: string;
-  name?: string;
-  lastMessage: string;
+export interface GroupChatCardSchema {
+  chatRoomId: number;
   roomType: RoomType;
-  timestamp: string;
-  unreadCount?: number;
-  status: OneToOneChatStatusType | PartyStatusType | null;
-  partyTitle?: string;
+  recentTime: string; // "2026-01-10T23:40:00"
+  partyTitle: string;
+  partyImage: string;
+  partyStatus: GroupChatStatusType;
+  recentMessage: string;
+  unreadMessageCnt: number;
+  currentParticipantCnt: number;
+}
 
-  // 2. 1:1 채팅 전용
-  opponentProfileImage?: any; //추후에 프로필 이미지 추가 시 url로 수정
-  myProfileImage?: any; //추후에 프로필 이미지 추가 시 url로 수정
-
-  // 3. 파티 채팅 전용
-  partyImage?: any; //추후에 파티 이미지 추가 시 url로 수정
-  memberCount?: number;
-  category?: PartyCategoryType;
+/**
+ * 채팅방 내부 detail 스키마
+ */
+export type GroupChatDetailSchema = {
+  groupChatRoomId: number;
+  roomType: "GROUP";
+  partyId: number;
+  partyTitle: string;
+  participantType: participantType;
+  status: GroupChatStatusType;
+  currentParticipantCnt: number;
+  maxParticipantCnt: number;
+  formattedPartyCnt: string;
 };
 
 // ============================================
@@ -131,7 +183,7 @@ export interface TextMessage extends BaseMessage {
 
   senderId: number;
   nickname: string;
-  isMine: boolean;
+  // isMine: boolean;
 
   text: string;
 }
@@ -146,7 +198,7 @@ export interface ImageUrlMessage extends BaseMessage {
 
   senderId: number;
   nickname: string;
-  isMine: boolean;
+  // isMine: boolean;
 
   imageUrl: string;
 }

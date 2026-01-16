@@ -15,7 +15,7 @@ export const useRequestJoinParty = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["getOnetoOneRoomList"] });
       router.push({
-        pathname: "/chat/[id]",
+        pathname: "/(app)/chat/[id]",
         params: {
           id: data,
           roomType: "ONE_TO_ONE",

@@ -1,10 +1,13 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { PartyStatusType } from "@/types/chat.types";
+import {
+  GroupChatStatusLabelMap,
+  GroupChatStatusType,
+} from "@/types/chat.types";
 import { StyleSheet, Text, View } from "react-native";
 
 export interface PartyStatusTagProps {
-  status: PartyStatusType;
+  status: GroupChatStatusType;
 }
 
 /**
@@ -16,21 +19,29 @@ export interface PartyStatusTagProps {
 const PartyStatusTag = ({ status }: PartyStatusTagProps) => {
   // 상태별 스타일을 객체로 정의
   const statusStyles = {
-    "모집 중": {
+    RECRUITING: {
+      // 모집 중
       container: styles.statusTagRecruiting,
       text: styles.statusTagTextRecruiting,
     },
-    "진행 중": {
+    COMPLETED: {
+      // 진행 중
       container: styles.statusTagOngoing,
       text: styles.statusTagTextOngoing,
     },
-    "파티 종료": {
+    CLOSED: {
+      // 파티 종료
       container: styles.statusTagEnded,
       text: styles.statusTagTextEnded,
     },
+    CANCELLED: {
+      // 파티 취소
+      container: styles.statusTagCancelled,
+      text: styles.statusTagTextCancelled,
+    },
   };
 
-  const currentStyle = statusStyles[status] || statusStyles["모집 중"];
+  const currentStyle = statusStyles[status] || statusStyles["RECRUITING"];
 
   return (
     <View style={[styles.statusTag, currentStyle.container]}>
@@ -41,7 +52,7 @@ const PartyStatusTag = ({ status }: PartyStatusTagProps) => {
           currentStyle.text,
         ]}
       >
-        {status}
+        {GroupChatStatusLabelMap[status]}
       </Text>
     </View>
   );
@@ -68,6 +79,10 @@ const styles = StyleSheet.create({
   statusTagEnded: {
     backgroundColor: colors.gray[4],
   },
+  // 파티 취소 상태 태그
+  statusTagCancelled: {
+    backgroundColor: colors.red[1],
+  },
   // 상태 태그 텍스트 기본 스타일
   statusTagText: {},
   // 모집 중 상태 태그 텍스트
@@ -81,5 +96,9 @@ const styles = StyleSheet.create({
   // 파티 종료 상태 태그 텍스트
   statusTagTextEnded: {
     color: colors.gray[1],
+  },
+  // 파티 취소 상태 태그 텍스트
+  statusTagTextCancelled: {
+    color: colors.red[1],
   },
 });

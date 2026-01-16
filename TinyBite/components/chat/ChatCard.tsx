@@ -1,18 +1,19 @@
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import {
+  GroupChatCardSchema,
+  GroupChatStatusType,
   OneToOneChatCardSchema,
   OneToOneChatStatusType,
-  PartyStatusType,
 } from "@/types/chat.types";
 import { useRouter } from "expo-router";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ChatCardImage from "./ChatCardImage";
 import OneOnOneChatStatusTag from "./OneOnOneChatStatusTag";
 import PartyStatusTag from "./PartyStatusTag";
 
 interface ChatItemProps {
-  item: OneToOneChatCardSchema;
+  item: OneToOneChatCardSchema | GroupChatCardSchema;
 }
 
 /**
@@ -27,15 +28,18 @@ const ChatItem = ({ item }: ChatItemProps) => {
   // 채팅 타입 확인 (1:1 채팅인지 파티 채팅인지)
   const isOneOnOne = item.roomType === "ONE_TO_ONE";
 
+  const oneToOneItem = item as OneToOneChatCardSchema;
+  const groupItem = item as GroupChatCardSchema;
+
   const handleChatPress = () => {
     router.navigate({
-      pathname: "/chat/[id]",
+      pathname: "/(app)/chat/[id]",
       params: {
         id: item.chatRoomId,
         roomType: item.roomType,
-        status: item.status,
-        partyTitle: item.partyTitle,
-        targetName: item.targetName,
+        // status: item.status,
+        // partyTitle: item.partyTitle,
+        // targetName: item.targetName,
       },
     });
   };
@@ -57,7 +61,7 @@ const ChatItem = ({ item }: ChatItemProps) => {
             ellipsizeMode="tail"
           >
             {/* 1:1 채팅은 사용자 이름, 파티 채팅은 파티 제목 표시 */}
-            {isOneOnOne ? item.targetName : item.partyTitle}
+            {isOneOnOne ? oneToOneItem.targetName : groupItem.partyTitle}
           </Text>
           <Text style={[styles.timestamp, textStyles.body12_M135]}>
             {item.recentTime}
@@ -88,28 +92,29 @@ const ChatItem = ({ item }: ChatItemProps) => {
         {/* 태그 영역: 상태 태그 + 파티 제목(1:1) / 인원수(파티) */}
         <View style={styles.tagsContainer}>
           {/* 상태 태그: RoomType에 따라 적절한 태그 컴포넌트 사용 */}
-          {item.status &&
-            (isOneOnOne ? (
-              // 1:1 채팅 상태 태그 (승인 대기, 승인 거절, 승인 완료, 승인 요청, 파티 종료)
-              <OneOnOneChatStatusTag
-                status={item.status as OneToOneChatStatusType}
-              />
-            ) : (
-              // 파티 채팅 상태 태그 (모집 중, 진행 중, 파티 종료)
-              <PartyStatusTag status={item.status as PartyStatusType} />
-            ))}
+          {isOneOnOne ? (
+            // 1:1 채팅 상태 태그 (승인 대기, 승인 거절, 승인 완료, 승인 요청, 파티 종료)
+            <OneOnOneChatStatusTag
+              status={oneToOneItem.status as OneToOneChatStatusType}
+            />
+          ) : (
+            // 파티 채팅 상태 태그 (모집 중, 진행 중, 파티 종료)
+            <PartyStatusTag
+              status={groupItem.partyStatus as GroupChatStatusType}
+            />
+          )}
           {/* 1:1 채팅일 때 파티 제목 표시 */}
-          {isOneOnOne && item.partyTitle && (
+          {isOneOnOne && (
             <Text
               style={[styles.partyTitle, textStyles.body13_SB135]}
               numberOfLines={1}
               ellipsizeMode="tail"
             >
-              {item.partyTitle}
+              {oneToOneItem.partyTitle}
             </Text>
           )}
           {/* 파티 채팅일 때 인원수 표시 */}
-          {/* {!isOneOnOne && item.memberCount !== undefined && (
+          {!isOneOnOne && (
             <View style={styles.memberCountContainer}>
               <Image
                 source={require("@/assets/images/chat/member-count.png")}
@@ -117,10 +122,10 @@ const ChatItem = ({ item }: ChatItemProps) => {
                 resizeMode="contain"
               />
               <Text style={[styles.memberCount, textStyles.body13_SB135]}>
-                {item.memberCount}
+                {groupItem.currentParticipantCnt}
               </Text>
             </View>
-          )} */}
+          )}
         </View>
       </View>
     </TouchableOpacity>
@@ -140,6 +145,7 @@ const styles = StyleSheet.create({
   // 프로필 이미지 컨테이너
   profileContainer: {
     marginRight: 16,
+    justifyContent: "center",
   },
   // 채팅 컨텐츠 영역
   chatContent: {
@@ -150,11 +156,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    gap: 4,
   },
   // 사용자 이름 / 파티 제목
   userName: {
+    flexShrink: 1,
     color: colors.black,
-    maxWidth: "80%",
   },
   // 타임스탬프
   timestamp: {

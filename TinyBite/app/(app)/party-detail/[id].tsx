@@ -43,9 +43,7 @@ export default function PartyDetailScreen() {
   const queryClient = useQueryClient();
   const { id } = useLocalSearchParams<{ id: string }>();
   const partyId = id ? parseInt(id, 10) : 0;
-  const setInitialPartyInfo = useEditPartyStore(
-    (state) => state.setInitialPartyInfo
-  );
+  const setOriginalInfo = useEditPartyStore((state) => state.setOriginalInfo);
 
   // 현재 로그인한 사용자 정보 조회
   const { user } = useAuthStore();
@@ -93,21 +91,12 @@ export default function PartyDetailScreen() {
   // 데이터를 성공적으로 받아왔을 시 Store 업데이트 (렌더링 중 업데이트 방지)
   useEffect(() => {
     if (isSuccess && partyDetail) {
-      setInitialPartyInfo(partyDetail);
+      setOriginalInfo(partyDetail);
     }
-  }, [isSuccess, partyDetail, setInitialPartyInfo]);
-
-  // 로딩 중일 때
-  if (isLoading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={colors.main} />
-      </View>
-    );
-  }
+  }, [isSuccess, partyDetail, setOriginalInfo]);
 
   // 에러 발생 시
-  if (error || !partyDetail) {
+  if (error && !isLoading) {
     return (
       <ConfirmModal
         visible={true}
@@ -115,6 +104,15 @@ export default function PartyDetailScreen() {
         singleButtonText="닫기"
         onClose={() => router.back()}
       />
+    );
+  }
+
+  // 로딩 중일 때
+  if (isLoading || !partyDetail) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={colors.main} />
+      </View>
     );
   }
 
@@ -158,7 +156,7 @@ export default function PartyDetailScreen() {
                 queryClient.invalidateQueries({
                   queryKey: ["getHostingParties"],
                 });
-                router.replace("/(tabs)");
+                router.replace("/(app)/(tabs)");
                 return true;
               } catch (error: any) {
                 // 400(이미 참여자가 있음 / 권한 없음) 상태 코드인 경우 에러 로그 출력하지 않음
@@ -225,7 +223,7 @@ export default function PartyDetailScreen() {
           detailPartyId={partyId}
           isClosed={partyDetail?.isClosed}
           isParticipating={partyDetail?.isParticipating}
-          pricePerPerson={partyDetail?.pricePerPerson}
+          groupChatRoomId={partyDetail?.groupChatRoomId}
         />
       </View>
     </>

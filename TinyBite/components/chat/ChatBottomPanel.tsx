@@ -59,7 +59,7 @@ const ChatBottomPanel = ({
 
       // 미리보기 화면으로 이동
       router.push({
-        pathname: "/gallery-preview",
+        pathname: "/(app)/gallery-preview",
         params: {
           uri: selectedImage.uri,
           fileName: fileName,
@@ -81,7 +81,7 @@ const ChatBottomPanel = ({
 
     // 카메라 화면으로 이동
     setIsPanelVisible(false);
-    router.push("/camera");
+    router.push("/(app)/camera");
   };
 
   useEffect(() => {
@@ -134,7 +134,7 @@ const ChatBottomPanel = ({
           const { granted } = await requestPermission();
           setShowCameraModal(false);
           if (granted) {
-            router.push("/camera");
+            router.push("/(app)/camera");
           }
         }}
       />

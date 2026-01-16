@@ -1,11 +1,12 @@
 import { getActiveParties, getHostingParties } from "@/api/partyApi";
 import MainCard from "@/components/main/MainCard";
+import { useUserCoords } from "@/hooks/useUserCoords";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import { PartyItem } from "@/types/party.types";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 type TabType = "active" | "hosting";
@@ -18,13 +19,22 @@ type TabType = "active" | "hosting";
 const MyPartyList = () => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabType>("active");
+  const { coords, refresh: fetchCoords } = useUserCoords();
+
+  // 컴포넌트 마운트 시 위치 정보 가져오기
+  useEffect(() => {
+    if (!coords) {
+      fetchCoords();
+    }
+  }, []);
 
   // 참여중인 파티 리스트 조회
   const { data: activeParties = [], isLoading: isLoadingActive } = useQuery<
     PartyItem[]
   >({
     queryKey: ["getActiveParties"],
-    queryFn: getActiveParties,
+    queryFn: () => getActiveParties(coords?.latitude, coords?.longitude),
+    enabled: activeTab === "active",
   });
 
   // 호스팅 중인 파티 리스트 조회
@@ -32,7 +42,7 @@ const MyPartyList = () => {
     PartyItem[]
   >({
     queryKey: ["getHostingParties"],
-    queryFn: getHostingParties,
+    queryFn: () => getHostingParties(coords?.latitude, coords?.longitude),
     enabled: activeTab === "hosting",
   });
 
@@ -112,7 +122,7 @@ const MyPartyList = () => {
               containerStyle={styles.mypageCard}
               onPress={() =>
                 router.push({
-                  pathname: "/party-detail/[id]" as any,
+                  pathname: "/(app)/party-detail/[id]" as any,
                   params: { id: item.partyId.toString() },
                 })
               }

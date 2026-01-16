@@ -68,7 +68,7 @@ export default function Index() {
       // 5. 유저 있음 → 저장 후 메인
       if (user) {
         setUser(user);
-        router.replace("/(tabs)");
+        router.replace("/(app)/(tabs)");
       }
     };
 

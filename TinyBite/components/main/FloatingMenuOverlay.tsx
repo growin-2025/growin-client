@@ -48,7 +48,7 @@ const FloatingMenuOverlay = ({
                 onPress={() => {
                   setIsMenuOpen(false);
                   router.navigate({
-                    pathname: "/party/create/[type]",
+                    pathname: "/(app)/party/create/[type]",
                     params: { type: "DELIVERY" },
                   });
                 }}
@@ -69,7 +69,7 @@ const FloatingMenuOverlay = ({
                 onPress={() => {
                   setIsMenuOpen(false);
                   router.navigate({
-                    pathname: "/party/create/[type]",
+                    pathname: "/(app)/party/create/[type]",
                     params: { type: "HOUSEHOLD" },
                   });
                 }}
@@ -90,7 +90,7 @@ const FloatingMenuOverlay = ({
                 onPress={() => {
                   setIsMenuOpen(false);
                   router.navigate({
-                    pathname: "/party/create/[type]",
+                    pathname: "/(app)/party/create/[type]",
                     params: { type: "GROCERY" },
                   });
                 }}

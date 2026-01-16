@@ -1,10 +1,17 @@
 import ChatCard from "@/components/chat/ChatCard";
-import { useGetOnetoOneRoomListQuery } from "@/hooks/queries/useChatRoom";
+import {
+  useGetGroupRoomListQuery,
+  useGetOnetoOneRoomListQuery,
+} from "@/hooks/queries/useChatRoom";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
-import { OneToOneChatCardSchema } from "@/types/chat.types";
+import {
+  FilterTab,
+  GroupChatCardSchema,
+  OneToOneChatCardSchema,
+} from "@/types/chat.types";
 import { useFocusEffect } from "expo-router";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
   FlatList,
   Image,
@@ -15,10 +22,24 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+// 필터 탭 목록
+const filters: FilterTab[] = ["전체", "참여중인 파티", "1:1 채팅"];
+
 /**
- * 필터 탭 타입 정의
+ * 채팅 아이템 렌더링 함수
  */
-type FilterTab = "전체" | "참여중인 파티" | "1:1 채팅";
+const renderChatItem = ({
+  item,
+}: {
+  item: OneToOneChatCardSchema | GroupChatCardSchema;
+}) => {
+  return <ChatCard item={item} />;
+};
+
+/**
+ * 아이템 구분선 컴포넌트 (80% 너비)
+ */
+const ItemSeparator = () => <View style={styles.separator} />;
 
 /**
  * 채팅 화면 컴포넌트
@@ -27,51 +48,31 @@ type FilterTab = "전체" | "참여중인 파티" | "1:1 채팅";
  * - 채팅 리스트: 사용자별 채팅 아이템 표시
  */
 export default function ChatScreen() {
-  const { data: onetoOneRoomList = [], refetch } =
-    useGetOnetoOneRoomListQuery();
+  const [selectedFilter, setSelectedFilter] = useState<FilterTab>("전체");
+
+  const groupQuery = useGetGroupRoomListQuery();
+  const oneToOneQuery = useGetOnetoOneRoomListQuery();
 
   useFocusEffect(
     useCallback(() => {
-      refetch();
-    }, [refetch])
+      groupQuery.refetch();
+      oneToOneQuery.refetch();
+    }, [])
   );
 
-  // 선택된 필터 탭 상태
-  const [selectedFilter, setSelectedFilter] = useState<FilterTab>("전체");
-
-  // 필터 탭 목록
-  const filters: FilterTab[] = ["전체", "참여중인 파티", "1:1 채팅"];
+  const mergedData = useMemo(() => {
+    return [...(groupQuery.data ?? []), ...(oneToOneQuery.data ?? [])];
+  }, [groupQuery.data, oneToOneQuery.data]);
 
   /**
    * 필터에 맞는 데이터 필터링
    */
-  const filteredData: OneToOneChatCardSchema[] = onetoOneRoomList.filter(
-    (item) => {
+  const filteredData: (OneToOneChatCardSchema | GroupChatCardSchema)[] =
+    mergedData.filter((item) => {
       if (selectedFilter === "전체") return true;
+      if (selectedFilter === "참여중인 파티") return item.roomType === "GROUP";
       if (selectedFilter === "1:1 채팅") return item.roomType === "ONE_TO_ONE";
-      if (selectedFilter === "참여중인 파티") return item.roomType === "Group";
-      return true;
-    }
-  );
-  // .map((item) => ({
-  //   id: item.chatRoomId,
-  //   lastMessage: item.recentMessage,
-  //   timestamp: item.recentTime,
-  //   targetName: item.partyTitle || "", // Add missing required property
-  //   ...item,
-  // }));
-
-  /**
-   * 채팅 아이템 렌더링 함수
-   */
-  const renderChatItem = ({ item }: { item: OneToOneChatCardSchema }) => {
-    return <ChatCard item={item} />;
-  };
-
-  /**
-   * 아이템 구분선 컴포넌트 (80% 너비)
-   */
-  const ItemSeparator = () => <View style={styles.separator} />;
+    });
 
   return (
     <View style={styles.container}>
@@ -156,6 +157,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
+
   // 상단 SafeArea 배경색 (메인 색상)
   safeAreaTop: {
     backgroundColor: colors.main,
@@ -224,8 +226,7 @@ const styles = StyleSheet.create({
   separator: {
     height: 1,
     backgroundColor: colors.gray[4],
-    marginLeft: "10%",
-    marginRight: "10%",
+    marginHorizontal: 20,
   },
   // 빈 상태 컨테이너
   emptyContainer: {

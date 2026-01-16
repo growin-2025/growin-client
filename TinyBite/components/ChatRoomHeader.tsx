@@ -2,11 +2,12 @@ import OneOnOneChatStatusTag from "@/components/chat/OneOnOneChatStatusTag";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
 import {
+  GroupChatDetailSchema,
+  GroupChatStatusType,
+  OneToOneChatDetailSchema,
   OneToOneChatStatusType,
-  PartyStatusType,
-  RoomType,
 } from "@/types/chat.types";
-import { router, useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PartyStatusTag from "./chat/PartyStatusTag";
@@ -14,10 +15,12 @@ import PartyStatusTag from "./chat/PartyStatusTag";
 const CHEVRON_LEFT_ICON = require("@/assets/images/chevron/chevron-left-36-gray.png");
 const MEMBER_COUNT = require("@/assets/images/chat/member-count.png");
 
-const ChatRoomHeader = () => {
-  const { roomType } = useLocalSearchParams<{
-    roomType: RoomType;
-  }>();
+interface ChatRoomHeaderProps {
+  roomDetail: OneToOneChatDetailSchema | GroupChatDetailSchema;
+}
+
+const ChatRoomHeader = ({ roomDetail }: ChatRoomHeaderProps) => {
+  // const data = roomDetail.roomType === 'ONE_TO_ONE' ? roomDetail as OneToOneChatDetailSchema : roomDetail as GroupChatDetailSchema;
 
   return (
     <SafeAreaView style={styles.safeAreaView} edges={["top"]}>
@@ -26,7 +29,7 @@ const ChatRoomHeader = () => {
           <Image style={styles.imageChevron} source={CHEVRON_LEFT_ICON} />
         </TouchableOpacity>
 
-        {roomType === "ONE_TO_ONE" ? (
+        {roomDetail.roomType === "ONE_TO_ONE" ? (
           <View style={styles.headerContent}>
             <View style={styles.infoWrapper}>
               <Text
@@ -34,14 +37,16 @@ const ChatRoomHeader = () => {
                 numberOfLines={1}
                 ellipsizeMode="tail"
               >
-                .임시 타켓 이름.
+                {roomDetail.targetName}
               </Text>
               <OneOnOneChatStatusTag
-                status={"PENDING" as OneToOneChatStatusType} /* // 임시 상태 */
+                status={
+                  `${roomDetail.participantStatus}` as OneToOneChatStatusType
+                }
               />
             </View>
             <Text style={[styles.subTitle, textStyles.body15_SB135]}>
-              .임시 파티 제목.
+              {roomDetail.partyTitle}
             </Text>
           </View>
         ) : (
@@ -52,17 +57,17 @@ const ChatRoomHeader = () => {
                 numberOfLines={1}
                 ellipsizeMode="tail"
               >
-                .임시 파티 제목.
+                {roomDetail.partyTitle}
               </Text>
             </View>
             <View style={styles.infoWrapper}>
               <PartyStatusTag
-                status={"모집 중" as PartyStatusType} /* // 임시 상태 */
+                status={`${roomDetail.status}` as GroupChatStatusType}
               />
               <View style={styles.members}>
                 <Image style={styles.imageUser} source={MEMBER_COUNT} />
                 <Text style={[styles.userCount, textStyles.body15_SB135]}>
-                  .임시 명수.
+                  {roomDetail.currentParticipantCnt}
                 </Text>
               </View>
             </View>

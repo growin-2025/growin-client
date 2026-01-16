@@ -1,18 +1,22 @@
 import { colors } from "@/styles/colors";
-import { OneToOneChatCardSchema, PartyCategoryType } from "@/types/chat.types";
+import {
+  GroupChatCardSchema,
+  OneToOneChatCardSchema,
+} from "@/types/chat.types";
+import { parseProfileImage } from "@/utils/parseProfileImage";
 import { Image, StyleSheet, View } from "react-native";
 
 /**
  * 카테고리별 아이콘 매핑
  */
-const categoryIcons: Record<PartyCategoryType, any> = {
-  delivery: require("@/assets/images/main/category/delivery.png"),
-  grocery: require("@/assets/images/main/category/grocery.png"),
-  essentials: require("@/assets/images/main/category/essentials.png"),
-};
+// const categoryIcons: Record<PartyCategoryType, any> = {
+//   delivery: require("@/assets/images/main/category/delivery.png"),
+//   grocery: require("@/assets/images/main/category/grocery.png"),
+//   essentials: require("@/assets/images/main/category/essentials.png"),
+// };
 
 interface ChatItemImageProps {
-  item: OneToOneChatCardSchema;
+  item: OneToOneChatCardSchema | GroupChatCardSchema;
 }
 
 /**
@@ -24,13 +28,17 @@ const ChatItemImage = ({ item }: ChatItemImageProps) => {
   const isOneOnOne = item.roomType === "ONE_TO_ONE";
 
   if (isOneOnOne) {
+    const oneToOneItem = item as OneToOneChatCardSchema;
+
     return (
       <View style={styles.overlappingProfilesContainer}>
         {/* 상대방 프로필 이미지 (왼쪽) */}
         <View style={styles.opponentProfileWrapper}>
-          {item.targetProfileImage ? (
+          {oneToOneItem.targetProfileImage ? (
             <Image
-              source={{ uri: item.targetProfileImage }}
+              source={{
+                uri: parseProfileImage(oneToOneItem.targetProfileImage),
+              }}
               style={styles.profileImageCircle}
               resizeMode="cover"
             />
@@ -40,9 +48,11 @@ const ChatItemImage = ({ item }: ChatItemImageProps) => {
         </View>
         {/* 내 프로필 이미지 (오른쪽, 겹침) */}
         <View style={styles.myProfileWrapper}>
-          {item.myProfileImage ? (
+          {oneToOneItem.myProfileImage ? (
             <Image
-              source={{ uri: item.myProfileImage }}
+              source={{
+                uri: parseProfileImage(oneToOneItem.myProfileImage),
+              }}
               style={styles.profileImageCircle}
               resizeMode="cover"
             />
@@ -54,27 +64,28 @@ const ChatItemImage = ({ item }: ChatItemImageProps) => {
     );
   }
 
-  // return (
-  //   <View style={styles.partyImageWrapper}>
-  //     {item.partyImage ? (
-  //       <Image
-  //         source={{ uri: item.partyImage }}
-  //         style={styles.partyImage}
-  //         resizeMode="cover"
-  //       />
-  //     ) : (
-  //       <View style={styles.partyImagePlaceholder}>
-  //         {item.category && categoryIcons[item.category] ? (
-  //           <Image
-  //             source={categoryIcons[item.category]}
-  //             style={styles.categoryIcon}
-  //             resizeMode="contain"
-  //           />
-  //         ) : null}
-  //       </View>
-  //     )}
-  //   </View>
-  // );
+  const groupItem = item as GroupChatCardSchema;
+  return (
+    <View style={styles.partyImageWrapper}>
+      {groupItem.partyImage ? (
+        <Image
+          source={{ uri: groupItem.partyImage }}
+          style={styles.partyImage}
+          resizeMode="cover"
+        />
+      ) : (
+        <View style={styles.partyImagePlaceholder}>
+          {/* {groupItem.category && categoryIcons[groupItem.category] ? (
+            <Image
+              source={categoryIcons[groupItem.category]}
+              style={styles.categoryIcon}
+              resizeMode="contain"
+            />
+          ) : null} */}
+        </View>
+      )}
+    </View>
+  );
 };
 
 export default ChatItemImage;

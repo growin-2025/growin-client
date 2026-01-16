@@ -28,7 +28,7 @@ export type PartyItem = {
   pricePerPerson: number;
   participantStatus: string;
   distance: string;
-  distanceKm: number;
+  distanceKm: string;
   timeAgo: string;
   isClosed: boolean;
   category: PartyCategory;
@@ -121,6 +121,7 @@ export type PartyDetail = {
   images: string[];
   isClosed: boolean;
   isParticipating: boolean;
+  groupChatRoomId?: number; // 참여중일 때만 포함됨
 };
 
 /**

@@ -20,7 +20,7 @@ export interface CreatingPartyState {
   partyTitle: string;
   totalAmount: string;
   numberOfPeople: number;
-  pickUpLocation: PickupLocation;
+  pickUpLocation: PickupLocation | null;
   detailedDescription: string;
   productLink: string;
   addPhoto: (uri: string, mimeType: string, fileName: string) => void;
@@ -29,7 +29,7 @@ export interface CreatingPartyState {
   setPartyTitle: (title: string) => void;
   setTotalAmount: (amount: string) => void;
   setNumberOfPeople: (number: number) => void;
-  setPickUpLocation: (location: PickupLocation) => void;
+  setPickUpLocation: (location: PickupLocation | null) => void;
   setDetailedDescription: (description: string) => void;
   setProductLink: (link: string) => void;
   resetCreateParty: () => void;
@@ -42,11 +42,7 @@ export const useCreatingPartyStore = create<CreatingPartyState>((set, get) => ({
   partyTitle: "",
   totalAmount: "",
   numberOfPeople: 2,
-  pickUpLocation: {
-    place: "",
-    pickupLatitude: 0,
-    pickupLongitude: 0,
-  },
+  pickUpLocation: null,
   detailedDescription: "",
   productLink: "",
   addPhoto: (uri: string, mimeType: string, fileName: string) => {
@@ -103,13 +99,15 @@ export const useCreatingPartyStore = create<CreatingPartyState>((set, get) => ({
       numberOfPeople: number,
     }));
   },
-  setPickUpLocation: (location: PickupLocation) => {
+  setPickUpLocation: (location: PickupLocation | null) => {
     set(() => ({
-      pickUpLocation: {
-        place: location.place,
-        pickupLatitude: location.pickupLatitude,
-        pickupLongitude: location.pickupLongitude,
-      },
+      pickUpLocation: location
+        ? {
+            place: location.place,
+            pickupLatitude: location.pickupLatitude,
+            pickupLongitude: location.pickupLongitude,
+          }
+        : null,
     }));
   },
   setDetailedDescription: (description: string) => {
@@ -130,11 +128,7 @@ export const useCreatingPartyStore = create<CreatingPartyState>((set, get) => ({
       partyTitle: "",
       totalAmount: "",
       numberOfPeople: 2,
-      pickUpLocation: {
-        place: "중구 명동",
-        pickupLatitude: 37.55103512680912,
-        pickupLongitude: 126.9254146711746,
-      },
+      pickUpLocation: null,
       detailedDescription: "",
       productLink: "",
     }));

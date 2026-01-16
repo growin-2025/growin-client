@@ -1,17 +1,36 @@
 import ConfirmModal from "@/components/ConfirmModal";
+import { useSettlePartyMutation } from "@/hooks/mutations/useChat";
 import { colors } from "@/styles/colors";
 import { textStyles } from "@/styles/typography/textStyles";
+import { useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const GROUP_ICON = require("@/assets/images/chat/group-icon.png");
 const BRAND_ICON = require("@/assets/images/chat/brand-logo-50.png");
 
-const ChatPartyClosureCard = () => {
+interface ChatPartyClosureCardProps {
+  partyId: number;
+  groupChatRoomId: number;
+}
+
+const ChatPartyClosureCard = ({
+  partyId,
+  groupChatRoomId,
+}: ChatPartyClosureCardProps) => {
+  const queryClient = useQueryClient();
   const [showModal, setShowModal] = useState(false);
 
-  const handleCloseChatRoom = () => {
-    console.log("종료하기");
+  const settleMutation = useSettlePartyMutation(partyId, groupChatRoomId);
+
+  const handleCloseChatRoom = async () => {
+    await settleMutation.mutateAsync();
+    if (settleMutation.isSuccess) {
+      // queryClient.invalidateQueries({
+      //   queryKey: ["useGetGroupRoomDetailQuery", groupChatRoomId],
+      // });
+      queryClient.invalidateQueries();
+    }
   };
 
   return (

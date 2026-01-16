@@ -77,12 +77,16 @@ export default function PartyPlaceSearch() {
   };
 
   const onPressDone = () => {
-    const locationData: PickupLocation = {
-      place: selectedItem?.place_name!,
-      pickupLatitude: parseFloat(selectedItem?.y!),
-      pickupLongitude: parseFloat(selectedItem?.x!),
-    };
-    setPickUpLocation(locationData);
+    if (selectedItem) {
+      const locationData: PickupLocation = {
+        place: selectedItem.place_name,
+        pickupLatitude: parseFloat(selectedItem.y),
+        pickupLongitude: parseFloat(selectedItem.x),
+      };
+      setPickUpLocation(locationData);
+    } else {
+      setPickUpLocation(null);
+    }
     router.back();
   };
 

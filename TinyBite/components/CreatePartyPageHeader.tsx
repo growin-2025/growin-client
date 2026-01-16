@@ -8,13 +8,22 @@ const CHEVRON_LEFT_ICON = require("@/assets/images/chevron/chevron-left-36-gray.
 
 interface CreatePartyPageHeaderProps {
   title: string;
+  action?: () => void;
 }
 
-const CreatePartyPageHeader = ({ title }: CreatePartyPageHeaderProps) => {
+const CreatePartyPageHeader = ({
+  title,
+  action,
+}: CreatePartyPageHeaderProps) => {
   return (
     <SafeAreaView style={styles.safeAreaView} edges={["top"]}>
       <View style={styles.container}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity
+          onPress={() => {
+            action?.();
+            router.back();
+          }}
+        >
           <Image style={styles.image} source={CHEVRON_LEFT_ICON} />
         </TouchableOpacity>
 

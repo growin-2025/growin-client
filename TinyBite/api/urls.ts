@@ -28,6 +28,14 @@ export const ENDPOINT = {
     SEARCH_LOG: "/api/parties/search/log",
     SEARCH_LOG_DELETE: (keyword: string) =>
       `/api/parties/search/log/${keyword}`,
+    PARTICIPANTS: {
+      APPROVE: (partyId: number, participantId: number) =>
+        `/api/parties/${partyId}/participants/${participantId}/approve`,
+      REJECT: (partyId: number, participantId: number) =>
+        `/api/parties/${partyId}/participants/${participantId}/reject`,
+    },
+    COMPLETE: (partyId: number) => `/api/parties/${partyId}/complete`,
+    SETTLE: (partyId: number) => `/api/parties/${partyId}/settle`,
   },
   FILE: {
     UPLOAD_FILE: "api/v1/file/upload",
@@ -47,8 +55,15 @@ export const ENDPOINT = {
     WS_SEND: "/publish/send",
   },
   CHAT_ROOM: {
+    // 채팅방 리스트 조회
     ONE_TO_ONE: "/api/v1/chatroom/one-to-one",
     GROUP: "/api/v1/chatroom/group",
+    // 채팅방 정보 조회
+    DETAIL: {
+      ONE_TO_ONE: (chatroomId: number) =>
+        `/api/v1/chatroom/one-to-one/${chatroomId}`,
+      GROUP: (chatroomId: number) => `/api/v1/chatroom/group/${chatroomId}`,
+    },
   },
   FCM: {
     TOKEN: "/api/v1/fcm/token",
