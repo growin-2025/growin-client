@@ -134,6 +134,17 @@ export default function PartyCreateScreen() {
   };
 
   const showCorrectLinkToast = () => {
+    if (!isValid) {
+      Toast.show({
+        type: "basicToast",
+        props: { text: "필수 값을 채워주세요." },
+        position: "bottom",
+        bottomOffset: 133,
+        visibilityTime: 2000,
+      });
+      return;
+    }
+
     Toast.show({
       type: "basicToast",
       props: { text: "올바른 URL 형식으로 입력해주세요." },
@@ -161,9 +172,9 @@ export default function PartyCreateScreen() {
       totalPrice: Number(totalAmount),
       maxParticipants: numberOfPeople,
       pickupLocation: {
-        place: pickUpLocation.place,
-        pickupLatitude: pickUpLocation.pickupLatitude,
-        pickupLongitude: pickUpLocation.pickupLongitude,
+        place: pickUpLocation!.place,
+        pickupLatitude: pickUpLocation!.pickupLatitude,
+        pickupLongitude: pickUpLocation!.pickupLongitude,
       },
       ...(photoStringList && { images: photoStringList }),
       ...(productLink && { productLink }),
@@ -177,7 +188,7 @@ export default function PartyCreateScreen() {
     <>
       <StatusBar style="dark" />
       <View style={styles.container}>
-        <CreatePartyPageHeader title={title} />
+        <CreatePartyPageHeader title={title} action={resetCreateParty} />
         <View style={{ flex: 1 }}>
           <KeyboardAwareScrollView
             contentContainerStyle={styles.contentContainer}
@@ -238,7 +249,7 @@ export default function PartyCreateScreen() {
                   iconType="location"
                   placeholder="예) 역삼역 1번 출구"
                   maxLength={30}
-                  value={pickUpLocation.place}
+                  value={pickUpLocation?.place || ""}
                 />
               </Pressable>
             </View>

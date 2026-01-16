@@ -43,9 +43,7 @@ export default function PartyDetailScreen() {
   const queryClient = useQueryClient();
   const { id } = useLocalSearchParams<{ id: string }>();
   const partyId = id ? parseInt(id, 10) : 0;
-  const setInitialPartyInfo = useEditPartyStore(
-    (state) => state.setInitialPartyInfo
-  );
+  const setOriginalInfo = useEditPartyStore((state) => state.setOriginalInfo);
 
   // 현재 로그인한 사용자 정보 조회
   const { user } = useAuthStore();
@@ -93,9 +91,9 @@ export default function PartyDetailScreen() {
   // 데이터를 성공적으로 받아왔을 시 Store 업데이트 (렌더링 중 업데이트 방지)
   useEffect(() => {
     if (isSuccess && partyDetail) {
-      setInitialPartyInfo(partyDetail);
+      setOriginalInfo(partyDetail);
     }
-  }, [isSuccess, partyDetail, setInitialPartyInfo]);
+  }, [isSuccess, partyDetail, setOriginalInfo]);
 
   // 에러 발생 시
   if (error && !isLoading) {

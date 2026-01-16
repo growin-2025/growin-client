@@ -16,6 +16,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
 import { FlatList, Pressable, StyleSheet, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -58,6 +59,7 @@ export default function PartyCreateScreen() {
     pickupLocation,
     description,
     productLink,
+    setInitialPartyInfo,
     setPartyTitle,
     setTotalAmount,
     setPickUpLocation,
@@ -74,6 +76,7 @@ export default function PartyCreateScreen() {
       pickupLocation: state.pickupLocation,
       description: state.description,
       productLink: state.productLink,
+      setInitialPartyInfo: state.setInitialPartyInfo,
       setPartyTitle: state.setPartyTitle,
       setTotalAmount: state.setTotalAmount,
       setPickUpLocation: state.setPickUpLocation,
@@ -121,6 +124,10 @@ export default function PartyCreateScreen() {
     },
   });
 
+  useEffect(() => {
+    setInitialPartyInfo();
+  }, [setInitialPartyInfo]);
+
   const renderItem = ({ item }: { item: Photo | PhotoUrl }) => {
     return <PhotoItem id={item.id} imageUri={item.imageUri} />;
   };
@@ -138,7 +145,30 @@ export default function PartyCreateScreen() {
     }
   };
 
+  const isValid = (): boolean => {
+    if (
+      title.value &&
+      totalPrice.value &&
+      maxParticipants.value &&
+      pickupLocation.value
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   const onClickEditParty = async () => {
+    if (!isValid) {
+      Toast.show({
+        type: "basicToast",
+        props: { text: "필수 값을 채워주세요." },
+        position: "bottom",
+        bottomOffset: 133,
+        visibilityTime: 2000,
+      });
+      return;
+    }
+
     if (productLink.isEdited && !isValidLink(productLink.value)) {
       Toast.show({
         type: "basicToast",
@@ -179,11 +209,6 @@ export default function PartyCreateScreen() {
         // 필수 필드
         images: allImageUrls,
         description: description,
-        pickupLocation: {
-          place: pickupLocation.place,
-          pickupLatitude: pickupLocation.pickupLatitude,
-          pickupLongitude: pickupLocation.pickupLongitude,
-        },
       };
 
       if (title.isEdited) {
@@ -197,6 +222,13 @@ export default function PartyCreateScreen() {
       }
       if (productLink.isEdited) {
         body.productLink = productLink.value;
+      }
+      if (pickupLocation.isEdited && pickupLocation.value) {
+        body.pickupLocation = {
+          place: pickupLocation.value.place,
+          pickupLatitude: pickupLocation.value.pickupLatitude,
+          pickupLongitude: pickupLocation.value.pickupLongitude,
+        };
       }
 
       await EditPartyMutation.mutateAsync({
@@ -212,7 +244,7 @@ export default function PartyCreateScreen() {
     <>
       <StatusBar style="dark" />
       <View style={styles.container}>
-        <CreatePartyPageHeader title="파티 수정" />
+        <CreatePartyPageHeader title="파티 수정" action={setInitialPartyInfo} />
         <View style={{ flex: 1 }}>
           <KeyboardAwareScrollView
             contentContainerStyle={styles.contentContainer}
@@ -275,7 +307,7 @@ export default function PartyCreateScreen() {
                   iconType="location"
                   placeholder="예) 역삼역 1번 출구"
                   maxLength={30}
-                  value={pickupLocation.place}
+                  value={pickupLocation?.value?.place || ""}
                   isEditable={isAllEditable}
                 />
               </Pressable>
@@ -305,7 +337,11 @@ export default function PartyCreateScreen() {
             )}
           </KeyboardAwareScrollView>
           <View style={styles.createButtonContainer}>
-            <GlobalButton onClick={onClickEditParty} text="완료" />
+            <GlobalButton
+              onClick={onClickEditParty}
+              text="완료"
+              disabled={!isValid()}
+            />
           </View>
         </View>
       </View>
