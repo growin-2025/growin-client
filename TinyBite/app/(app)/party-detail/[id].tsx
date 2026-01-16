@@ -156,7 +156,7 @@ export default function PartyDetailScreen() {
                 queryClient.invalidateQueries({
                   queryKey: ["getHostingParties"],
                 });
-                router.replace("/(tabs)");
+                router.replace("/(app)/(tabs)");
                 return true;
               } catch (error: any) {
                 // 400(이미 참여자가 있음 / 권한 없음) 상태 코드인 경우 에러 로그 출력하지 않음

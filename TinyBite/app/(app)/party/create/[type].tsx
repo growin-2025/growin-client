@@ -89,7 +89,7 @@ export default function PartyCreateScreen() {
     mutationFn: postCreateParty,
     onSuccess: (data) => {
       resetCreateParty();
-      router.replace("/(tabs)");
+      router.replace("/(app)/(tabs)");
       Toast.show({
         type: "basicToast",
         props: { text: "파티가 생성되었습니다." },
