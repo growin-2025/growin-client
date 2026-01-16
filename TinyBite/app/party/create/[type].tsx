@@ -90,6 +90,13 @@ export default function PartyCreateScreen() {
     onSuccess: (data) => {
       resetCreateParty();
       router.replace("/(tabs)");
+      Toast.show({
+        type: "basicToast",
+        props: { text: "파티가 생성되었습니다." },
+        position: "bottom",
+        bottomOffset: 133,
+        visibilityTime: 2000,
+      });
     },
     onError: (error: AxiosError<ApiError>) => {
       if (error.response?.data) {
