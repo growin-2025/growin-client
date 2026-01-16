@@ -19,21 +19,22 @@ type TabType = "active" | "hosting";
 const MyPartyList = () => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabType>("active");
-    const { coords, refresh: fetchCoords } = useUserCoords();
-  
-    // 컴포넌트 마운트 시 위치 정보 가져오기
-    useEffect(() => {
-      if (!coords) {
-        fetchCoords();
-      }
-    }, []);
+  const { coords, refresh: fetchCoords } = useUserCoords();
+
+  // 컴포넌트 마운트 시 위치 정보 가져오기
+  useEffect(() => {
+    if (!coords) {
+      fetchCoords();
+    }
+  }, []);
 
   // 참여중인 파티 리스트 조회
   const { data: activeParties = [], isLoading: isLoadingActive } = useQuery<
     PartyItem[]
   >({
     queryKey: ["getActiveParties"],
-    queryFn:() => getActiveParties(coords?.latitude, coords?.longitude),
+    queryFn: () => getActiveParties(coords?.latitude, coords?.longitude),
+    enabled: activeTab === "active",
   });
 
   // 호스팅 중인 파티 리스트 조회
@@ -41,7 +42,7 @@ const MyPartyList = () => {
     PartyItem[]
   >({
     queryKey: ["getHostingParties"],
-    queryFn:() =>  getHostingParties(coords?.latitude, coords?.longitude),
+    queryFn: () => getHostingParties(coords?.latitude, coords?.longitude),
     enabled: activeTab === "hosting",
   });
 
