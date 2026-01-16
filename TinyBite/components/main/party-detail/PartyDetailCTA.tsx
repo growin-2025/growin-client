@@ -8,14 +8,12 @@ interface PartyDetailCTAProps {
   detailPartyId: number;
   isClosed?: boolean;
   isParticipating?: boolean;
-  pricePerPerson?: number;
 }
 
 const PartyDetailCTA = ({
   detailPartyId,
   isClosed,
   isParticipating,
-  pricePerPerson,
 }: PartyDetailCTAProps) => {
   const { mutate } = useRequestJoinParty();
 
@@ -27,7 +25,7 @@ const PartyDetailCTA = ({
       return "채팅방으로 이동";
     }
     if (pricePerPerson != null) {
-      return `${pricePerPerson.toLocaleString()}원으로 참여하기`;
+      return "채팅으로 참여하기";
     }
     return "로딩 중...";
   };
