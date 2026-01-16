@@ -145,6 +145,7 @@ const styles = StyleSheet.create({
   // 프로필 이미지 컨테이너
   profileContainer: {
     marginRight: 16,
+    justifyContent: "center",
   },
   // 채팅 컨텐츠 영역
   chatContent: {
@@ -155,11 +156,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    gap: 4,
   },
   // 사용자 이름 / 파티 제목
   userName: {
+    flexShrink: 1,
     color: colors.black,
-    maxWidth: "80%",
   },
   // 타임스탬프
   timestamp: {
